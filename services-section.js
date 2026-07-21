@@ -14,6 +14,7 @@
 
   /* ===== CONTENT: CYB3R's 6 services + Cloudinary videos (edit freely) ===== */
   var V = "https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/";
+  var PLUS = "https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a44c6196a38f1b057c124e8_svglogoplus.png"; /* CYB3R teal plus icon */
   var services = [
     { title: "Brand & Identity", caption: "Identity systems built to travel across every touchpoint.",
       desc: "Positioning, naming and visual identity that give your brand credibility, clarity and lasting recognition.",
@@ -50,7 +51,8 @@
   ".cyb-svc .panel{position:absolute;inset:0;display:flex;will-change:transform;background:var(--bg)}" +
   ".cyb-svc .pinner{position:absolute;inset:0;display:flex}" +
   ".cyb-svc .col-left{width:50%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:5vh 3vw;background:var(--bg)}" +
-  ".cyb-svc .panel.blk-dark .col-left{background:#05070a}" +
+  ".cyb-svc .panel.blk-dark .col-left{background:#39F1E0}" +
+  ".cyb-svc .panel.blk-dark .p-caption{color:#0d1116}" +
   ".cyb-svc .p-caption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-align:center;max-width:32ch;line-height:1.5}" +
   ".cyb-svc .p-caption .w{display:inline-block;white-space:pre;will-change:filter,opacity}" +
   ".cyb-svc .v-card{position:relative;width:min(88%,660px);aspect-ratio:3/2;overflow:hidden;border-radius:0;background:#000;border:1px solid var(--line)}" +
@@ -58,11 +60,8 @@
   ".cyb-svc .v-card .v-tag{position:absolute;left:0;right:0;bottom:0;padding:16px;font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:linear-gradient(180deg,transparent,rgba(0,0,0,.74));display:flex;justify-content:space-between;align-items:flex-end;gap:10px}" +
   ".cyb-svc .v-card .v-tag b{color:var(--accent);font-weight:600}" +
   ".cyb-svc .divider{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line);z-index:5}" +
-  ".cyb-svc .divider .x{position:absolute;left:50%;width:12px;height:12px;transform:translateX(-50%)}" +
+  ".cyb-svc .divider .x{position:absolute;left:50%;width:15px;height:15px;transform:translateX(-50%);object-fit:contain}" +
   ".cyb-svc .divider .x.t{top:9vh}.cyb-svc .divider .x.b{bottom:9vh}" +
-  ".cyb-svc .divider .x::before,.cyb-svc .divider .x::after{content:'';position:absolute;background:var(--line-2)}" +
-  ".cyb-svc .divider .x::before{left:50%;top:0;width:1px;height:100%;transform:translateX(-50%)}" +
-  ".cyb-svc .divider .x::after{top:50%;left:0;height:1px;width:100%;transform:translateY(-50%)}" +
   ".cyb-svc .col-right{width:50%;height:100%;display:flex;flex-direction:column;justify-content:center;padding:8vh 5vw 8vh 4vw;background:var(--bg);color:var(--ink)}" +
   ".cyb-svc .col-right h2{font-weight:500;letter-spacing:-.02em;font-size:clamp(1.6rem,2.6vw,2.3rem);margin:0 0 18px;color:#fff}" +
   ".cyb-svc .col-right .s-desc{color:var(--ink-2);font-size:1rem;line-height:1.55;max-width:46ch;margin:0 0 40px}" +
@@ -99,7 +98,7 @@
             '<div class="v-card"><video muted loop playsinline preload="metadata" src="' + s.video + '"></video>' +
               '<div class="v-tag"><span>' + esc(s.title) + '</span><b>0' + (i + 1) + ' / 0' + N + '</b></div></div>' +
           '</div>' +
-          '<div class="divider"><span class="x t"></span><span class="x b"></span></div>' +
+          '<div class="divider"><img class="x t" src="' + PLUS + '" alt=""><img class="x b" src="' + PLUS + '" alt=""></div>' +
           '<div class="col-right">' +
             '<h2>' + esc(s.title) + '</h2>' +
             '<p class="s-desc">' + esc(s.desc) + '</p>' +
