@@ -44,15 +44,14 @@
 
   /* ===== scoped CSS (dark, sharp corners; all under .cyb-svc) ===== */
   var CSS =
-  ".cyb-svc{--ink:#EDEDEF;--ink-2:#A7ACB4;--ink-dim:#727782;--line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.24);--accent:#39F1E0;--bg:#0d1116;--mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}" +
+  ".cyb-svc{--ink:#EDEDEF;--ink-2:#A7ACB4;--ink-dim:#727782;--line:rgba(255,255,255,.12);--line-2:rgba(255,255,255,.24);--accent:#39F1E0;--bg:#1A232D;--mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace}" +
   ".cyb-svc *{box-sizing:border-box}" +
   ".cyb-svc .svc-pin{position:relative;height:800vh;background:var(--bg)}" +
   ".cyb-svc .svc-stage{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--bg)}" +
   ".cyb-svc .panel{position:absolute;inset:0;display:flex;will-change:transform;background:var(--bg)}" +
   ".cyb-svc .pinner{position:absolute;inset:0;display:flex}" +
   ".cyb-svc .col-left{width:50%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:5vh 3vw;background:var(--bg)}" +
-  ".cyb-svc .panel.blk-dark .col-left{background:#39F1E0}" +
-  ".cyb-svc .panel.blk-dark .p-caption{color:#0d1116}" +
+  ".cyb-svc .panel.blk-dark .col-left{background:#202A36}" +
   ".cyb-svc .p-caption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-align:center;max-width:32ch;line-height:1.5}" +
   ".cyb-svc .p-caption .w{display:inline-block;white-space:pre;will-change:filter,opacity}" +
   ".cyb-svc .v-card{position:relative;width:min(88%,660px);aspect-ratio:3/2;overflow:hidden;border-radius:0;background:#000;border:1px solid var(--line)}" +
