@@ -51,7 +51,8 @@
   ".cyb-svc .panel{position:absolute;inset:0;display:flex;will-change:transform;background:var(--bg)}" +
   ".cyb-svc .pinner{position:absolute;inset:0;display:flex}" +
   ".cyb-svc .col-left{width:50%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:5vh 3vw;background:var(--bg)}" +
-  ".cyb-svc .panel.blk-dark .col-left{background:#202A36}" +
+  ".cyb-svc .panel.blk-dark .col-left{background:#39F1E0}" +
+  ".cyb-svc .panel.blk-dark .p-caption{color:#0d1116}" +
   ".cyb-svc .p-caption{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-align:center;max-width:32ch;line-height:1.5}" +
   ".cyb-svc .p-caption .w{display:inline-block;white-space:pre;will-change:filter,opacity}" +
   ".cyb-svc .v-card{position:relative;width:min(88%,660px);aspect-ratio:3/2;overflow:hidden;border-radius:0;background:#000;border:1px solid var(--line)}" +
