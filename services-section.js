@@ -19,27 +19,27 @@
     { title: "Brand & Identity", caption: "Identity systems built to travel across every touchpoint.",
       desc: "Positioning, naming and visual identity that give your brand credibility, clarity and lasting recognition.",
       caps: ["Brand strategy & positioning", "Visual identity systems", "Logo & wordmark design", "Brand guidelines", "Creative direction", "Messaging & tone of voice"],
-      video: V + "v1783637909/branding01_exa3fq.mp4" },
+      video: V + "v1784719091/brand_h6pyks.mp4" },
     { title: "Web Design & Development", caption: "Designed to perform on every screen.",
       desc: "High-fidelity websites and web apps designed to attract, engage and convert, built for speed and scale.",
       caps: ["Web design (UX/UI)", "Webflow & headless builds", "Responsive, motion-first interfaces", "Landing pages & funnels", "CMS & integrations", "Performance & SEO foundations"],
-      video: V + "v1784713152/webdesign_lvcpfw.mp4" },
+      video: V + "v1784718807/webui_ptpypo.mp4" },
     { title: "SEO & Google Ads", caption: "Engineered to scale measurable growth.",
       desc: "Organic search and paid media built to put you in front of high-intent buyers and grow qualified pipeline.",
       caps: ["Technical & on-page SEO", "Content & link strategy", "Google Ads (Search, PMax)", "Paid media management", "Conversion tracking", "Reporting & optimisation"],
-      video: V + "v1784713150/seonew_o32y58.mp4" },
+      video: V + "v1784718850/seoupsacled_gkz99e.mp4" },
     { title: "Social Media & Content", caption: "Content that compounds attention into demand.",
       desc: "Social-first content and community that build audience, authority and a steady stream of inbound interest.",
       caps: ["Social strategy", "Content production", "Short-form video", "Community management", "Paid social", "Influencer & partnerships"],
-      video: V + "v1783637914/social_kdyleo.mp4" },
+      video: V + "v1784718752/socialmedia_oabpfi.mp4" },
     { title: "Commercial Print & Production", caption: "Tactile brand experiences, produced end to end.",
       desc: "Print, packaging and physical collateral produced to the same standard as everything you do online.",
       caps: ["Print & packaging design", "Merchandise", "Large-format & signage", "Event & retail collateral", "Artwork & pre-press", "Production management"],
-      video: V + "v1783637911/merch_sqjwqw.mp4" },
+      video: V + "v1784718731/commercialprint_yl4nyp.mp4" },
     { title: "AI-Driven Advertising", caption: "Smarter campaigns, powered by automation.",
       desc: "AI-assisted creative, targeting and optimisation that make every ad dollar work harder across the funnel.",
       caps: ["AI creative & iteration", "Audience modelling", "Automated bidding & budgets", "Predictive optimisation", "Full-funnel measurement", "Continuous experimentation"],
-      video: V + "v1783637914/ai_ads_hojtor.mp4" }
+      video: V + "v1784718887/aidriven_vxzk8p.mp4" }
   ];
 
   /* ===== scoped CSS (dark, sharp corners; all under .cyb-svc) ===== */

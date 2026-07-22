@@ -187,12 +187,12 @@
 
   // ---- CYB3R service cards: 6 videos + titles (Cloudinary, pre-cropped to the card aspect 812:568, CORS ok) ----
   const CARDS=[
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1783637909/branding01_exa3fq.mp4","Brand & Identity"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784713152/webdesign_lvcpfw.mp4","Web Design & Development"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784713150/seonew_o32y58.mp4","SEO & Google Ads"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1783637914/social_kdyleo.mp4","Social Media & Content"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1783637911/merch_sqjwqw.mp4","Commercial Print & Production"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1783637914/ai_ads_hojtor.mp4","AI-Driven Advertising"]
+    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784719091/brand_h6pyks.mp4","Brand & Identity"],
+    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718807/webui_ptpypo.mp4","Web Design & Development"],
+    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718850/seoupsacled_gkz99e.mp4","SEO & Google Ads"],
+    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718752/socialmedia_oabpfi.mp4","Social Media & Content"],
+    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718731/commercialprint_yl4nyp.mp4","Commercial Print & Production"],
+    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718887/aidriven_vxzk8p.mp4","AI-Driven Advertising"]
   ];
   const PAL=[0,1,2,3,4,5,0,1,2];           // 9 ribbon cards = indices into CARDS (6 unique, cycled)
   const GRID_IDX=[0,1,2,3,4,5];            // 6 grid cards, one per service
