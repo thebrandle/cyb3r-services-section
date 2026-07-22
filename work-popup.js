@@ -1,4 +1,4 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.3.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.4.0
  *
  * Reads hidden markers inside each card's .pop-data (bound to CMS fields):
  *   [data-pd="si"|"sl"|"sy"] -> conditional-visibility markers for the Industry / Location / Year rows
@@ -67,6 +67,7 @@
     var industry = T(kids[2]);
     var loc = T(kids[3]);
     var year = T(kids[4]);
+    var wurl = T(kids[6]); // Website URL
 
     var mi = pd.querySelector('[data-pd="si"]');
     var ml = pd.querySelector('[data-pd="sl"]');
@@ -85,10 +86,24 @@
     var wrap = document.querySelector('.wpop-rows');
     if (wrap) wrap.style.display = any ? '' : 'none';
 
-    // CTA row: website link (label from Website Link Text) + optional extra button
+    // CTA row: website link + optional extra button. The website link is managed here so a Website
+    // URL entered without an http(s):// scheme still shows (the base engine's strict regex would
+    // otherwise add .hide and drop the button) - the scheme is prepended for the href.
     var row = ensureRow();
     var link = document.querySelector('.wpop-link');
-    if (link) link.textContent = clean(T(mc), 'Go to the website');
+    var linkShown = false;
+    if (link) {
+      if (wurl) {
+        link.setAttribute('href', /^https?:\/\//i.test(wurl) ? wurl : 'https://' + wurl.replace(/^\/+/, ''));
+        link.setAttribute('target', '_blank');
+        link.setAttribute('rel', 'noopener');
+        link.classList.remove('hide');
+        link.textContent = clean(T(mc), 'Go to the website');
+        linkShown = true;
+      } else {
+        link.classList.add('hide');
+      }
+    }
 
     var extraShown = false;
     var b2 = row ? row.querySelector('.wpop-link2') : null;
@@ -104,10 +119,7 @@
         b2.classList.add('hide');
       }
     }
-    if (row) {
-      var linkShown = link && !link.classList.contains('hide');
-      row.style.display = (linkShown || extraShown) ? '' : 'none';
-    }
+    if (row) row.style.display = (linkShown || extraShown) ? '' : 'none';
   }
 
   // token: a stale deferred apply (rapid card switching) must not overwrite the latest card
