@@ -13,7 +13,7 @@
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
 
   /* ===== CONTENT: CYB3R's 6 services + Cloudinary videos (edit freely) ===== */
-  var V = "https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/";
+  var V = "https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto:best,w_1440/";
   var PLUS = "https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a44c6196a38f1b057c124e8_svglogoplus.png"; /* CYB3R teal plus icon */
   var services = [
     { title: "Brand & Identity", caption: "Identity systems built to travel across every touchpoint.",
