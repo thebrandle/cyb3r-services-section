@@ -80,7 +80,12 @@
     var hero = mc.querySelector(".hero.for-inner");
     var wrap = document.createElement("div"); wrap.className = "cyb-svc";
     wrap.innerHTML = '<div class="svc-pin" id="svcPin"><div class="svc-stage" id="svcStage"></div></div>';
-    if (hero) hero.insertAdjacentElement("afterend", wrap); else mc.insertBefore(wrap, mc.firstChild);
+    // Prefer the native Designer host (.svc-scroll-host, placed after the hero) so the user can
+    // control the section's outer padding/margin in the Webflow editor. Fallback: inject after hero.
+    var host = document.querySelector(".svc-scroll-host");
+    if (host) host.appendChild(wrap);
+    else if (hero) hero.insertAdjacentElement("afterend", wrap);
+    else mc.insertBefore(wrap, mc.firstChild);
     build();
   }
 
