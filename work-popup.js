@@ -1,5 +1,7 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.1
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.2
  *
+ * v1.13.2: the direction flip alternates over MASONRY bands only (full-width rows are
+ * skipped), so the band under the video mirrors the band above it.
  * v1.13.1: no two bands ever look the same - per-band random column WIDTHS + alternate
  * bands pack right-to-left (the odd-one-out tile flips sides) on top of the height jitter.
  * v1.13.0: MASONRY BANDS - "Popup Layout" = band sizes separated by x (any separator), top
@@ -218,9 +220,13 @@
           }
           var colWrap = document.createElement('div');
           colWrap.className = 'wpop-collage';
-          var anyMedia = false, slotCursor = 0;
+          var anyMedia = false, slotCursor = 0, mBand = 0;
           for (gi = 0; gi < useSegs.length; gi++) {
             var n = useSegs[gi];
+            // alternate MASONRY bands mirror direction; full-width rows don't count,
+            // so the band below the video flips against the band above it
+            var flip = n > 1 && mBand % 2 === 1;
+            if (n > 1) mBand++;
             var band = document.createElement('div');
             band.className = 'wc-band';
             var colN = n <= 2 ? n : (n <= 4 ? 2 : 3);
@@ -256,9 +262,8 @@
               } else {
                 tile.className = 'wc-tile wc-empty';
               }
-              // alternate bands pack right-to-left so equal-size bands never share a shape
               var colIdx = ti % colN;
-              if (gi % 2 === 1) colIdx = colN - 1 - colIdx;
+              if (flip) colIdx = colN - 1 - colIdx;
               colEls[colIdx].appendChild(tile);
             }
             colWrap.appendChild(band);
