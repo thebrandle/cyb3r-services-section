@@ -1,4 +1,10 @@
-/* CYB3R Work grid IDLE FLICKER (Latest Work cards, /work page). v1.0.0
+/* CYB3R Work grid IDLE FLICKER (Latest Work cards, /work page). v1.1.0
+ *
+ * v1.1.0: PERF - tames the hover engine's eager video preload: every .card-hover video is
+ * locked to preload="metadata" (a MutationObserver catches them the moment the engine
+ * creates them, before its 800px IntersectionObserver can flip them to preload="auto" and
+ * download the full file). Videos now stream only on a real hover / flicker. Flicker start
+ * also delayed 900ms -> 2600ms so the page settles first.
  *
  * While the user is NOT hovering the grid, random cards briefly "light up" like flickering
  * lights - each flicker is a short synthetic hover (mouseenter/mouseleave dispatched on the
@@ -13,6 +19,33 @@
  */
 (function () {
   if ((location.pathname || '').replace(/\/+$/, '') !== '/work') return;
+
+  // --- perf: lock hover-engine videos to metadata-only preload (runs even with
+  // reduced motion - it is a loading optimization, not an animation) ---
+  function tameVideos() {
+    var vs = document.querySelectorAll('.card-hover video');
+    for (var i = 0; i < vs.length; i++) {
+      var v = vs[i];
+      if (v.dataset.tamed) continue;
+      v.dataset.tamed = '1';
+      v.setAttribute('preload', 'metadata');
+      try {
+        Object.defineProperty(v, 'preload', {
+          configurable: true,
+          get: function () { return 'metadata'; },
+          set: function () {}
+        });
+      } catch (e) {}
+    }
+  }
+  tameVideos();
+  if ('MutationObserver' in window) {
+    new MutationObserver(tameVideos).observe(document.documentElement, { childList: true, subtree: true });
+  } else {
+    setTimeout(tameVideos, 900);
+    setTimeout(tameVideos, 2100);
+  }
+
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
   var MAX_LIT = 3;
@@ -82,7 +115,7 @@
       }
     }
     document.addEventListener('visibilitychange', function () { if (document.hidden) extinguishAll(); });
-    setTimeout(tick, 900);            // let the grid settle before the show starts
+    setTimeout(tick, 2600);           // let the page settle before the show starts
     setTimeout(refreshPool, 3500);    // re-scan once splash images have finished loading
     return true;
   }
