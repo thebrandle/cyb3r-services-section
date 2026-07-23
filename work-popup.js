@@ -1,5 +1,11 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.11.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.12.0
  *
+ * v1.12.0: the media collage is MASONRY - "Popup Layout" is now just the TILE COUNT (1-9,
+ * e.g. "7"; old patterns like 3x1x3 still work, the numbers are summed). Tiles fill vertical
+ * columns (1 col for 1 tile, 2 cols up to 4, 3 cols from 5) with per-tile random height
+ * weights, seeded from the card name so each card's masonry is stable between opens. Slots
+ * stay positional: tile s = Popup Img s; the video (Popup Video URL, "4: https://...") still
+ * takes its slot; empty declared slots render as dark tiles.
  * v1.11.0: rich-text paragraphs/list items now INHERIT font-size/weight/line-height from
  * .wpop-desc (the site's global `p { font-size: var(--font--work-title); opacity:.7 }` rule was
  * overriding the class, which is why Designer font changes on wpop-desc "did nothing"). Also:
@@ -61,9 +67,9 @@
     '.wpop-link::after,.wpop-link2::after{content:"\\2192";font-weight:600}' +
     '.wpop-link:hover,.wpop-link2:hover{background:#14a098!important;color:#fff!important;opacity:1!important}' +
     '.wpop-link.hide,.wpop-link2.hide{display:none!important}' +
-    '.wpop-collage{position:absolute;inset:0;display:flex;flex-direction:column;gap:6px;background:#0f0e0e}' +
-    '.wpop-collage .wc-row{flex:1;display:flex;gap:6px;min-height:0}' +
-    '.wpop-collage .wc-tile{flex:1;position:relative;overflow:hidden;min-width:0}' +
+    '.wpop-collage{position:absolute;inset:0;display:flex;gap:6px;background:#0f0e0e}' +
+    '.wpop-collage .wc-col{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}' +
+    '.wpop-collage .wc-tile{flex:1 1 0;position:relative;overflow:hidden;min-height:0}' +
     '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
     '.wpop-collage .wc-tile.wc-empty{background:#141b22}' +
     '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}' +
@@ -167,11 +173,13 @@
       var layoutStr = T(pd.querySelector('[data-pd="playout"]'));
       var pvidUrl = T(pd.querySelector('[data-pd="pvid"]'));
       if (layoutStr) {
-        // Rows: each number = tiles in that row (max 3), max 3 rows. FIXED slots per row:
-        // row 1 = slots 1-3, row 2 = slots 4-6, row 3 = slots 7-9. A 1-tile row uses only
-        // its first slot; a 2-tile row its first two. Empty declared slots = dark tiles.
-        var rowsDef = layoutStr.split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
-          .filter(function (n) { return n > 0; }).slice(0, 3).map(function (n) { return Math.min(n, 3); });
+        // MASONRY: "Popup Layout" = the tile COUNT (one number, e.g. "7"; old multi-number
+        // patterns like 3x1x3 are summed). Tiles fill vertical columns (1 col for 1 tile,
+        // 2 cols up to 4 tiles, 3 cols from 5) with random height weights seeded from the
+        // card name, so each card's masonry is stable between opens. Slots stay positional:
+        // tile s = Popup Img s; empty declared slots = dark tiles.
+        var tileN = Math.min(layoutStr.split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
+          .filter(function (n) { return n > 0; }).reduce(function (a, b) { return a + b; }, 0), 9);
         // Video slot: "4: https://..." puts the video in slot 4; a bare URL means slot 1.
         var vidSlot = 0, vidUrl = '';
         var vsm = pvidUrl.match(/^([1-9])\s*[:|,\s]\s*(https?:\/\/\S+)/i);
@@ -186,36 +194,48 @@
           }
           return null;
         }
-        if (rowsDef.length) {
+        if (tileN > 0) {
+          // seeded PRNG (FNV hash of name + count) - random-looking but stable per card
+          var seedStr = (T(kids[0]) || '') + ':' + tileN;
+          var sh = 2166136261;
+          for (var hc = 0; hc < seedStr.length; hc++) { sh ^= seedStr.charCodeAt(hc); sh = Math.imul(sh, 16777619); }
+          function rnd() {
+            sh = Math.imul(sh ^ (sh >>> 15), 2246822519);
+            sh = Math.imul(sh ^ (sh >>> 13), 3266489917);
+            return ((sh ^= sh >>> 16) >>> 0) / 4294967296;
+          }
           var colWrap = document.createElement('div');
           colWrap.className = 'wpop-collage';
+          var colN = tileN <= 2 ? tileN : (tileN <= 4 ? 2 : 3);
+          var colEls = [];
+          for (var ci = 0; ci < colN; ci++) {
+            var ce = document.createElement('div');
+            ce.className = 'wc-col';
+            colWrap.appendChild(ce);
+            colEls.push(ce);
+          }
           var anyMedia = false;
-          for (var ri = 0; ri < rowsDef.length; ri++) {
-            var rowEl = document.createElement('div');
-            rowEl.className = 'wc-row';
-            for (var ti = 0; ti < rowsDef[ri]; ti++) {
-              var slot = ri * 3 + ti + 1;
-              var tile = document.createElement('div');
-              tile.className = 'wc-tile';
-              var itm = slotMedia(slot);
-              if (itm && itm.v) {
-                var vv = document.createElement('video');
-                vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
-                vv.playsInline = true; vv.setAttribute('playsinline', '');
-                tile.appendChild(vv);
-                var vp = vv.play(); if (vp && vp.catch) vp.catch(function () {});
-                anyMedia = true;
-              } else if (itm) {
-                var ig = document.createElement('img');
-                ig.src = itm.i; ig.alt = '';
-                tile.appendChild(ig);
-                anyMedia = true;
-              } else {
-                tile.className = 'wc-tile wc-empty';
-              }
-              rowEl.appendChild(tile);
+          for (var s = 1; s <= tileN; s++) {
+            var tile = document.createElement('div');
+            tile.className = 'wc-tile';
+            tile.style.flexGrow = (0.7 + rnd() * 1.6).toFixed(3);
+            var itm = slotMedia(s);
+            if (itm && itm.v) {
+              var vv = document.createElement('video');
+              vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
+              vv.playsInline = true; vv.setAttribute('playsinline', '');
+              tile.appendChild(vv);
+              var vp = vv.play(); if (vp && vp.catch) vp.catch(function () {});
+              anyMedia = true;
+            } else if (itm) {
+              var ig = document.createElement('img');
+              ig.src = itm.i; ig.alt = '';
+              tile.appendChild(ig);
+              anyMedia = true;
+            } else {
+              tile.className = 'wc-tile wc-empty';
             }
-            colWrap.appendChild(rowEl);
+            colEls[(s - 1) % colN].appendChild(tile);
           }
           if (anyMedia) {
             mediaBox.appendChild(colWrap);
