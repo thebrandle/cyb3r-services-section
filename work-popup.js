@@ -1,11 +1,13 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.12.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.0
  *
- * v1.12.0: the media collage is MASONRY - "Popup Layout" is now just the TILE COUNT (1-9,
- * e.g. "7"; old patterns like 3x1x3 still work, the numbers are summed). Tiles fill vertical
- * columns (1 col for 1 tile, 2 cols up to 4, 3 cols from 5) with per-tile random height
- * weights, seeded from the card name so each card's masonry is stable between opens. Slots
- * stay positional: tile s = Popup Img s; the video (Popup Video URL, "4: https://...") still
- * takes its slot; empty declared slots render as dark tiles.
+ * v1.13.0: MASONRY BANDS - "Popup Layout" = band sizes separated by x (any separator), top
+ * to bottom. Each number = tiles in that horizontal band, packed masonry (random seeded
+ * heights); a 1-tile band = a FULL-WIDTH row (e.g. for the video). Slots run sequentially
+ * across bands (Popup Img 1-9 in order; the video takes its slot via "s: https://...").
+ * BLANK now defaults to 3x3 (two masonry bands of 3, slots 1-6) - the collage still only
+ * shows when at least one slot has media, else the single Popup Image fallback. Total
+ * capped at 9. Example: 6x1x2 = 6 masonry, slot 7 full row, slots 8-9 masonry.
+ * v1.12.0: the media collage was MASONRY with a single tile count.
  * v1.11.0: rich-text paragraphs/list items now INHERIT font-size/weight/line-height from
  * .wpop-desc (the site's global `p { font-size: var(--font--work-title); opacity:.7 }` rule was
  * overriding the class, which is why Designer font changes on wpop-desc "did nothing"). Also:
@@ -67,7 +69,8 @@
     '.wpop-link::after,.wpop-link2::after{content:"\\2192";font-weight:600}' +
     '.wpop-link:hover,.wpop-link2:hover{background:#14a098!important;color:#fff!important;opacity:1!important}' +
     '.wpop-link.hide,.wpop-link2.hide{display:none!important}' +
-    '.wpop-collage{position:absolute;inset:0;display:flex;gap:6px;background:#0f0e0e}' +
+    '.wpop-collage{position:absolute;inset:0;display:flex;flex-direction:column;gap:6px;background:#0f0e0e}' +
+    '.wpop-collage .wc-band{flex:1 1 0;display:flex;gap:6px;min-height:0}' +
     '.wpop-collage .wc-col{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}' +
     '.wpop-collage .wc-tile{flex:1 1 0;position:relative;overflow:hidden;min-height:0}' +
     '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
@@ -172,14 +175,14 @@
       if (pop) pop.classList.remove('has-collage');
       var layoutStr = T(pd.querySelector('[data-pd="playout"]'));
       var pvidUrl = T(pd.querySelector('[data-pd="pvid"]'));
-      if (layoutStr) {
-        // MASONRY: "Popup Layout" = the tile COUNT (one number, e.g. "7"; old multi-number
-        // patterns like 3x1x3 are summed). Tiles fill vertical columns (1 col for 1 tile,
-        // 2 cols up to 4 tiles, 3 cols from 5) with random height weights seeded from the
-        // card name, so each card's masonry is stable between opens. Slots stay positional:
-        // tile s = Popup Img s; empty declared slots = dark tiles.
-        var tileN = Math.min(layoutStr.split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
-          .filter(function (n) { return n > 0; }).reduce(function (a, b) { return a + b; }, 0), 9);
+      {
+        // MASONRY BANDS: layout = band sizes top to bottom ("3x3" default when blank).
+        // Each band is a horizontal strip: 1 tile = full-width row (e.g. the video),
+        // 2 tiles = 2 columns, 3-4 = 2 columns, 5+ = 3 columns - tiles get seeded random
+        // height weights inside the band. Slots run sequentially across bands.
+        var segs = (layoutStr || '3 3').split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
+          .filter(function (n) { return n > 0; });
+        if (!segs.length) segs = [3, 3];
         // Video slot: "4: https://..." puts the video in slot 4; a bare URL means slot 1.
         var vidSlot = 0, vidUrl = '';
         var vsm = pvidUrl.match(/^([1-9])\s*[:|,\s]\s*(https?:\/\/\S+)/i);
@@ -194,9 +197,16 @@
           }
           return null;
         }
-        if (tileN > 0) {
-          // seeded PRNG (FNV hash of name + count) - random-looking but stable per card
-          var seedStr = (T(kids[0]) || '') + ':' + tileN;
+        // trim bands to the 9 available slots
+        var total = 0, useSegs = [];
+        for (var gi = 0; gi < segs.length && total < 9; gi++) {
+          var take = Math.min(segs[gi], 9 - total);
+          useSegs.push(take);
+          total += take;
+        }
+        if (total > 0) {
+          // seeded PRNG (FNV hash of name + layout) - random-looking but stable per card
+          var seedStr = (T(kids[0]) || '') + ':' + useSegs.join('x');
           var sh = 2166136261;
           for (var hc = 0; hc < seedStr.length; hc++) { sh ^= seedStr.charCodeAt(hc); sh = Math.imul(sh, 16777619); }
           function rnd() {
@@ -206,36 +216,45 @@
           }
           var colWrap = document.createElement('div');
           colWrap.className = 'wpop-collage';
-          var colN = tileN <= 2 ? tileN : (tileN <= 4 ? 2 : 3);
-          var colEls = [];
-          for (var ci = 0; ci < colN; ci++) {
-            var ce = document.createElement('div');
-            ce.className = 'wc-col';
-            colWrap.appendChild(ce);
-            colEls.push(ce);
-          }
-          var anyMedia = false;
-          for (var s = 1; s <= tileN; s++) {
-            var tile = document.createElement('div');
-            tile.className = 'wc-tile';
-            tile.style.flexGrow = (0.7 + rnd() * 1.6).toFixed(3);
-            var itm = slotMedia(s);
-            if (itm && itm.v) {
-              var vv = document.createElement('video');
-              vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
-              vv.playsInline = true; vv.setAttribute('playsinline', '');
-              tile.appendChild(vv);
-              var vp = vv.play(); if (vp && vp.catch) vp.catch(function () {});
-              anyMedia = true;
-            } else if (itm) {
-              var ig = document.createElement('img');
-              ig.src = itm.i; ig.alt = '';
-              tile.appendChild(ig);
-              anyMedia = true;
-            } else {
-              tile.className = 'wc-tile wc-empty';
+          var anyMedia = false, slotCursor = 0;
+          for (gi = 0; gi < useSegs.length; gi++) {
+            var n = useSegs[gi];
+            var band = document.createElement('div');
+            band.className = 'wc-band';
+            var colN = n <= 2 ? n : (n <= 4 ? 2 : 3);
+            // band height ~ its row count, with a little seeded variation
+            band.style.flexGrow = (Math.max(1, Math.ceil(n / colN)) * (0.9 + rnd() * 0.3)).toFixed(3);
+            var colEls = [];
+            for (var ci = 0; ci < colN; ci++) {
+              var ce = document.createElement('div');
+              ce.className = 'wc-col';
+              band.appendChild(ce);
+              colEls.push(ce);
             }
-            colEls[(s - 1) % colN].appendChild(tile);
+            for (var ti = 0; ti < n; ti++) {
+              var s = ++slotCursor;
+              var tile = document.createElement('div');
+              tile.className = 'wc-tile';
+              tile.style.flexGrow = (0.7 + rnd() * 1.6).toFixed(3);
+              var itm = slotMedia(s);
+              if (itm && itm.v) {
+                var vv = document.createElement('video');
+                vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
+                vv.playsInline = true; vv.setAttribute('playsinline', '');
+                tile.appendChild(vv);
+                var vp = vv.play(); if (vp && vp.catch) vp.catch(function () {});
+                anyMedia = true;
+              } else if (itm) {
+                var ig = document.createElement('img');
+                ig.src = itm.i; ig.alt = '';
+                tile.appendChild(ig);
+                anyMedia = true;
+              } else {
+                tile.className = 'wc-tile wc-empty';
+              }
+              colEls[ti % colN].appendChild(tile);
+            }
+            colWrap.appendChild(band);
           }
           if (anyMedia) {
             mediaBox.appendChild(colWrap);
