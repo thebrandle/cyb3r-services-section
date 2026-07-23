@@ -1,5 +1,8 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.2
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.3
  *
+ * v1.13.3: media always fills its card - all collage flexGrow values are now >= 1 (flex
+ * only fills a FRACTION of free space when grows sum below 1, which left the full-width
+ * video row ~3% short of the band and some tiles short of their column).
  * v1.13.2: the direction flip alternates over MASONRY bands only (full-width rows are
  * skipped), so the band under the video mirrors the band above it.
  * v1.13.1: no two bands ever look the same - per-band random column WIDTHS + alternate
@@ -230,14 +233,17 @@
             var band = document.createElement('div');
             band.className = 'wc-band';
             var colN = n <= 2 ? n : (n <= 4 ? 2 : 3);
-            // band height ~ its row count, with a little seeded variation
-            band.style.flexGrow = (Math.max(1, Math.ceil(n / colN)) * (0.9 + rnd() * 0.3)).toFixed(3);
+            // band height ~ its row count, with a little seeded variation.
+            // Every flexGrow in the collage must be >= 1: flex only fills a fraction of the
+            // free space when grow sums come in under 1 (that left the video row letterboxed).
+            band.style.flexGrow = (Math.max(1, Math.ceil(n / colN)) * (1 + rnd() * 0.25)).toFixed(3);
             var colEls = [];
             for (var ci = 0; ci < colN; ci++) {
               var ce = document.createElement('div');
               ce.className = 'wc-col';
               // per-band random column WIDTHS so no two bands share the same skeleton
-              ce.style.flexGrow = (0.8 + rnd() * 0.7).toFixed(3);
+              // (always >= 1 so a lone column still fills the full band width)
+              ce.style.flexGrow = (1 + rnd() * 0.7).toFixed(3);
               band.appendChild(ce);
               colEls.push(ce);
             }
@@ -245,7 +251,7 @@
               var s = ++slotCursor;
               var tile = document.createElement('div');
               tile.className = 'wc-tile';
-              tile.style.flexGrow = (0.7 + rnd() * 1.6).toFixed(3);
+              tile.style.flexGrow = (1 + rnd() * 1.3).toFixed(3);
               var itm = slotMedia(s);
               if (itm && itm.v) {
                 var vv = document.createElement('video');
