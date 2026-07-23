@@ -1,7 +1,8 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.6.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.6.1
  *
- * v1.6.0: collage is ROW-based per user: each number in "Popup Layout" = tiles in that ROW,
- * top to bottom. "3+1+2" = row of 3, then one full-width tile, then a row of 2. "3x3" = 3 rows of 3.
+ * v1.6.1: layout parser accepts ANY separator between row sizes - "3x1x3", "3+1+3", "3 1 3"
+ * all mean: row of 3, one full-width, row of 3. Every number = one row, top to bottom.
+ * v1.6.0: collage is ROW-based per user: each number in "Popup Layout" = tiles in that ROW.
  * v1.5.0: per-card MEDIA COLLAGE on the popup's left half. Markers in .pop-data:
  *   [data-pd="playout"] -> "Popup Layout" pattern
  *   [data-pd="pvid"]    -> "Popup Video URL" (optional; takes the first tile, muted autoplay loop)
@@ -152,10 +153,9 @@
           var psrc = pim.getAttribute('src') || '';
           if (psrc && pim.className.indexOf('w-condition-invisible') < 0 && psrc.indexOf('placeholder') < 0) media.push({ i: psrc });
         }
-        var cols = [];
-        var nm = layoutStr.match(/^(\d)\s*x\s*(\d)$/i);
-        if (nm) { for (var kk = 0; kk < +nm[2]; kk++) cols.push(+nm[1]); }
-        else cols = layoutStr.split('+').map(function (s) { return parseInt(s, 10) || 0; }).filter(Boolean);
+        // Every number in the pattern = one ROW (tiles in that row), any separator: 3x1x3, 3+1+3, "3 1 3"
+        var cols = layoutStr.split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
+          .filter(function (n) { return n > 0 && n <= 9; });
         if (media.length && cols.length) {
           var colWrap = document.createElement('div');
           colWrap.className = 'wpop-collage';
