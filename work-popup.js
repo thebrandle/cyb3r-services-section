@@ -1,5 +1,7 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.7.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.7.1
  *
+ * v1.7.1: "Popup Logo Size" field ([data-pd="plogoh"]) sets the title-logo height per card
+ * in px (clamped 20-240; blank = the CSS default 56px).
  * v1.7.0: FIXED SLOT GRID - Popup Img slots map to positions: 1-3 = row 1, 4-6 = row 2,
  * 7-9 = row 3, always. A 1-tile (full-width) row uses only its first slot (e.g. row 2 = slot 4;
  * slots 5-6 unused). A 2-tile row uses its first two. Video: "Popup Video URL" = "4: https://..."
@@ -221,6 +223,9 @@
         li.className = 'wpop-title-logo';
         li.src = lsrc;
         li.alt = T(kids[0]) || 'logo';
+        // per-card size override (Popup Logo Size, px; clamped 20-240; blank = CSS default 56)
+        var lh = parseInt(T(pd.querySelector('[data-pd="plogoh"]')), 10);
+        if (lh > 0) li.style.height = Math.min(Math.max(lh, 20), 240) + 'px';
         ttl.appendChild(li);
       }
     }
