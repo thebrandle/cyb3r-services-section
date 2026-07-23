@@ -1,4 +1,10 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.4.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.5.0
+ *
+ * v1.5.0: per-card MEDIA COLLAGE on the popup's left half. Markers in .pop-data:
+ *   [data-pd="playout"] -> "Popup Layout" pattern, e.g. "2+2+1" (columns of stacked tiles) or "3x3"
+ *   [data-pd="pvid"]    -> "Popup Video URL" (optional; takes the first tile, muted autoplay loop)
+ *   [data-pd="pm1..9"]  -> bound imgs for "Popup Img 1..9" (fill tiles in order; empties skipped)
+ * When a layout + at least one media exists, the collage replaces the single photo/logo.
  *
  * Reads hidden markers inside each card's .pop-data (bound to CMS fields):
  *   [data-pd="si"|"sl"|"sy"] -> conditional-visibility markers for the Industry / Location / Year rows
@@ -26,7 +32,12 @@
     '.wpop-cta-row .wpop-link,.wpop-cta-row .wpop-link2{margin:0!important}' +
     '.wpop-link::after,.wpop-link2::after{content:"\\2192";font-weight:600}' +
     '.wpop-link:hover,.wpop-link2:hover{background:#14a098!important;color:#fff!important;opacity:1!important}' +
-    '.wpop-link.hide,.wpop-link2.hide{display:none!important}';
+    '.wpop-link.hide,.wpop-link2.hide{display:none!important}' +
+    '.wpop-collage{position:absolute;inset:0;display:flex;gap:6px;background:#0f0e0e}' +
+    '.wpop-collage .wc-col{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}' +
+    '.wpop-collage .wc-tile{flex:1;position:relative;overflow:hidden;min-height:0}' +
+    '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
+    '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}';
 
   function injectCSS() {
     if (document.getElementById('cyb3r-wpop-style')) return;
@@ -120,6 +131,62 @@
       }
     }
     if (row) row.style.display = (linkShown || extraShown) ? '' : 'none';
+
+    // --- media collage (left half) ---
+    var pop = document.querySelector('.wpop');
+    var mediaBox = document.querySelector('.wpop-media');
+    if (mediaBox) {
+      var oldCol = mediaBox.querySelector('.wpop-collage');
+      if (oldCol) oldCol.remove();
+      if (pop) pop.classList.remove('has-collage');
+      var layoutStr = T(pd.querySelector('[data-pd="playout"]'));
+      var pvidUrl = T(pd.querySelector('[data-pd="pvid"]'));
+      if (layoutStr) {
+        var media = [];
+        if (/^https?:\/\//i.test(pvidUrl)) media.push({ v: pvidUrl });
+        for (var mi2 = 1; mi2 <= 9; mi2++) {
+          var pim = pd.querySelector('[data-pd="pm' + mi2 + '"]');
+          if (!pim) continue;
+          var psrc = pim.getAttribute('src') || '';
+          if (psrc && pim.className.indexOf('w-condition-invisible') < 0 && psrc.indexOf('placeholder') < 0) media.push({ i: psrc });
+        }
+        var cols = [];
+        var nm = layoutStr.match(/^(\d)\s*x\s*(\d)$/i);
+        if (nm) { for (var kk = 0; kk < +nm[2]; kk++) cols.push(+nm[1]); }
+        else cols = layoutStr.split('+').map(function (s) { return parseInt(s, 10) || 0; }).filter(Boolean);
+        if (media.length && cols.length) {
+          var colWrap = document.createElement('div');
+          colWrap.className = 'wpop-collage';
+          var mIdx = 0;
+          for (var ci = 0; ci < cols.length && mIdx < media.length; ci++) {
+            var colEl = document.createElement('div');
+            colEl.className = 'wc-col';
+            for (var ti = 0; ti < cols[ci] && mIdx < media.length; ti++) {
+              var tile = document.createElement('div');
+              tile.className = 'wc-tile';
+              var itm = media[mIdx++];
+              if (itm.v) {
+                var vv = document.createElement('video');
+                vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
+                vv.playsInline = true; vv.setAttribute('playsinline', '');
+                tile.appendChild(vv);
+                var vp = vv.play(); if (vp && vp.catch) vp.catch(function () {});
+              } else {
+                var ig = document.createElement('img');
+                ig.src = itm.i; ig.alt = '';
+                tile.appendChild(ig);
+              }
+              colEl.appendChild(tile);
+            }
+            if (colEl.children.length) colWrap.appendChild(colEl);
+          }
+          if (colWrap.children.length) {
+            mediaBox.appendChild(colWrap);
+            if (pop) pop.classList.add('has-collage');
+          }
+        }
+      }
+    }
   }
 
   // token: a stale deferred apply (rapid card switching) must not overwrite the latest card
