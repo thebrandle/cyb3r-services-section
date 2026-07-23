@@ -1,5 +1,7 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.6.1
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.6.2
  *
+ * v1.6.2: the typed layout is honored EXACTLY - every declared tile renders. Fewer images
+ * than tiles -> images cycle from the start to fill the remaining slots (no dropped rows).
  * v1.6.1: layout parser accepts ANY separator between row sizes - "3x1x3", "3+1+3", "3 1 3"
  * all mean: row of 3, one full-width, row of 3. Every number = one row, top to bottom.
  * v1.6.0: collage is ROW-based per user: each number in "Popup Layout" = tiles in that ROW.
@@ -159,14 +161,16 @@
         if (media.length && cols.length) {
           var colWrap = document.createElement('div');
           colWrap.className = 'wpop-collage';
+          // The typed layout is honored EXACTLY: every declared tile renders. If there are fewer
+          // media than tiles, images cycle from the start again to fill the remaining slots.
           var mIdx = 0;
-          for (var ci = 0; ci < cols.length && mIdx < media.length; ci++) {
+          for (var ci = 0; ci < cols.length; ci++) {
             var colEl = document.createElement('div');
             colEl.className = 'wc-row';
-            for (var ti = 0; ti < cols[ci] && mIdx < media.length; ti++) {
+            for (var ti = 0; ti < cols[ci]; ti++) {
               var tile = document.createElement('div');
               tile.className = 'wc-tile';
-              var itm = media[mIdx++];
+              var itm = media[mIdx % media.length]; mIdx++;
               if (itm.v) {
                 var vv = document.createElement('video');
                 vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
