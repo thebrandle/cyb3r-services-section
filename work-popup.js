@@ -1,7 +1,9 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.5.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.6.0
  *
+ * v1.6.0: collage is ROW-based per user: each number in "Popup Layout" = tiles in that ROW,
+ * top to bottom. "3+1+2" = row of 3, then one full-width tile, then a row of 2. "3x3" = 3 rows of 3.
  * v1.5.0: per-card MEDIA COLLAGE on the popup's left half. Markers in .pop-data:
- *   [data-pd="playout"] -> "Popup Layout" pattern, e.g. "2+2+1" (columns of stacked tiles) or "3x3"
+ *   [data-pd="playout"] -> "Popup Layout" pattern
  *   [data-pd="pvid"]    -> "Popup Video URL" (optional; takes the first tile, muted autoplay loop)
  *   [data-pd="pm1..9"]  -> bound imgs for "Popup Img 1..9" (fill tiles in order; empties skipped)
  * When a layout + at least one media exists, the collage replaces the single photo/logo.
@@ -33,9 +35,9 @@
     '.wpop-link::after,.wpop-link2::after{content:"\\2192";font-weight:600}' +
     '.wpop-link:hover,.wpop-link2:hover{background:#14a098!important;color:#fff!important;opacity:1!important}' +
     '.wpop-link.hide,.wpop-link2.hide{display:none!important}' +
-    '.wpop-collage{position:absolute;inset:0;display:flex;gap:6px;background:#0f0e0e}' +
-    '.wpop-collage .wc-col{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}' +
-    '.wpop-collage .wc-tile{flex:1;position:relative;overflow:hidden;min-height:0}' +
+    '.wpop-collage{position:absolute;inset:0;display:flex;flex-direction:column;gap:6px;background:#0f0e0e}' +
+    '.wpop-collage .wc-row{flex:1;display:flex;gap:6px;min-height:0}' +
+    '.wpop-collage .wc-tile{flex:1;position:relative;overflow:hidden;min-width:0}' +
     '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
     '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}';
 
@@ -160,7 +162,7 @@
           var mIdx = 0;
           for (var ci = 0; ci < cols.length && mIdx < media.length; ci++) {
             var colEl = document.createElement('div');
-            colEl.className = 'wc-col';
+            colEl.className = 'wc-row';
             for (var ti = 0; ti < cols[ci] && mIdx < media.length; ti++) {
               var tile = document.createElement('div');
               tile.className = 'wc-tile';
