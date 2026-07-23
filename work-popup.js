@@ -1,5 +1,13 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.8.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.9.0
  *
+ * v1.9.0: UNIFORM PANEL LAYOUT for all cards - top to bottom: LOGO (.wpop-toplogo native img,
+ * filled from Popup Logo, height from Popup Logo Size), TITLE (.wpop-title, from the new
+ * "Popup Title" field [data-pd="ptitle"], blank = item Name), DESCRIPTION (.wpop-desc, smaller
+ * normal-weight; Popup Body rich text still overrides it), SERVICES stacked one per line
+ * (.wpop-services native block: "SERVICES" label + .wpop-services-list; text from the new
+ * multiline "Popup Services" field [data-pd="psvc"], fallback to old Services; lines split on
+ * newlines, or on , | when single-line), then the CTAs. The old SERVICES/INDUSTRY/LOCATION/
+ * YEAR rows are retired (.wpop-rows display:none via Designer style; toggles ignored).
  * v1.8.0: "Popup Body" RichText field ([data-pd="pbody"]) - when filled, its formatted HTML
  * (headings, paragraphs, bold, lists) REPLACES the plain Description text in the popup
  * (.wpop-desc gets .wpop-rich + the rich markup). Blank = plain Description as before.
@@ -52,7 +60,7 @@
     '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
     '.wpop-collage .wc-tile.wc-empty{background:#141b22}' +
     '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}' +
-    '.wpop-title-logo{display:block;height:56px;width:auto;max-width:70%;object-fit:contain;object-position:left center}' +
+    '.wpop-toplogo[src*="placeholder"]{display:none!important}' +
     '.wpop-desc.wpop-rich h1,.wpop-desc.wpop-rich h2,.wpop-desc.wpop-rich h3,.wpop-desc.wpop-rich h4,' +
     '.wpop-desc.wpop-rich h5,.wpop-desc.wpop-rich h6{color:#0f0e0e;font-weight:600;line-height:1.25;margin:1.15em 0 .4em}' +
     '.wpop-desc.wpop-rich h1{font-size:1.6em}.wpop-desc.wpop-rich h2{font-size:1.45em}' +
@@ -75,7 +83,6 @@
   injectCSS();
 
   function T(el) { return el ? (el.textContent || '').replace(/ /g, ' ').trim() : ''; }
-  function vis(el) { return !!el && !el.classList.contains('w-condition-invisible'); }
   function clean(s, fb) { return (s || fb).replace(/\s*→\s*$/, '').trim() || fb; }
 
   // Wrap the website link in a flex row (once) and add the empty 2nd button beside it.
@@ -101,27 +108,11 @@
     if (!pd) return;
     var kids = pd.children;
     var services = T(kids[1]);
-    var industry = T(kids[2]);
-    var loc = T(kids[3]);
-    var year = T(kids[4]);
     var wurl = T(kids[6]); // Website URL
 
-    var mi = pd.querySelector('[data-pd="si"]');
-    var ml = pd.querySelector('[data-pd="sl"]');
-    var my = pd.querySelector('[data-pd="sy"]');
     var mc = pd.querySelector('[data-pd="ct"]');
     var xt = T(pd.querySelector('[data-pd="xt"]'));
     var xu = T(pd.querySelector('[data-pd="xu"]'));
-
-    var rows = document.querySelectorAll('.wpop-rows .wpop-row'); // Services, Industry, Location, Year
-    var shown = [!!services, vis(mi) && !!industry, vis(ml) && !!loc, vis(my) && !!year];
-    var any = false;
-    for (var i = 0; i < rows.length && i < 4; i++) {
-      rows[i].style.display = shown[i] ? '' : 'none';
-      if (shown[i]) any = true;
-    }
-    var wrap = document.querySelector('.wpop-rows');
-    if (wrap) wrap.style.display = any ? '' : 'none';
 
     // CTA row: website link + optional extra button. The website link is managed here so a Website
     // URL entered without an http(s):// scheme still shows (the base engine's strict regex would
@@ -238,21 +229,38 @@
       }
     }
 
-    // --- title -> logo (optional, per card) ---
+    // --- title: Popup Title field, else the item Name ---
     var ttl = document.querySelector('.wpop-title');
-    if (ttl) {
+    if (ttl) ttl.textContent = T(pd.querySelector('[data-pd="ptitle"]')) || T(kids[0]) || 'Project';
+
+    // --- logo on top (Popup Logo; height from Popup Logo Size px, clamped 20-240, blank = 56) ---
+    var tl = document.querySelector('.wpop-toplogo');
+    if (tl) {
       var lg = pd.querySelector('[data-pd="plogo"]');
       var lsrc = lg ? (lg.getAttribute('src') || '') : '';
       if (lsrc && lg.className.indexOf('w-condition-invisible') < 0 && lsrc.indexOf('placeholder') < 0) {
-        ttl.textContent = '';
-        var li = document.createElement('img');
-        li.className = 'wpop-title-logo';
-        li.src = lsrc;
-        li.alt = T(kids[0]) || 'logo';
-        // per-card size override (Popup Logo Size, px; clamped 20-240; blank = CSS default 56)
         var lh = parseInt(T(pd.querySelector('[data-pd="plogoh"]')), 10);
-        if (lh > 0) li.style.height = Math.min(Math.max(lh, 20), 240) + 'px';
-        ttl.appendChild(li);
+        tl.src = lsrc;
+        tl.alt = T(kids[0]) || 'logo';
+        tl.style.height = (lh > 0 ? Math.min(Math.max(lh, 20), 240) : 56) + 'px';
+        tl.style.display = '';
+      } else {
+        tl.style.display = 'none';
+      }
+    }
+
+    // --- services, stacked one per line (Popup Services; fallback = old Services split on , |) ---
+    var svcBox = document.querySelector('.wpop-services');
+    var svcList = document.querySelector('.wpop-services-list');
+    if (svcBox && svcList) {
+      var stext = T(pd.querySelector('[data-pd="psvc"]')) || services;
+      if (stext) {
+        var lines = (stext.indexOf('\n') > -1 ? stext.split('\n') : stext.split(/,|\|/))
+          .map(function (s) { return s.trim(); }).filter(Boolean);
+        svcList.textContent = lines.join('\n');
+        svcBox.style.display = '';
+      } else {
+        svcBox.style.display = 'none';
       }
     }
   }
