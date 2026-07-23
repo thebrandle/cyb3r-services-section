@@ -1,5 +1,9 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.10.1
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.11.0
  *
+ * v1.11.0: rich-text paragraphs/list items now INHERIT font-size/weight/line-height from
+ * .wpop-desc (the site's global `p { font-size: var(--font--work-title); opacity:.7 }` rule was
+ * overriding the class, which is why Designer font changes on wpop-desc "did nothing"). Also:
+ * .wpop-head row at the top of the panel holds the logo + close button side by side.
  * v1.10.1: the industry line is a ROW - "INDUSTRY" label (.wpop-lab) on the left, the value
  * (.wpop-industry-val, from the Industry field) on the right; the row hides when empty.
  * v1.10.0: panel order is now LOGO -> INDUSTRY -> SERVICES -> TITLE -> DESCRIPTION -> CTAs.
@@ -74,7 +78,8 @@
     '.wpop-desc.wpop-rich blockquote{border-left:3px solid #39F1E0;margin:.9em 0;padding:.15em 0 .15em .9em}' +
     '.wpop-desc.wpop-rich figure{margin:.9em 0}.wpop-desc.wpop-rich img{max-width:100%;height:auto;display:block}' +
     '.wpop-desc.wpop-rich a{color:inherit;text-decoration:underline}' +
-    '.wpop-desc.wpop-rich>:first-child{margin-top:0}.wpop-desc.wpop-rich>:last-child{margin-bottom:0}';
+    '.wpop-desc.wpop-rich>:first-child{margin-top:0}.wpop-desc.wpop-rich>:last-child{margin-bottom:0}' +
+    '.wpop-desc.wpop-rich p,.wpop-desc.wpop-rich li{font-size:inherit;font-weight:inherit;line-height:inherit;opacity:1}';
 
   function injectCSS() {
     if (document.getElementById('cyb3r-wpop-style')) return;
