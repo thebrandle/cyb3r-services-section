@@ -1,7 +1,8 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.10.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.10.1
  *
- * v1.10.0: panel order is now LOGO -> INDUSTRY (.wpop-industry small uppercase line, from the
- * Industry field, hidden when empty) -> SERVICES -> TITLE -> DESCRIPTION -> CTAs.
+ * v1.10.1: the industry line is a ROW - "INDUSTRY" label (.wpop-lab) on the left, the value
+ * (.wpop-industry-val, from the Industry field) on the right; the row hides when empty.
+ * v1.10.0: panel order is now LOGO -> INDUSTRY -> SERVICES -> TITLE -> DESCRIPTION -> CTAs.
  * v1.9.0: UNIFORM PANEL LAYOUT for all cards - top to bottom: LOGO (.wpop-toplogo native img,
  * filled from Popup Logo, height from Popup Logo Size), TITLE (.wpop-title, from the new
  * "Popup Title" field [data-pd="ptitle"], blank = item Name), DESCRIPTION (.wpop-desc, smaller
@@ -251,12 +252,13 @@
       }
     }
 
-    // --- industry line (small uppercase; Industry field, hidden when empty) ---
+    // --- industry row: INDUSTRY label left, value right; hidden when Industry is empty ---
     var ind = document.querySelector('.wpop-industry');
     if (ind) {
       var itext = T(kids[2]);
-      ind.textContent = itext;
-      ind.style.display = itext ? '' : 'none';
+      var iv = ind.querySelector('.wpop-industry-val');
+      if (iv) iv.textContent = itext;
+      ind.style.display = (itext && iv) ? '' : 'none';
     }
 
     // --- services, stacked one per line (Popup Services; fallback = old Services split on , |) ---
