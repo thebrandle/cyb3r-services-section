@@ -1,7 +1,10 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.6.2
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.7.0
  *
- * v1.6.2: the typed layout is honored EXACTLY - every declared tile renders. Fewer images
- * than tiles -> images cycle from the start to fill the remaining slots (no dropped rows).
+ * v1.7.0: FIXED SLOT GRID - Popup Img slots map to positions: 1-3 = row 1, 4-6 = row 2,
+ * 7-9 = row 3, always. A 1-tile (full-width) row uses only its first slot (e.g. row 2 = slot 4;
+ * slots 5-6 unused). A 2-tile row uses its first two. Video: "Popup Video URL" = "4: https://..."
+ * puts the video in slot 4 (bare URL = slot 1). Declared-but-empty slots render as dark tiles.
+ * Also: [data-pd="plogo"] (Popup Logo field) replaces the popup title TEXT with the logo image.
  * v1.6.1: layout parser accepts ANY separator between row sizes - "3x1x3", "3+1+3", "3 1 3"
  * all mean: row of 3, one full-width, row of 3. Every number = one row, top to bottom.
  * v1.6.0: collage is ROW-based per user: each number in "Popup Layout" = tiles in that ROW.
@@ -42,7 +45,9 @@
     '.wpop-collage .wc-row{flex:1;display:flex;gap:6px;min-height:0}' +
     '.wpop-collage .wc-tile{flex:1;position:relative;overflow:hidden;min-width:0}' +
     '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
-    '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}';
+    '.wpop-collage .wc-tile.wc-empty{background:#141b22}' +
+    '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}' +
+    '.wpop-title-logo{display:block;height:56px;width:auto;max-width:70%;object-fit:contain;object-position:left center}';
 
   function injectCSS() {
     if (document.getElementById('cyb3r-wpop-style')) return;
@@ -147,50 +152,76 @@
       var layoutStr = T(pd.querySelector('[data-pd="playout"]'));
       var pvidUrl = T(pd.querySelector('[data-pd="pvid"]'));
       if (layoutStr) {
-        var media = [];
-        if (/^https?:\/\//i.test(pvidUrl)) media.push({ v: pvidUrl });
-        for (var mi2 = 1; mi2 <= 9; mi2++) {
-          var pim = pd.querySelector('[data-pd="pm' + mi2 + '"]');
-          if (!pim) continue;
-          var psrc = pim.getAttribute('src') || '';
-          if (psrc && pim.className.indexOf('w-condition-invisible') < 0 && psrc.indexOf('placeholder') < 0) media.push({ i: psrc });
+        // Rows: each number = tiles in that row (max 3), max 3 rows. FIXED slots per row:
+        // row 1 = slots 1-3, row 2 = slots 4-6, row 3 = slots 7-9. A 1-tile row uses only
+        // its first slot; a 2-tile row its first two. Empty declared slots = dark tiles.
+        var rowsDef = layoutStr.split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
+          .filter(function (n) { return n > 0; }).slice(0, 3).map(function (n) { return Math.min(n, 3); });
+        // Video slot: "4: https://..." puts the video in slot 4; a bare URL means slot 1.
+        var vidSlot = 0, vidUrl = '';
+        var vsm = pvidUrl.match(/^([1-9])\s*[:|,\s]\s*(https?:\/\/\S+)/i);
+        if (vsm) { vidSlot = +vsm[1]; vidUrl = vsm[2]; }
+        else if (/^https?:\/\//i.test(pvidUrl)) { vidSlot = 1; vidUrl = pvidUrl; }
+        function slotMedia(s) {
+          if (vidUrl && s === vidSlot) return { v: vidUrl };
+          var pim = pd.querySelector('[data-pd="pm' + s + '"]');
+          if (pim) {
+            var psrc = pim.getAttribute('src') || '';
+            if (psrc && pim.className.indexOf('w-condition-invisible') < 0 && psrc.indexOf('placeholder') < 0) return { i: psrc };
+          }
+          return null;
         }
-        // Every number in the pattern = one ROW (tiles in that row), any separator: 3x1x3, 3+1+3, "3 1 3"
-        var cols = layoutStr.split(/[^0-9]+/).map(function (s) { return parseInt(s, 10) || 0; })
-          .filter(function (n) { return n > 0 && n <= 9; });
-        if (media.length && cols.length) {
+        if (rowsDef.length) {
           var colWrap = document.createElement('div');
           colWrap.className = 'wpop-collage';
-          // The typed layout is honored EXACTLY: every declared tile renders. If there are fewer
-          // media than tiles, images cycle from the start again to fill the remaining slots.
-          var mIdx = 0;
-          for (var ci = 0; ci < cols.length; ci++) {
-            var colEl = document.createElement('div');
-            colEl.className = 'wc-row';
-            for (var ti = 0; ti < cols[ci]; ti++) {
+          var anyMedia = false;
+          for (var ri = 0; ri < rowsDef.length; ri++) {
+            var rowEl = document.createElement('div');
+            rowEl.className = 'wc-row';
+            for (var ti = 0; ti < rowsDef[ri]; ti++) {
+              var slot = ri * 3 + ti + 1;
               var tile = document.createElement('div');
               tile.className = 'wc-tile';
-              var itm = media[mIdx % media.length]; mIdx++;
-              if (itm.v) {
+              var itm = slotMedia(slot);
+              if (itm && itm.v) {
                 var vv = document.createElement('video');
                 vv.src = itm.v; vv.muted = true; vv.loop = true; vv.autoplay = true;
                 vv.playsInline = true; vv.setAttribute('playsinline', '');
                 tile.appendChild(vv);
                 var vp = vv.play(); if (vp && vp.catch) vp.catch(function () {});
-              } else {
+                anyMedia = true;
+              } else if (itm) {
                 var ig = document.createElement('img');
                 ig.src = itm.i; ig.alt = '';
                 tile.appendChild(ig);
+                anyMedia = true;
+              } else {
+                tile.className = 'wc-tile wc-empty';
               }
-              colEl.appendChild(tile);
+              rowEl.appendChild(tile);
             }
-            if (colEl.children.length) colWrap.appendChild(colEl);
+            colWrap.appendChild(rowEl);
           }
-          if (colWrap.children.length) {
+          if (anyMedia) {
             mediaBox.appendChild(colWrap);
             if (pop) pop.classList.add('has-collage');
           }
         }
+      }
+    }
+
+    // --- title -> logo (optional, per card) ---
+    var ttl = document.querySelector('.wpop-title');
+    if (ttl) {
+      var lg = pd.querySelector('[data-pd="plogo"]');
+      var lsrc = lg ? (lg.getAttribute('src') || '') : '';
+      if (lsrc && lg.className.indexOf('w-condition-invisible') < 0 && lsrc.indexOf('placeholder') < 0) {
+        ttl.textContent = '';
+        var li = document.createElement('img');
+        li.className = 'wpop-title-logo';
+        li.src = lsrc;
+        li.alt = T(kids[0]) || 'logo';
+        ttl.appendChild(li);
       }
     }
   }
