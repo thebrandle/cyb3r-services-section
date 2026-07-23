@@ -1,5 +1,7 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.0
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.1
  *
+ * v1.13.1: no two bands ever look the same - per-band random column WIDTHS + alternate
+ * bands pack right-to-left (the odd-one-out tile flips sides) on top of the height jitter.
  * v1.13.0: MASONRY BANDS - "Popup Layout" = band sizes separated by x (any separator), top
  * to bottom. Each number = tiles in that horizontal band, packed masonry (random seeded
  * heights); a 1-tile band = a FULL-WIDTH row (e.g. for the video). Slots run sequentially
@@ -228,6 +230,8 @@
             for (var ci = 0; ci < colN; ci++) {
               var ce = document.createElement('div');
               ce.className = 'wc-col';
+              // per-band random column WIDTHS so no two bands share the same skeleton
+              ce.style.flexGrow = (0.8 + rnd() * 0.7).toFixed(3);
               band.appendChild(ce);
               colEls.push(ce);
             }
@@ -252,7 +256,10 @@
               } else {
                 tile.className = 'wc-tile wc-empty';
               }
-              colEls[ti % colN].appendChild(tile);
+              // alternate bands pack right-to-left so equal-size bands never share a shape
+              var colIdx = ti % colN;
+              if (gi % 2 === 1) colIdx = colN - 1 - colIdx;
+              colEls[colIdx].appendChild(tile);
             }
             colWrap.appendChild(band);
           }
