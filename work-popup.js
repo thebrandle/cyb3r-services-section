@@ -1,5 +1,8 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.7.1
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.8.0
  *
+ * v1.8.0: "Popup Body" RichText field ([data-pd="pbody"]) - when filled, its formatted HTML
+ * (headings, paragraphs, bold, lists) REPLACES the plain Description text in the popup
+ * (.wpop-desc gets .wpop-rich + the rich markup). Blank = plain Description as before.
  * v1.7.1: "Popup Logo Size" field ([data-pd="plogoh"]) sets the title-logo height per card
  * in px (clamped 20-240; blank = the CSS default 56px).
  * v1.7.0: FIXED SLOT GRID - Popup Img slots map to positions: 1-3 = row 1, 4-6 = row 2,
@@ -49,7 +52,18 @@
     '.wpop-collage .wc-tile img,.wpop-collage .wc-tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}' +
     '.wpop-collage .wc-tile.wc-empty{background:#141b22}' +
     '.wpop.has-collage .wpop-img,.wpop.has-collage .wpop-logo{display:none!important}' +
-    '.wpop-title-logo{display:block;height:56px;width:auto;max-width:70%;object-fit:contain;object-position:left center}';
+    '.wpop-title-logo{display:block;height:56px;width:auto;max-width:70%;object-fit:contain;object-position:left center}' +
+    '.wpop-desc.wpop-rich h1,.wpop-desc.wpop-rich h2,.wpop-desc.wpop-rich h3,.wpop-desc.wpop-rich h4,' +
+    '.wpop-desc.wpop-rich h5,.wpop-desc.wpop-rich h6{color:#0f0e0e;font-weight:600;line-height:1.25;margin:1.15em 0 .4em}' +
+    '.wpop-desc.wpop-rich h1{font-size:1.6em}.wpop-desc.wpop-rich h2{font-size:1.45em}' +
+    '.wpop-desc.wpop-rich h3{font-size:1.2em}.wpop-desc.wpop-rich h4{font-size:1.05em}' +
+    '.wpop-desc.wpop-rich p{margin:0 0 .85em}' +
+    '.wpop-desc.wpop-rich ul,.wpop-desc.wpop-rich ol{margin:0 0 .9em;padding-left:1.25em}' +
+    '.wpop-desc.wpop-rich li{margin:.3em 0}' +
+    '.wpop-desc.wpop-rich blockquote{border-left:3px solid #39F1E0;margin:.9em 0;padding:.15em 0 .15em .9em}' +
+    '.wpop-desc.wpop-rich figure{margin:.9em 0}.wpop-desc.wpop-rich img{max-width:100%;height:auto;display:block}' +
+    '.wpop-desc.wpop-rich a{color:inherit;text-decoration:underline}' +
+    '.wpop-desc.wpop-rich>:first-child{margin-top:0}.wpop-desc.wpop-rich>:last-child{margin-bottom:0}';
 
   function injectCSS() {
     if (document.getElementById('cyb3r-wpop-style')) return;
@@ -209,6 +223,18 @@
             if (pop) pop.classList.add('has-collage');
           }
         }
+      }
+    }
+
+    // --- rich body (optional, per card): Popup Body replaces the plain Description ---
+    var desc = document.querySelector('.wpop-desc');
+    if (desc) {
+      var rb = pd.querySelector('[data-pd="pbody"]');
+      if (rb && T(rb) && rb.className.indexOf('w-dyn-bind-empty') < 0) {
+        desc.innerHTML = rb.innerHTML;
+        desc.classList.add('wpop-rich');
+      } else {
+        desc.classList.remove('wpop-rich');
       }
     }
 
