@@ -7,7 +7,7 @@
 (function () {
   if (!document.querySelector('.wk,.dm')) return;
   var d = document, h = d.head,
-      B = 'https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@b784354858d4a8c8ec7bf5f967370f94dcb217ff/';
+      B = 'https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@1b6d194193f3729ee47e8a7edef9382481a876f5/';
   var l = d.createElement('link'); l.rel = 'stylesheet'; l.href = B + 'cyb3r-sections.css'; h.appendChild(l);
   function j(u, c) { var s = d.createElement('script'); s.src = u; if (c) s.onload = c; h.appendChild(s); }
   j('https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js', function () { j(B + 'cyb3r-sections.js'); });
