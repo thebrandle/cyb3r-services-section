@@ -46,23 +46,40 @@
       }
     }
   }
-  addEventListener('touchstart', kick, { once: true, passive: true });
-  addEventListener('click', kick, { once: true });
+  /* v1.3.0: the kick exists for iOS Low Power Mode - TOUCH devices only. On desktop the
+   * first-click listener was firing video .play() spin-ups exactly when the user clicked
+   * the hamburger, hitching the menu animation. Desktop muted autoplay needs no gesture. */
+  if (('ontouchstart' in window) || (navigator.maxTouchPoints | 0) > 0) {
+    addEventListener('touchstart', kick, { once: true, passive: true });
+    addEventListener('click', kick, { once: true });
+  }
 
   /* v1.2.0: hero background videos PAUSE while their hero is scrolled off-screen - video
    * decode costs CPU/GPU every frame and competes with scroll + menu animations (the Work
    * hero alpha video decodes in software). Playback resumes when the hero comes back. */
   if ('IntersectionObserver' in window) {
+    /* Hysteresis: play immediately on entry, but only pause after the video has been
+     * off-screen for 800ms straight - crossing the hero boundary while scrolling was
+     * thrashing play/pause (each play() is a decoder spin-up = a visible hitch). */
+    var vioTimers = new WeakMap();
     var vio = new IntersectionObserver(function (es) {
       for (var i = 0; i < es.length; i++) {
-        var v = es[i].target;
-        if (es[i].isIntersecting) {
-          if (v.paused && (v.autoplay || v.hasAttribute('autoplay'))) {
-            v.muted = true;
-            var p = v.play();
-            if (p && p.catch) p.catch(function () {});
+        (function (v, inView) {
+          if (inView) {
+            var t = vioTimers.get(v);
+            if (t) { clearTimeout(t); vioTimers.delete(v); }
+            if (v.paused && (v.autoplay || v.hasAttribute('autoplay'))) {
+              v.muted = true;
+              var p = v.play();
+              if (p && p.catch) p.catch(function () {});
+            }
+          } else if (!vioTimers.has(v)) {
+            vioTimers.set(v, setTimeout(function () {
+              vioTimers.delete(v);
+              if (!v.paused) v.pause();
+            }, 800));
           }
-        } else if (!v.paused) { v.pause(); }
+        })(es[i].target, es[i].isIntersecting);
       }
     }, { rootMargin: '120px' });
     var vioWatch = function () {

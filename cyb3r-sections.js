@@ -108,8 +108,13 @@
 
   /* ---------- card videos: play only while in view (perf + reduced-motion aware) ---------- */
   if(!reduce && "IntersectionObserver" in window){
+    // hysteresis: play on entry, pause only after 500ms continuously out - cards cross the
+    // viewport edge constantly during the horizontal scroll and play/pause thrash hitches
+    const vPauseT=new WeakMap();
     const vio=new IntersectionObserver((ents)=>{ ents.forEach(en=>{ const v=en.target;
-      if(en.isIntersecting){ v.muted=true; const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{}); } else v.pause(); }); },{threshold:0.15});
+      if(en.isIntersecting){ const t=vPauseT.get(v); if(t){ clearTimeout(t); vPauseT.delete(v); }
+        v.muted=true; const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
+      else if(!vPauseT.has(v)){ vPauseT.set(v, setTimeout(()=>{ vPauseT.delete(v); v.pause(); }, 500)); } }); },{threshold:0.15});
     cards.forEach(c=>{ const v=c.inner.querySelector(".scene-vid"); if(v){ v.muted=true;
       v.addEventListener("playing",()=>v.classList.add("sv-on"));
       ["waiting","pause","emptied"].forEach(ev=>v.addEventListener(ev,()=>v.classList.remove("sv-on")));
@@ -262,14 +267,19 @@
   if(!canvas || !T) return;   // guard: .dm absent, or three.js not loaded -> don't crash
   // network + render gate: card videos download/play AND the WebGL loop renders only while
   // the section is near the viewport; both idle when it is far away
-  let dmVisible=false;
+  let dmVisible=false, dmPauseT=0;
   (function(){ const dmRoot=canvas.closest(".dm")||canvas;
     if("IntersectionObserver" in window){
       new IntersectionObserver(function(es){ es.forEach(function(e){
         dmVisible=e.isIntersecting;
         if(e.isIntersecting){ dmSeen=true;
-          DMV.forEach(function(v){ if(v.preload==="none") v.preload="auto"; const p=v.play(); if(p&&p.catch) p.catch(function(){}); });
-        } else if(dmSeen){ DMV.forEach(function(v){ v.pause(); }); }
+          if(dmPauseT){ clearTimeout(dmPauseT); dmPauseT=0; }
+          // stagger the six decoder spin-ups instead of starting them all in one frame
+          DMV.forEach(function(v,i){ if(v.preload==="none") v.preload="auto";
+            setTimeout(function(){ if(dmVisible){ const p=v.play(); if(p&&p.catch) p.catch(function(){}); } }, i*70); });
+        } else if(dmSeen && !dmPauseT){
+          dmPauseT=setTimeout(function(){ dmPauseT=0; if(!dmVisible) DMV.forEach(function(v){ v.pause(); }); }, 700);
+        }
       }); },{rootMargin:"700px"}).observe(dmRoot);
     } else { dmSeen=true; dmVisible=true; DMV.forEach(function(v){ const p=v.play(); if(p&&p.catch) p.catch(function(){}); }); }
   })();

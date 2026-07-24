@@ -150,15 +150,19 @@
      * leaves view AND when a panel is fully covered by the next one (before this, scrolling
      * to the last panel left all six videos decoding at once - the scroll jank). The first
      * panel's reveal (incl. its video) waits for the section to actually approach. */
-    var svcVisible = false, started = reduce;
+    var svcVisible = false, started = reduce, svcPauseT = 0;
     function pauseAll() { panels.forEach(function (pn) { if (pn.vid && !pn.vid.paused) pn.vid.pause(); }); }
     function resumeTop() { panels.forEach(function (pn) { if (pn.revealed && !pn.covered && pn.vid && pn.vid.paused) { var p = pn.vid.play(); if (p && p.catch) p.catch(function () {}); } }); }
     if ("IntersectionObserver" in window) {
       new IntersectionObserver(function (es) {
         for (var i = 0; i < es.length; i++) {
           svcVisible = es[i].isIntersecting;
-          if (svcVisible) { if (!started) { started = true; reveal(panels[0]); } else resumeTop(); }
-          else pauseAll();
+          if (svcVisible) {
+            if (svcPauseT) { clearTimeout(svcPauseT); svcPauseT = 0; }
+            if (!started) { started = true; reveal(panels[0]); } else resumeTop();
+          } else if (!svcPauseT) {
+            svcPauseT = setTimeout(function () { svcPauseT = 0; if (!svcVisible) pauseAll(); }, 700);
+          }
         }
       }, { rootMargin: "250px" }).observe(pin);
     } else { svcVisible = true; if (!started) { started = true; reveal(panels[0]); } }
