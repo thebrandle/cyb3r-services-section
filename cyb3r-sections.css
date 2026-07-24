@@ -46,7 +46,8 @@
     box-shadow:0 30px 60px -34px rgba(0,0,0,.7); }
 .wk .art .scene{ position:absolute; inset:0; will-change:transform; background-size:cover; background-position:center; background-repeat:no-repeat; }
 .wk .art:hover .scene{ transform:scale(1.05); transition:transform .8s cubic-bezier(.22,1,.36,1); }
-.wk .art .scene-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; display:block; z-index:1; }
+.wk .art .scene-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center; display:block; z-index:1; opacity:0; transition:opacity .4s ease; }
+.wk .art .scene-vid.sv-on{ opacity:1; }
 .wk .art:hover .scene-vid{ transform:scale(1.05); transition:transform .8s cubic-bezier(.22,1,.36,1); }
 .wk .art::after{ content:none; }
 .wk .art .frame{ position:absolute; inset:16px; pointer-events:none; z-index:3; }

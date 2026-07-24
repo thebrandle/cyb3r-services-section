@@ -94,7 +94,7 @@
   const cards=projects.map((p)=>{
     const el=document.createElement("div"); el.className="panel card";
     const inner=document.createElement("div"); inner.className="p-inner";
-    inner.innerHTML=`<div class="art"><div class="scene" style="background-image:url('${p.img}')"></div>${p.video?`<video class="scene-vid" muted loop playsinline preload="metadata" poster="${p.img}"><source src="${p.video}" type="video/mp4"></video>`:``}</div>
+    inner.innerHTML=`<div class="art"><div class="scene" style="background-image:url('${p.img}')"></div>${p.video?`<video class="scene-vid" muted loop playsinline preload="none" poster="${p.img}"><source src="${p.video}" type="video/mp4"></video>`:``}</div>
       <div class="info"><div class="cardline"></div><h3>${p.name}</h3><div class="cta-row"></div></div>`;
     el.appendChild(inner); track.appendChild(el);
     inner.querySelector(".cta-row").appendChild(makeButton("Explore project",{href:"/work?project="+encodeURIComponent(p.work), target:"_blank"}));
@@ -105,7 +105,11 @@
   if(!reduce && "IntersectionObserver" in window){
     const vio=new IntersectionObserver((ents)=>{ ents.forEach(en=>{ const v=en.target;
       if(en.isIntersecting){ v.muted=true; const pr=v.play(); if(pr&&pr.catch) pr.catch(()=>{}); } else v.pause(); }); },{threshold:0.15});
-    cards.forEach(c=>{ const v=c.inner.querySelector(".scene-vid"); if(v){ v.muted=true; vio.observe(v); } });
+    cards.forEach(c=>{ const v=c.inner.querySelector(".scene-vid"); if(v){ v.muted=true;
+      v.addEventListener("playing",()=>v.classList.add("sv-on"));
+      ["waiting","pause","emptied"].forEach(ev=>v.addEventListener(ev,()=>v.classList.remove("sv-on")));
+      v.addEventListener("error",()=>{ try{v.remove();}catch(e){} },true);
+      vio.observe(v); } });
   }
 
   /* ---------- layout (exact: heading = 0.5W, cards = 0.5W each → A=0.5w, R=0.5w) ---------- */
@@ -207,16 +211,17 @@
   ];
 
   const _cardCache={};
+  const DMV=[]; let dmSeen=false;   // card videos start cold; fetched + played only once .dm approaches
   function getCard(idx){
     if(_cardCache[idx]) return _cardCache[idx];
     const [url,title]=CARDS[idx];
     // playing video -> VideoTexture (auto-updates each frame). Cloudinary crops to the card aspect so nothing stretches.
     const vid=document.createElement("video");
     vid.crossOrigin="anonymous"; vid.muted=true; vid.defaultMuted=true; vid.loop=true; vid.playsInline=true;
-    vid.setAttribute("muted",""); vid.setAttribute("playsinline",""); vid.setAttribute("webkit-playsinline",""); vid.preload="auto";
+    vid.setAttribute("muted",""); vid.setAttribute("playsinline",""); vid.setAttribute("webkit-playsinline",""); vid.preload="none";
     vid.style.cssText="position:fixed;left:-9999px;top:0;width:2px;height:2px;opacity:0;pointer-events:none";
     (document.body||document.documentElement).appendChild(vid);
-    vid.src=url; const pr=vid.play(); if(pr&&pr.catch) pr.catch(function(){});
+    vid.src=url; DMV.push(vid); if(dmSeen){ const pr=vid.play(); if(pr&&pr.catch) pr.catch(function(){}); }
     const vtex=new T.VideoTexture(vid); vtex.minFilter=T.LinearFilter; vtex.magFilter=T.LinearFilter; vtex.generateMipmaps=false;
     // static label overlay (transparent, bottom gradient + title) composited over the video in the shader
     const cw=812,ch=568; const c=document.createElement("canvas"); c.width=cw; c.height=ch; const x=c.getContext("2d");
@@ -236,6 +241,16 @@
   // ---- renderer / scene / camera ----
   const canvas=document.getElementById("gl");
   if(!canvas || !T) return;   // guard: .dm absent, or three.js not loaded -> don't crash
+  // network gate: the six card videos only download + play when the section is near; paused when far
+  (function(){ const dmRoot=canvas.closest(".dm")||canvas;
+    if("IntersectionObserver" in window){
+      new IntersectionObserver(function(es){ es.forEach(function(e){
+        if(e.isIntersecting){ dmSeen=true;
+          DMV.forEach(function(v){ if(v.preload==="none") v.preload="auto"; const p=v.play(); if(p&&p.catch) p.catch(function(){}); });
+        } else if(dmSeen){ DMV.forEach(function(v){ v.pause(); }); }
+      }); },{rootMargin:"700px"}).observe(dmRoot);
+    } else { dmSeen=true; DMV.forEach(function(v){ const p=v.play(); if(p&&p.catch) p.catch(function(){}); }); }
+  })();
   const renderer=new T.WebGLRenderer({canvas, alpha:true, antialias:true});
   renderer.setPixelRatio(Math.min(2, devicePixelRatio||1));
   renderer.setClearColor(0x040508, 0);
