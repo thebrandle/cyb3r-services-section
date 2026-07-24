@@ -360,6 +360,9 @@
   // ---- scroll drive (Lenis-style continuous smoothing) ----
   const pin=document.getElementById("dmPin"), hwTop=document.getElementById("hwTop"), hwBottom=document.getElementById("hwBottom"),
         caption=document.getElementById("caption"), bar=document.getElementById("bar"), phaseEl=document.getElementById("phase");
+  // the "View our services" underline IS the scroll progress bar: move the bar box under the link
+  (function(){ var fc=document.querySelector(".dm .foot-cta"), bb=bar&&bar.parentElement;
+    if(fc&&bb&&bb.classList.contains("bar")) fc.appendChild(bb); })();
   function pinProgress(){ const r=pin.getBoundingClientRect(); const total=pin.offsetHeight-innerHeight; return clamp(-r.top/total,0,1); }
   let gSmooth=0, last=performance.now();
 
