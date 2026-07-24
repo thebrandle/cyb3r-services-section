@@ -20,20 +20,20 @@
   const projects=[
     { name:"Early Health City", desc:"Strategy, brand and design for a landmark health destination.",
       kick:"Strategy · Branding · Design", hero:"Health, reimagined.", work:"Early Health City",
-      img:"https://cdn.prod.website-files.com/6a293cee4280dd8c699d4d69/6a638426670be636c4f04ed6_earlyhealth.png",
+      img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-early-health.webp",
       vscale:1.08,
       video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1783004741/EarlyHealthCity-Quick_agpsxp.mp4" },
     { name:"Gattaca Genomics", desc:"Web design and development for a next-generation genomics platform.",
       kick:"Web Design · Development", hero:"Decoding tomorrow.", work:"Gattaca Genomics",
-      img:"https://cdn.prod.website-files.com/6a293cee4280dd8c699d4d69/6a638436ffa7bae7f5006c8c_gattaca.png",
+      img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-gattaca.webp",
       video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1783434285/gattacavideo_rkjmpa.mp4" },
     { name:"Cyb3r Group", desc:"Social, content and AI-driven advertising engineered for growth.",
       kick:"Social · Content · AI Advertising", hero:"Growth, engineered.", work:"CYB3R",
-      img:"https://cdn.prod.website-files.com/6a293cee4280dd8c699d4d69/6a4d0dba884e0f0f15de3d43_cyb3r.png",
+      img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-cyb3r-group.webp",
       video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1782950479/cyb3r_awam01.mp4" },
     { name:"Innovation City (RAKDAO)", desc:"SEO, Google Ads and paid media built to scale on-chain growth.",
       kick:"SEO · Google Ads · Paid Media", hero:"Built on-chain.", work:"Innovation City",
-      img:"https://cdn.prod.website-files.com/6a293cee4280dd8c699d4d69/6a6383f2bee05b7eee330da6_innovationcity.png",
+      img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-innovation-city.webp",
       video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1782952121/rakdaonew_fkhboc.mp4" }
   ];
   /* Card placeholder images above mirror the 'Selected Works' CMS collection (collection
