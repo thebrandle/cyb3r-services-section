@@ -48,4 +48,30 @@
   }
   addEventListener('touchstart', kick, { once: true, passive: true });
   addEventListener('click', kick, { once: true });
+
+  /* v1.2.0: hero background videos PAUSE while their hero is scrolled off-screen - video
+   * decode costs CPU/GPU every frame and competes with scroll + menu animations (the Work
+   * hero alpha video decodes in software). Playback resumes when the hero comes back. */
+  if ('IntersectionObserver' in window) {
+    var vio = new IntersectionObserver(function (es) {
+      for (var i = 0; i < es.length; i++) {
+        var v = es[i].target;
+        if (es[i].isIntersecting) {
+          if (v.paused && (v.autoplay || v.hasAttribute('autoplay'))) {
+            v.muted = true;
+            var p = v.play();
+            if (p && p.catch) p.catch(function () {});
+          }
+        } else if (!v.paused) { v.pause(); }
+      }
+    }, { rootMargin: '120px' });
+    var vioWatch = function () {
+      var vs = document.querySelectorAll('.hero-image video, .w-background-video video');
+      for (var i = 0; i < vs.length; i++) {
+        if (!vs[i].dataset.cybVio) { vs[i].dataset.cybVio = '1'; vio.observe(vs[i]); }
+      }
+    };
+    vioWatch();
+    setTimeout(vioWatch, 1500);
+  }
 })();

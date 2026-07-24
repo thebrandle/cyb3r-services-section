@@ -137,7 +137,14 @@
 
   function targetProgress(){ const r=pin.getBoundingClientRect(); const total=pin.offsetHeight-window.innerHeight; return clamp(-r.top/total,0,1); }
 
+  // perf: the loop idles (no layout reads, no style writes) while the section is off-screen
+  let wkVisible=true;
+  if("IntersectionObserver" in window){ wkVisible=false;
+    new IntersectionObserver(es=>{ es.forEach(e=>{ wkVisible=e.isIntersecting; }); },{rootMargin:"300px"}).observe(pin);
+  }
+
   function render(){
+    if(!wkVisible){ requestAnimationFrame(render); return; }
     // continuous smoothing every frame (this is what makes it Lenis-smooth)
     progress = reduce ? targetProgress() : lerp(progress, targetProgress(), 0.1);
 
@@ -245,15 +252,18 @@
   // ---- renderer / scene / camera ----
   const canvas=document.getElementById("gl");
   if(!canvas || !T) return;   // guard: .dm absent, or three.js not loaded -> don't crash
-  // network gate: the six card videos only download + play when the section is near; paused when far
+  // network + render gate: card videos download/play AND the WebGL loop renders only while
+  // the section is near the viewport; both idle when it is far away
+  let dmVisible=false;
   (function(){ const dmRoot=canvas.closest(".dm")||canvas;
     if("IntersectionObserver" in window){
       new IntersectionObserver(function(es){ es.forEach(function(e){
+        dmVisible=e.isIntersecting;
         if(e.isIntersecting){ dmSeen=true;
           DMV.forEach(function(v){ if(v.preload==="none") v.preload="auto"; const p=v.play(); if(p&&p.catch) p.catch(function(){}); });
         } else if(dmSeen){ DMV.forEach(function(v){ v.pause(); }); }
       }); },{rootMargin:"700px"}).observe(dmRoot);
-    } else { dmSeen=true; DMV.forEach(function(v){ const p=v.play(); if(p&&p.catch) p.catch(function(){}); }); }
+    } else { dmSeen=true; dmVisible=true; DMV.forEach(function(v){ const p=v.play(); if(p&&p.catch) p.catch(function(){}); }); }
   })();
   const renderer=new T.WebGLRenderer({canvas, alpha:true, antialias:true});
   renderer.setPixelRatio(Math.min(2, devicePixelRatio||1));
@@ -386,6 +396,7 @@
   let gSmooth=0, last=performance.now();
 
   function tick(now){
+    if(!dmVisible){ last=now; requestAnimationFrame(tick); return; }   // idle off-screen: no geometry math, no WebGL render
     const dt=Math.min(0.05,(now-last)/1000); last=now;
     gSmooth += (pinProgress()-gSmooth)*(1-Math.pow(0.001, dt));    // ≈0.1/frame, matches Lenis
     const g=gSmooth;
