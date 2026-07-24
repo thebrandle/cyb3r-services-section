@@ -69,7 +69,7 @@
   ".cyb-svc .cap-row{position:relative;padding:16px 0}" +
   ".cyb-svc .cap-row .cap-line{position:absolute;left:0;top:0;height:1px;width:100%;background:var(--line);transform:scaleX(0);transform-origin:left}" +
   ".cyb-svc .cap-row .cap-txt{font-size:1.04rem;letter-spacing:-.01em;color:var(--ink)}" +
-  "@media(max-width:860px){.cyb-svc .svc-pin{height:auto}.cyb-svc .svc-stage{position:static;height:auto;overflow:visible}.cyb-svc .panel{position:relative;inset:auto;flex-direction:column;transform:none!important}.cyb-svc .pinner{position:relative;inset:auto;flex-direction:column;transform:none!important}.cyb-svc .col-left,.cyb-svc .col-right{width:100%}.cyb-svc .divider{display:none}.cyb-svc .col-left{padding:40px 24px}.cyb-svc .col-right{padding:10px 24px 48px}.cyb-svc .cap-row .cap-line{transform:scaleX(1)!important}}" +
+  "@media(max-width:860px){.cyb-svc .svc-pin{height:auto}.cyb-svc .svc-stage{position:static;height:auto;overflow:visible}.cyb-svc .panel{position:relative;inset:auto;flex-direction:column;transform:none!important}.cyb-svc .pinner{position:relative;inset:auto;flex-direction:column;transform:none!important}.cyb-svc .col-left,.cyb-svc .col-right{width:100%}.cyb-svc .divider{display:none}.cyb-svc .col-left{padding:40px 24px}.cyb-svc .col-right{padding:34px 24px 48px}.cyb-svc .cap-row .cap-line{transform:scaleX(1)!important}}" +
   "@media (prefers-reduced-motion:reduce){.cyb-svc .cap-row .cap-line{transform:scaleX(1)!important}.cyb-svc .p-caption .w{opacity:1!important;filter:none!important}}" +
   ".dm{display:none!important}"; /* replaces the old Work in Motion section */
 
