@@ -100,7 +100,7 @@
         '<div class="pinner">' +
           '<div class="col-left">' +
             '<div class="p-caption" data-cap>' + esc(s.caption) + '</div>' +
-            '<div class="v-card"><video muted loop playsinline preload="metadata" src="' + s.video + '"></video>' +
+            '<div class="v-card"><video muted loop playsinline preload="metadata" src="' + (innerWidth <= 820 ? s.video.replace("w_1440", "w_720").replace("q_auto:best", "q_auto") : s.video) + '"></video>' +
               '<div class="v-tag"><span>' + esc(s.title) + '</span><b>0' + (i + 1) + ' / 0' + N + '</b></div></div>' +
           '</div>' +
           '<div class="divider"><img class="x t" src="' + PLUS + '" alt=""><img class="x b" src="' + PLUS + '" alt=""></div>' +
@@ -142,23 +142,54 @@
 
     panels.forEach(function (pn, i) { pn.el.style.transform = "translateY(" + (i === 0 ? 0 : 100) + "%)"; if (i > 0) hide(pn); });
     panels[0].revealed = true;
-    if (!reduce) requestAnimationFrame(function () { reveal(panels[0]); }); else panels.forEach(reveal);
+    if (reduce) panels.forEach(reveal);
 
     var pin = document.getElementById("svcPin");
-    var progress = 0, _last = performance.now();
+
+    /* perf: the loop idles while the section is off-screen; videos pause when the section
+     * leaves view AND when a panel is fully covered by the next one (before this, scrolling
+     * to the last panel left all six videos decoding at once - the scroll jank). The first
+     * panel's reveal (incl. its video) waits for the section to actually approach. */
+    var svcVisible = false, started = reduce;
+    function pauseAll() { panels.forEach(function (pn) { if (pn.vid && !pn.vid.paused) pn.vid.pause(); }); }
+    function resumeTop() { panels.forEach(function (pn) { if (pn.revealed && !pn.covered && pn.vid && pn.vid.paused) { var p = pn.vid.play(); if (p && p.catch) p.catch(function () {}); } }); }
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (es) {
+        for (var i = 0; i < es.length; i++) {
+          svcVisible = es[i].isIntersecting;
+          if (svcVisible) { if (!started) { started = true; reveal(panels[0]); } else resumeTop(); }
+          else pauseAll();
+        }
+      }, { rootMargin: "250px" }).observe(pin);
+    } else { svcVisible = true; if (!started) { started = true; reveal(panels[0]); } }
+
+    var progress = 0, _last = performance.now(), applied = -1;
     function targetProgress() { var r = pin.getBoundingClientRect(); var total = pin.offsetHeight - innerHeight; return clamp(-r.top / total, 0, 1); }
     var SEG = N - 1;
     function render() {
-      progress = reduce ? targetProgress() : progress + (targetProgress() - progress) * (1 - Math.pow(0.0016, Math.min(0.05, (performance.now() - _last) / 1000)));
+      if (!svcVisible) { _last = performance.now(); requestAnimationFrame(render); return; }
+      var target = targetProgress();
+      progress = reduce ? target : progress + (target - progress) * (1 - Math.pow(0.0016, Math.min(0.05, (performance.now() - _last) / 1000)));
       _last = performance.now();
+      if (Math.abs(progress - target) < 0.0002) progress = target;              // snap once converged
+      if (progress === applied) { requestAnimationFrame(render); return; }      // settled: skip all writes
+      applied = progress;
       panels.forEach(function (pn, i) {
-        if (i === 0) { pn.el.style.transform = "translateY(0%)"; return; }
+        if (i === 0) return;                                                    // panel 0 never moves
         var segStart = (i - 1) / SEG, span = 1 / SEG;
         var raw = clamp((progress - segStart) / span, 0, 1);
         var slide = clamp(raw / 0.7, 0, 1);
-        pn.el.style.transform = "translateY(" + ((1 - slide) * 100) + "%)";
+        var tf = "translateY(" + ((1 - slide) * 100) + "%)";
+        if (pn.el.style.transform !== tf) pn.el.style.transform = tf;
         if (slide > 0.25 && !pn.revealed) { pn.revealed = true; reveal(pn); }
         if (slide < 0.05 && pn.revealed) { pn.revealed = false; hide(pn); }
+        var below = panels[i - 1];
+        if (slide >= 0.999) {
+          if (!below.covered) { below.covered = true; if (below.vid && !below.vid.paused) below.vid.pause(); }
+        } else if (below.covered) {
+          below.covered = false;
+          if (below.revealed && below.vid && below.vid.paused) { var pr = below.vid.play(); if (pr && pr.catch) pr.catch(function () {}); }
+        }
       });
       requestAnimationFrame(render);
     }

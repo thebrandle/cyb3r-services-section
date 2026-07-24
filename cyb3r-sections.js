@@ -98,7 +98,8 @@
   const cards=projects.map((p)=>{
     const el=document.createElement("div"); el.className="panel card";
     const inner=document.createElement("div"); inner.className="p-inner";
-    inner.innerHTML=`<div class="art"><div class="scene" style="background-image:url('${p.img}')"></div>${p.video?`<video class="scene-vid" muted loop playsinline preload="none" poster="${p.img}"${p.vscale?` style="transform:scale(${p.vscale})"`:``}><source src="${p.video}" type="video/mp4"></video>`:``}</div>
+    const vsrc=(p.video&&innerWidth<=820)?p.video.replace("w_1280","w_720"):p.video;   // lighter decode on phones/tablets
+    inner.innerHTML=`<div class="art"><div class="scene" style="background-image:url('${p.img}')"></div>${p.video?`<video class="scene-vid" muted loop playsinline preload="none" poster="${p.img}"${p.vscale?` style="transform:scale(${p.vscale})"`:``}><source src="${vsrc}" type="video/mp4"></video>`:``}</div>
       <div class="info"><div class="cardline"></div><h3>${p.name}</h3><div class="cta-row"></div></div>`;
     el.appendChild(inner); track.appendChild(el);
     inner.querySelector(".cta-row").appendChild(makeButton("Explore project",{href:"/work?project="+encodeURIComponent(p.work), target:"_blank"}));
@@ -143,10 +144,15 @@
     new IntersectionObserver(es=>{ es.forEach(e=>{ wkVisible=e.isIntersecting; }); },{rootMargin:"300px"}).observe(pin);
   }
 
+  let wkApplied=-1;
   function render(){
     if(!wkVisible){ requestAnimationFrame(render); return; }
     // continuous smoothing every frame (this is what makes it Lenis-smooth)
-    progress = reduce ? targetProgress() : lerp(progress, targetProgress(), 0.1);
+    const wkTarget=targetProgress();
+    progress = reduce ? wkTarget : lerp(progress, wkTarget, 0.1);
+    if(Math.abs(progress-wkTarget)<0.0002) progress=wkTarget;              // snap once converged
+    if(progress===wkApplied){ requestAnimationFrame(render); return; }     // settled: skip all writes
+    wkApplied=progress;
 
     const S = progress*(trackW - W);                // horizontal offset, like the site's S = k*o
     track.style.transform=`translate3d(${-S}px,0,0)`;
@@ -167,7 +173,8 @@
 
     // counter = nearest card to center
     let best=0,bd=1e9; cards.forEach((c,t)=>{ const r=(headW+t*cardW+cardW/2-S)/W; const d=Math.abs(r-0.75); if(d<bd){bd=d;best=t;} });
-    cur.textContent=String(best+1).padStart(2,"0");
+    const curTxt=String(best+1).padStart(2,"0");
+    if(cur.textContent!==curTxt) cur.textContent=curTxt;                   // text writes force layout - only on change
     barFill.style.transform=`scaleX(${progress})`;
     requestAnimationFrame(render);
   }
@@ -225,7 +232,8 @@
   const DMV=[]; let dmSeen=false;   // card videos start cold; fetched + played only once .dm approaches
   function getCard(idx){
     if(_cardCache[idx]) return _cardCache[idx];
-    const [url,title]=CARDS[idx];
+    let [url,title]=CARDS[idx];
+    if(innerWidth<=820) url=url.replace("w_800","w_480");   // half the texture upload bandwidth on phones
     // playing video -> VideoTexture (auto-updates each frame). Cloudinary crops to the card aspect so nothing stretches.
     const vid=document.createElement("video");
     vid.crossOrigin="anonymous"; vid.muted=true; vid.defaultMuted=true; vid.loop=true; vid.playsInline=true;
@@ -265,8 +273,11 @@
       }); },{rootMargin:"700px"}).observe(dmRoot);
     } else { dmSeen=true; dmVisible=true; DMV.forEach(function(v){ const p=v.play(); if(p&&p.catch) p.catch(function(){}); }); }
   })();
-  const renderer=new T.WebGLRenderer({canvas, alpha:true, antialias:true});
-  renderer.setPixelRatio(Math.min(2, devicePixelRatio||1));
+  // GPU budget: no MSAA at retina density (the DPR already masks aliasing) and a lower
+  // pixel ratio below desktop - full-viewport WebGL at DPR 2 was 4x the pixels per frame
+  const DPR=devicePixelRatio||1;
+  const renderer=new T.WebGLRenderer({canvas, alpha:true, antialias:DPR<2});
+  renderer.setPixelRatio(innerWidth<=991 ? Math.min(1.5, DPR) : Math.min(2, DPR));
   renderer.setClearColor(0x040508, 0);
   const scene=new T.Scene();
   let camera=new T.PerspectiveCamera(fovDeg(), innerWidth/innerHeight, 0.1, 500);
