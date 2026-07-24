@@ -1,5 +1,9 @@
-/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.3
+/* CYB3R Work popup (Latest Work collection, /work page only). v1.13.4
  *
+ * v1.13.4: an EXPLICIT Popup Layout always renders its grid - declared-but-empty slots
+ * show as dark placeholder tiles even when NO images are uploaded yet (the old anyMedia
+ * gate hid the whole collage until at least one slot had media, so freshly typed layouts
+ * looked like they "did nothing"). The blank-field 3x3 default still requires media.
  * v1.13.3: media always fills its card - all collage flexGrow values are now >= 1 (flex
  * only fills a FRACTION of free space when grows sum below 1, which left the full-width
  * video row ~3% short of the band and some tiles short of their column).
@@ -274,7 +278,11 @@
             }
             colWrap.appendChild(band);
           }
-          if (anyMedia) {
+          // An EXPLICIT Popup Layout always renders - empty slots show as dark tiles, so
+          // the chosen grid is visible even before any images are uploaded. The blank-field
+          // 3x3 default still requires real media, so untouched cards keep their single
+          // Popup Image / logo fallback.
+          if (anyMedia || layoutStr) {
             mediaBox.appendChild(colWrap);
             if (pop) pop.classList.add('has-collage');
           }
