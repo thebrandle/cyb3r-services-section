@@ -77,7 +77,7 @@
             vioTimers.set(v, setTimeout(function () {
               vioTimers.delete(v);
               if (!v.paused) v.pause();
-            }, 800));
+            }, 400));
           }
         })(es[i].target, es[i].isIntersecting);
       }
