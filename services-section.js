@@ -12,34 +12,38 @@
   var reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
 
-  /* ===== CONTENT: CYB3R's 6 services + Cloudinary videos (edit freely) ===== */
-  var V = "https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto:best,w_1440/";
+  /* ===== CONTENT: CYB3R's 6 services + videos (edit freely) =====
+   * Videos moved off Cloudinary (account locked, every asset 401'd) to Supabase Storage.
+   * The renditions are pre-encoded, not transformed on the fly, so the w_#### token lives
+   * in the FILENAME - that keeps the existing .replace("w_1440","w_720") swap below working.
+   * Available per clip: w_1440 (desktop), w_800, w_720 (mobile), w_640, w_480. */
+  var V = "https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/";
   var PLUS = "https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a44c6196a38f1b057c124e8_svglogoplus.png"; /* CYB3R teal plus icon */
   var services = [
     { title: "Brand & Identity", caption: "Identity systems built to travel across every touchpoint.",
       desc: "Positioning, naming and visual identity that give your brand credibility, clarity and lasting recognition.",
       caps: ["Brand strategy & positioning", "Visual identity systems", "Logo & wordmark design", "Brand guidelines", "Creative direction", "Messaging & tone of voice"],
-      video: V + "v1784719091/brand_h6pyks.mp4" },
+      video: V + "brand_w_1440.mp4" },
     { title: "Web Design & Development", caption: "Designed to perform on every screen.",
       desc: "High-fidelity websites and web apps designed to attract, engage and convert, built for speed and scale.",
       caps: ["Web design (UX/UI)", "Webflow & headless builds", "Responsive, motion-first interfaces", "Landing pages & funnels", "CMS & integrations", "Performance & SEO foundations"],
-      video: V + "v1784718807/webui_ptpypo.mp4" },
+      video: V + "webui_w_1440.mp4" },
     { title: "SEO & Google Ads", caption: "Engineered to scale measurable growth.",
       desc: "Organic search and paid media built to put you in front of high-intent buyers and grow qualified pipeline.",
       caps: ["Technical & on-page SEO", "Content & link strategy", "Google Ads (Search, PMax)", "Paid media management", "Conversion tracking", "Reporting & optimisation"],
-      video: V + "v1784718850/seoupsacled_gkz99e.mp4" },
+      video: V + "seoupsacled_w_1440.mp4" },
     { title: "Social Media & Content", caption: "Content that compounds attention into demand.",
       desc: "Social-first content and community that build audience, authority and a steady stream of inbound interest.",
       caps: ["Social strategy", "Content production", "Short-form video", "Community management", "Paid social", "Influencer & partnerships"],
-      video: V + "v1784718752/socialmedia_oabpfi.mp4" },
+      video: V + "socialmedia_w_1440.mp4" },
     { title: "Commercial Print & Production", caption: "Tactile brand experiences, produced end to end.",
       desc: "Print, packaging and physical collateral produced to the same standard as everything you do online.",
       caps: ["Print & packaging design", "Merchandise", "Large-format & signage", "Event & retail collateral", "Artwork & pre-press", "Production management"],
-      video: V + "v1784718731/commercialprint_yl4nyp.mp4" },
+      video: V + "commercialprint_w_1440.mp4" },
     { title: "AI-Driven Advertising", caption: "Smarter campaigns, powered by automation.",
       desc: "AI-assisted creative, targeting and optimisation that make every ad dollar work harder across the funnel.",
       caps: ["AI creative & iteration", "Audience modelling", "Automated bidding & budgets", "Predictive optimisation", "Full-funnel measurement", "Continuous experimentation"],
-      video: V + "v1784718887/aidriven_vxzk8p.mp4" }
+      video: V + "aidriven_w_1440.mp4" }
   ];
 
   /* ===== scoped CSS (dark, sharp corners; all under .cyb-svc) ===== */

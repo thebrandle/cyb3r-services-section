@@ -17,24 +17,27 @@
   const lerp=(a,b,t)=>a+(b-a)*t;
 
   // `work` = the exact project NAME on the Work page (used to open that project's overlay in a new tab)
+  // VIDEOS: moved off Cloudinary (account locked, all assets 401'd) to Supabase Storage.
+  // Renditions are pre-encoded, not transformed on the fly, so the w_#### token sits in the
+  // FILENAME - which keeps the existing .replace("w_1280","w_720") mobile swap below working.
   const projects=[
     { name:"Early Health City", desc:"Strategy, brand and design for a landmark health destination.",
       kick:"Strategy · Branding · Design", hero:"Health, reimagined.", work:"Early Health City",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-early-health.webp",
       vscale:1.08,
-      video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1783004741/EarlyHealthCity-Quick_agpsxp.mp4" },
+      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/earlyhealthcity_w_1280.mp4" },
     { name:"Gattaca Genomics", desc:"Web design and development for a next-generation genomics platform.",
       kick:"Web Design · Development", hero:"Decoding tomorrow.", work:"Gattaca Genomics",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-gattaca.webp",
-      video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1783434285/gattacavideo_rkjmpa.mp4" },
+      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/gattaca_w_1280.mp4" },
     { name:"Cyb3r Group", desc:"Social, content and AI-driven advertising engineered for growth.",
       kick:"Social · Content · AI Advertising", hero:"Growth, engineered.", work:"CYB3R",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-cyb3r-group.webp",
-      video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1782950479/cyb3r_awam01.mp4" },
+      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/cyb3r_w_1280.mp4" },
     { name:"Innovation City (RAKDAO)", desc:"SEO, Google Ads and paid media built to scale on-chain growth.",
       kick:"SEO · Google Ads · Paid Media", hero:"Built on-chain.", work:"Innovation City",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-innovation-city.webp",
-      video:"https://res.cloudinary.com/dq0likrb8/video/upload/q_auto,w_1280,c_limit/v1782952121/rakdaonew_fkhboc.mp4" }
+      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/rakdao_w_1280.mp4" }
   ];
   /* Card placeholder images above mirror the 'Selected Works' CMS collection (collection
    * 6a479f199798230430066283) - when the user swaps an image there, copy the new asset URL
@@ -214,12 +217,12 @@
 
   // ---- CYB3R service cards: 6 videos + titles (Cloudinary, pre-cropped to the card aspect 812:568, CORS ok) ----
   const CARDS=[
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784719091/brand_h6pyks.mp4","Brand & Identity"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718807/webui_ptpypo.mp4","Web Design & Development"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718850/seoupsacled_gkz99e.mp4","SEO & Google Ads"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718752/socialmedia_oabpfi.mp4","Social Media & Content"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718731/commercialprint_yl4nyp.mp4","Commercial Print & Production"],
-    ["https://res.cloudinary.com/dq0likrb8/video/upload/c_fill,ar_812:568,q_auto,w_800/v1784718887/aidriven_vxzk8p.mp4","AI-Driven Advertising"]
+    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/brand_w_800.mp4","Brand & Identity"],
+    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/webui_w_800.mp4","Web Design & Development"],
+    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/seoupsacled_w_800.mp4","SEO & Google Ads"],
+    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/socialmedia_w_800.mp4","Social Media & Content"],
+    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/commercialprint_w_800.mp4","Commercial Print & Production"],
+    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/aidriven_w_800.mp4","AI-Driven Advertising"]
   ];
   const PAL=[0,1,2,3,4,5,0,1,2];           // 9 ribbon cards = indices into CARDS (6 unique, cycled)
   const GRID_IDX=[0,1,2,3,4,5];            // 6 grid cards, one per service
