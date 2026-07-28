@@ -91,4 +91,30 @@
     vioWatch();
     setTimeout(vioWatch, 1500);
   }
+
+  /* v1.4.0 Header blur on scroll only (site-wide). The `.blur-effect` bar is a
+   * fixed, backdrop-filter:blur(30px) strip behind the logo/hamburger. It used to
+   * be on at all times, which looked wrong over the hero; it should only appear
+   * once the page is scrolled, like a normal sticky header.
+   * The Designer style now carries opacity:0 + the transition, so there is no
+   * flash of blur before this runs, and if this script ever fails the blur simply
+   * stays off (safe default) rather than being stuck on.
+   * The site scrolls natively (no ScrollSmoother on these pages), so a passive
+   * scroll listener is enough; work is coalesced into one rAF per frame and the
+   * style is only written when the state actually flips. */
+  (function () {
+    var el = document.querySelector('.blur-effect');
+    if (!el) return;
+    var ON_AT = 40, on = null, queued = 0;
+    function upd() {
+      queued = 0;
+      var want = (window.pageYOffset || document.documentElement.scrollTop || 0) > ON_AT;
+      if (want === on) return;      /* write only on change - no per-frame style churn */
+      on = want;
+      el.style.opacity = want ? '1' : '0';
+    }
+    function onScroll() { if (!queued) { queued = 1; requestAnimationFrame(upd); } }
+    addEventListener('scroll', onScroll, { passive: true });
+    upd();                          /* correct state on a restored/anchored scroll position */
+  })();
 })();
