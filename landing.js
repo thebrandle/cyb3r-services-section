@@ -558,3 +558,141 @@
     document.addEventListener('DOMContentLoaded', function(){ boot(0); });
   else boot(0);
 })();
+
+/* ── Discovery Call modal ──────────────────────────────────────────
+ * Branching qualifier in front of the NATIVE Webflow form (#cybDiscoveryHost).
+ * The real <form> is a page element so Webflow's own JS binds it at load and
+ * submissions land in Form Submissions. We only move it into the modal and
+ * toggle which fields are on screen - we never rebuild or re-submit it. */
+(function(){
+  if (window.__cybDiscovery) return; window.__cybDiscovery = 1;
+
+  var SERVICES = 'https://www.cyb3rmedia.com/services';
+
+  function build(){
+    var host = document.getElementById('cybDiscoveryHost');
+    if (!host || document.getElementById('cybModal')) return;
+
+    var m = document.createElement('div');
+    m.id = 'cybModal';
+    m.className = 'cyb-modal';
+    m.setAttribute('role','dialog');
+    m.setAttribute('aria-modal','true');
+    m.setAttribute('aria-label','Book a discovery call');
+    m.innerHTML =
+      '<div class="cyb-modal_backdrop" data-close></div>' +
+      '<div class="cyb-modal_panel">' +
+        '<button class="cyb-modal_x" data-close aria-label="Close">&times;</button>' +
+        '<div class="cyb-modal_body">' +
+          '<div class="cyb-step" data-step="q1">' +
+            '<div class="cyb-eyebrow">Book a discovery call</div>' +
+            '<h3>Are you currently running Google display adverts?</h3>' +
+            '<div class="cyb-choices">' +
+              '<button class="cyb-btn" data-a="q1-yes">Yes</button>' +
+              '<button class="cyb-btn is-ghost" data-a="q1-no">No</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cyb-step" data-step="q2" hidden>' +
+            '<div class="cyb-eyebrow">Book a discovery call</div>' +
+            '<h3>Are you interested in running display adverts?</h3>' +
+            '<div class="cyb-choices">' +
+              '<button class="cyb-btn" data-a="q2-yes">Yes</button>' +
+              '<button class="cyb-btn is-ghost" data-a="q2-no">No</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cyb-step" data-step="out" hidden>' +
+            '<div class="cyb-eyebrow">Not the right fit</div>' +
+            '<h3>This one is built for advertisers</h3>' +
+            '<p>Our relevance platform is designed for brands already investing in ' +
+            'display media, so it would not be much use to you yet. That said, ' +
+            'display is only part of what we do - brand, web, SEO, social and ' +
+            'production may be a far better place to start.</p>' +
+            '<div class="cyb-choices">' +
+              '<a class="cyb-btn" href="' + SERVICES + '">Explore our services</a>' +
+              '<button class="cyb-btn is-ghost" data-close>Close</button>' +
+            '</div>' +
+          '</div>' +
+          '<div class="cyb-step" data-step="form" hidden>' +
+            '<div class="cyb-eyebrow">Book a discovery call</div>' +
+            '<h3 data-formtitle>A few details and we will be in touch</h3>' +
+            '<div class="cyb-formhost"></div>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(m);
+
+    /* move the real Webflow form into the modal - the handler is bound to the
+       element itself, so relocating the node keeps submission working */
+    var wrap = host.querySelector('.w-form');
+    m.querySelector('.cyb-formhost').appendChild(wrap);
+    host.remove();
+
+    var spend = m.querySelector('#cybSpend');
+    var spendRow = spend;                       /* shown only for existing advertisers */
+    spendRow.style.display = 'none';
+
+    function show(name){
+      m.querySelectorAll('.cyb-step').forEach(function(s){
+        s.hidden = (s.getAttribute('data-step') !== name);
+      });
+    }
+    function open(){
+      m.classList.add('is-open');
+      document.documentElement.style.overflow = 'hidden';
+      show('q1');
+      var f = m.querySelector('#cybQ1'); if (f) f.value = '';
+      var g = m.querySelector('#cybQ2'); if (g) g.value = '';
+    }
+    function close(){
+      m.classList.remove('is-open');
+      document.documentElement.style.overflow = '';
+    }
+
+    m.addEventListener('click', function(e){
+      var t = e.target;
+      if (t.hasAttribute && t.hasAttribute('data-close')) { e.preventDefault(); return close(); }
+      var a = t.getAttribute && t.getAttribute('data-a');
+      if (!a) return;
+      e.preventDefault();
+      if (a === 'q1-yes') {
+        m.querySelector('#cybQ1').value = 'Yes';
+        spendRow.style.display = '';
+        spendRow.setAttribute('required','required');
+        m.querySelector('[data-formtitle]').textContent = 'Tell us about your current activity';
+        show('form');
+      } else if (a === 'q1-no') {
+        m.querySelector('#cybQ1').value = 'No';
+        show('q2');
+      } else if (a === 'q2-yes') {
+        m.querySelector('#cybQ2').value = 'Yes';
+        spendRow.style.display = 'none';
+        spendRow.removeAttribute('required');
+        spendRow.value = '';
+        m.querySelector('[data-formtitle]').textContent = 'A few details and we will be in touch';
+        show('form');
+      } else if (a === 'q2-no') {
+        m.querySelector('#cybQ2').value = 'No';
+        show('out');
+      }
+    });
+
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && m.classList.contains('is-open')) close();
+    });
+
+    /* every "book a discovery call" CTA on the page opens this */
+    document.addEventListener('click', function(e){
+      var a = e.target.closest && e.target.closest('a,button');
+      if (!a || m.contains(a)) return;
+      var txt = (a.textContent || '').trim().toLowerCase();
+      if (txt.indexOf('discovery call') === -1) return;
+      e.preventDefault();
+      open();
+    }, true);
+  }
+
+  if (document.readyState === 'loading')
+    document.addEventListener('DOMContentLoaded', build);
+  else build();
+  setTimeout(build, 1200);          /* the CTAs arrive with the injected markup */
+})();
