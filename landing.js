@@ -15,10 +15,6 @@
 
   <!-- ═══ HERO ═══ -->
   <section class="section_hero">
-    <svg class="hero-logo brandmark" viewBox="0 0 48 51" aria-label="logo">
-      <rect x="0" y="0" width="21" height="23" rx="10"/><rect x="26" y="0" width="22" height="23" rx="4"/>
-      <rect x="0" y="27" width="21" height="23" rx="4"/><rect x="26" y="27" width="22" height="23" rx="10"/>
-    </svg>
     <div class="hero-text_wrapper">
       <div class="text-size-large ix-fade" data-ix="load" data-ix-delay="300">The Alignment Agent for the Open Web</div>
       <h1 class="display-text intro-anim">Make every moment matter</h1>
@@ -216,8 +212,7 @@
 
   <!-- ═══ TESTIMONIALS ═══ -->
   <section class="section_testimonials section-pad">
-    <div class="ghost-tiles" aria-hidden="true"><span class="t1"></span><span class="t2"></span><span class="t3"></span><span class="t4"></span></div>
-    <div class="padding-global"><div class="container-large">
+<div class="padding-global"><div class="container-large">
       <div class="title_wrapper">
         <h2 class="heading-style-h1 fancy-anim">Proven by Enterprise Leaders</h2>
         <div class="margin-medium"><div class="text-size-large">How global brands use the Alignment Agent to lift outcomes and operate with full visibility.</div></div>
@@ -234,7 +229,6 @@
 
   <!-- ═══ CTA + FOOTER ═══ -->
   <section class="section_home-cta">
-    <div class="cta-glyphs" aria-hidden="true"><span class="t1"></span><span class="t2"></span><span class="t3"></span><span class="t4"></span></div>
     <div class="cta-inner">
       <div class="padding-global"><div class="container-large">
         <div class="title_wrapper">
@@ -308,7 +302,8 @@
   const cardsWrap=document.querySelector(".big-cards_wrapper");
 
   (function dots(){ cx+=(tx-cx)*0.065; cy+=(ty-cy)*0.065;
-    wrapper.style.setProperty("--mouse-x", cx+"px"); wrapper.style.setProperty("--mouse-y", cy+"px");
+    const _wr=wrapper.getBoundingClientRect();
+    wrapper.style.setProperty("--mouse-x", (cx-_wr.left)+"px"); wrapper.style.setProperty("--mouse-y", (cy-_wr.top)+"px");
     const vh=innerHeight;
     bigCards.forEach(c=>{ const r=c.el.getBoundingClientRect();
       const p=Math.max(0,Math.min(1,(vh-r.top)/(vh*0.55))); c.el.style.opacity=p.toFixed(3); });
