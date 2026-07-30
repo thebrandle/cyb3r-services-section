@@ -301,8 +301,6 @@
   }
 
 
-  #cybDiscoveryNative{ display:none; }
-
   /* ── Discovery Call modal ─────────────────────────────────────── */
   .cyb-modal{ position:fixed; inset:0; z-index:10000; display:none; }
   .cyb-modal.is-open{ display:flex; align-items:center; justify-content:center; padding:24px; }

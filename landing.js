@@ -647,7 +647,9 @@
     /* move the real Webflow form into the modal - the handler is bound to the
        element itself, so relocating the node keeps submission working */
     m.querySelector('.cyb-formhost').appendChild(host);
-    host.style.display = 'block';   /* overrides the parked-state rule */
+    var innerForm = host.querySelector('form');
+    if (innerForm) innerForm.style.display = 'block';
+    host.style.display = 'block';   /* undoes the inline park from hideEarly */
 
     /* Webflow's auto-generated labels are redundant next to placeholders, and the
        two qualifier fields are answered by the buttons - keep both out of sight
