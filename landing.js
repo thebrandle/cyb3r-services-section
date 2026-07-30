@@ -560,7 +560,7 @@
 })();
 
 /* ── Discovery Call modal ──────────────────────────────────────────
- * Branching qualifier in front of the NATIVE Webflow form (#cybDiscoveryHost).
+ * Branching qualifier in front of the NATIVE Webflow form (#cybDiscoveryNative).
  * The real <form> is a page element so Webflow's own JS binds it at load and
  * submissions land in Form Submissions. We only move it into the modal and
  * toggle which fields are on screen - we never rebuild or re-submit it. */
@@ -570,7 +570,7 @@
   var SERVICES = 'https://www.cyb3rmedia.com/services';
 
   function build(){
-    var host = document.getElementById('cybDiscoveryHost');
+    var host = document.getElementById('cybDiscoveryNative');
     if (!host || document.getElementById('cybModal')) return;
 
     var m = document.createElement('div');
@@ -623,10 +623,10 @@
 
     /* move the real Webflow form into the modal - the handler is bound to the
        element itself, so relocating the node keeps submission working */
-    var wrap = host.querySelector('.w-form');
-    m.querySelector('.cyb-formhost').appendChild(wrap);
-    host.remove();
+    m.querySelector('.cyb-formhost').appendChild(host);   /* move the whole .w-form block */
+    host.style.display='';
 
+    m.querySelectorAll('.cyb-formhost label').forEach(function(l){ l.style.display='none'; });
     var spend = m.querySelector('#cybSpend');
     var spendRow = spend;                       /* shown only for existing advertisers */
     spendRow.style.display = 'none';

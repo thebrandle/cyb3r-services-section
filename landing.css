@@ -300,14 +300,17 @@
     .cyb-lp .ticker-track, .cyb-lp .footer-bottom-gradient, .cyb-lp .footer-bottom-gradient::before, .cyb-lp .video-standin i{ animation:none !important; }
   }
 
+
+  #cybDiscoveryNative{ display:none; }
+
   /* ── Discovery Call modal ─────────────────────────────────────── */
   .cyb-modal{ position:fixed; inset:0; z-index:10000; display:none; }
-  .cyb-modal.is-open{ display:block; }
+  .cyb-modal.is-open{ display:flex; align-items:center; justify-content:center; padding:24px; }
   .cyb-modal_backdrop{ position:absolute; inset:0; background:rgba(10,14,18,.72);
     -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
   .cyb-modal_panel{ position:relative; z-index:2; width:min(92vw,560px);
-    margin:max(6vh,24px) auto 0; background:#1A232D; border:1px solid rgba(255,255,255,.14);
-    border-radius:0; padding:clamp(24px,4vw,44px); max-height:88vh; overflow-y:auto;
+    margin:0; background:#1A232D; border:1px solid rgba(255,255,255,.14);
+    border-radius:0; padding:clamp(32px,4.4vw,52px); max-height:86vh; overflow-y:auto;
     font-family:"Inter",system-ui,sans-serif; color:#EDEDEF; }
   .cyb-modal_x{ position:absolute; top:10px; right:14px; background:none; border:0;
     color:#A7ACB4; font-size:30px; line-height:1; cursor:pointer; padding:6px; }
@@ -315,7 +318,7 @@
   .cyb-eyebrow{ font-size:11px; letter-spacing:.16em; text-transform:uppercase;
     color:#39F1E0; margin-bottom:14px; }
   .cyb-modal h3{ font-size:clamp(20px,3.2vw,28px); line-height:1.18; letter-spacing:-.02em;
-    font-weight:600; margin:0 0 10px; color:#fff; }
+    font-weight:600; margin:0 0 12px; color:#fff; }
   .cyb-modal p{ color:#A7ACB4; font-size:15px; line-height:1.6; margin:0 0 6px; }
   .cyb-choices{ display:flex; gap:12px; flex-wrap:wrap; margin-top:22px; }
   .cyb-btn{ display:inline-flex; align-items:center; justify-content:center;
@@ -326,6 +329,7 @@
   .cyb-btn.is-ghost{ background:transparent; color:#EDEDEF;
     border:1px solid rgba(255,255,255,.28); }
   .cyb-btn.is-ghost:hover{ border-color:#39F1E0; color:#39F1E0; background:transparent; }
+  .cyb-formhost{ margin-top:30px; }
   .cyb-formhost input[type=text], .cyb-formhost input[type=email]{
     display:block; width:100%; margin:0 0 12px; padding:14px 16px; border-radius:0;
     background:#202A36; border:1px solid rgba(255,255,255,.16); color:#fff;
@@ -340,6 +344,8 @@
     padding:18px 0 0; color:#39F1E0; font-size:15px; }
   .cyb-formhost .w-form-fail{ color:#FF9F9F; }
   @media (max-width:600px){
-    .cyb-modal_panel{ width:100vw; margin:0; min-height:100vh; max-height:none; }
+    .cyb-modal.is-open{ padding:0; }
+    .cyb-modal_panel{ width:100vw; margin:0; min-height:100vh; max-height:none;
+      display:flex; flex-direction:column; justify-content:center; }
     .cyb-choices .cyb-btn{ flex:1 1 100%; }
   }
