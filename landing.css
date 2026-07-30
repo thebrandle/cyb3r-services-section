@@ -340,8 +340,8 @@
     color:#0F0E0E; border:0; border-radius:0; padding:15px 26px;
     font:600 15px "Inter",system-ui,sans-serif; cursor:pointer; }
   .cyb-formhost input[type=submit]:hover{ background:#EBEBEB; }
-  .cyb-formhost .w-form-done, .cyb-formhost .w-form-fail{ background:transparent;
-    padding:18px 0 0; color:#39F1E0; font-size:15px; }
+  .cyb-formhost .w-form-done, .cyb-formhost .w-form-fail{ display:none;
+    background:transparent; padding:18px 0 0; color:#39F1E0; font-size:15px; }
   .cyb-formhost .w-form-fail{ color:#FF9F9F; }
   @media (max-width:600px){
     .cyb-modal.is-open{ padding:0; }

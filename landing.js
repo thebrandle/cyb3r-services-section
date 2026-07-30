@@ -569,8 +569,31 @@
 
   var SERVICES = 'https://www.cyb3rmedia.com/services';
 
+  /* the id may sit on the <form> or on the .w-form block depending on how
+     Webflow rendered it - always work with the .w-form block so the success
+     and error messages travel into the modal with the form */
+  function findHost(){
+    var el = document.getElementById('cybDiscoveryNative');
+    if (!el) return null;
+    return (el.closest && el.closest('.w-form')) || el;
+  }
+  (function hideEarly(){
+    var h = findHost();
+    if (h) h.style.display = 'none';
+    else if (document.readyState === 'loading')
+      document.addEventListener('DOMContentLoaded', hideEarly);
+  })();
+
+  var PLACEHOLDER = {
+    cybSpend:   'Current monthly ad spend',
+    cybName:    'Full name',
+    cybEmail:   'Work email',
+    cybWebsite: 'Company website',
+    cybBudget:  'Budget for display advertising'
+  };
+
   function build(){
-    var host = document.getElementById('cybDiscoveryNative');
+    var host = findHost();
     if (!host || document.getElementById('cybModal')) return;
 
     var m = document.createElement('div');
@@ -623,12 +646,25 @@
 
     /* move the real Webflow form into the modal - the handler is bound to the
        element itself, so relocating the node keeps submission working */
-    m.querySelector('.cyb-formhost').appendChild(host);   /* move the whole .w-form block */
-    host.style.display='';
+    m.querySelector('.cyb-formhost').appendChild(host);
+    host.style.display = 'block';   /* overrides the parked-state rule */
 
-    m.querySelectorAll('.cyb-formhost label').forEach(function(l){ l.style.display='none'; });
-    var spend = m.querySelector('#cybSpend');
-    var spendRow = spend;                       /* shown only for existing advertisers */
+    /* Webflow's auto-generated labels are redundant next to placeholders, and the
+       two qualifier fields are answered by the buttons - keep both out of sight
+       but in the form so their values still post. */
+    m.querySelectorAll('.cyb-formhost label').forEach(function(l){ l.style.display = 'none'; });
+    ['cybQ1','cybQ2'].forEach(function(id){
+      var f = m.querySelector('#' + id);
+      if (f) { f.type = 'hidden'; }
+    });
+    Object.keys(PLACEHOLDER).forEach(function(id){
+      var f = m.querySelector('#' + id);
+      if (f) f.setAttribute('placeholder', PLACEHOLDER[id]);
+    });
+    var submit = m.querySelector('.cyb-formhost input[type=submit]');
+    if (submit) submit.value = 'Request my discovery call';
+
+    var spendRow = m.querySelector('#cybSpend');   /* only for existing advertisers */
     spendRow.style.display = 'none';
 
     function show(name){
