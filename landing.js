@@ -211,21 +211,7 @@
   </section>
 
   <!-- ═══ TESTIMONIALS ═══ -->
-  <section class="section_testimonials section-pad">
-<div class="padding-global"><div class="container-large">
-      <div class="title_wrapper">
-        <h2 data-c="testimonials-h2-1" class="heading-style-h1 fancy-anim">Proven by Enterprise Leaders</h2>
-        <div class="margin-medium"><div data-c="testimonials-div-1" class="text-size-large">How global brands use the Alignment Agent to lift outcomes and operate with full visibility.</div></div>
-      </div>
-      <div class="testimonial_wrapper ix-fade" data-ix="scroll">
-        <div class="testimonial-card">
-          <svg class="quote-ico" viewBox="0 0 44 34" fill="none"><path d="M0 34V20C0 8 6 1 18 0v8c-6 1-9 4-9 10h9v16H0Zm26 0V20C26 8 32 1 44 0v8c-6 1-9 4-9 10h9v16H26Z" fill="#fff"/></svg>
-          <div data-c="testimonials-div-2" class="heading-style-h3">What impressed us most was that this went far beyond a clever targeting trick. The agent reshaped how our creative and media teams work together, and the transparency reporting gave every stakeholder - from brand to procurement - total confidence in where our budget was going and why it performed.</div>
-          <div data-c="testimonials-div-3" class="text-size-small" style="opacity:.8">Head of Programmatic - Global Retail Group</div>
-        </div>
-      </div>
-    </div></div>
-  </section>
+  
 
   <!-- ═══ CTA + FOOTER ═══ -->
   <section class="section_home-cta">
