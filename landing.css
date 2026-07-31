@@ -56,14 +56,14 @@
   .cyb-lp .intro-anim .word, .cyb-lp .sub-anim .word, .cyb-lp .fancy-anim .word{ display:inline-block; will-change:transform,opacity; }
 
   /* IX2-equivalent fades (traced from the live site: y100→0 + fade, ~1s decel) */
-  .cyb-lp .ix-fade{ opacity:0; transform:translateY(100px); }
-  .cyb-lp .ix-fade.ix-in{ opacity:1; transform:translateY(0); }
-  .cyb-lp .ix-fade{ transition:opacity 1.05s cubic-bezier(.16,.84,.44,1), transform 1.05s cubic-bezier(.16,.84,.44,1); }
-  .cyb-lp .ix-fade.ix-slow{ transition-duration:1.4s,1.4s; }
-  .cyb-lp .ix-fade.ix-btn{ transform:translateY(50px); transition-duration:1.2s,1.2s; }
+  .cyb-lp [data-ix]{ opacity:0; transform:translateY(100px); }
+  .cyb-lp [data-ix].ix-in{ opacity:1; transform:translateY(0); }
+  .cyb-lp [data-ix]{ transition:opacity 1.05s cubic-bezier(.16,.84,.44,1), transform 1.05s cubic-bezier(.16,.84,.44,1); }
+  .cyb-lp [data-ix-variant="slow"]{ transition-duration:1.4s,1.4s; }
+  .cyb-lp [data-ix-variant="btn"]{ transform:translateY(50px); transition-duration:1.2s,1.2s; }
 /* .ix-fade.ix-btn ties .ix-fade.ix-in on specificity but is declared later, so the
    button was permanently stuck 50px down and never reached its end state. */
-.cyb-lp .ix-fade.ix-btn.ix-in{ transform:translateY(0); }
+.cyb-lp [data-ix-variant="btn"].ix-in{ transform:translateY(0); }
 
   /* ── HERO ────────────────────────────────────────────────────── */
   .cyb-lp .section_hero{ color:#fff; display:flex; flex-direction:column; justify-content:center; align-items:center;
