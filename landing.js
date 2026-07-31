@@ -17,7 +17,7 @@
       <div data-c="hero-div-1" class="text-size-large ix-fade" data-ix="load" data-ix-delay="300">The Alignment Agent for the Open Web</div>
       <h1 data-c="hero-h1-1" class="display-text intro-anim">Make every moment matter</h1>
       <div data-c="hero-div-2" class="text-size-large sub-anim ix-fade" data-ix="load" data-ix-delay="300">Agentic AI that makes real-time, placement-level decisions at scale.</div>
-      <div class="margin-medium ix-fade ix-btn" data-ix="load" data-ix-delay="2000"><a data-c="hero-a-1" href="#" class="button">Book a Discovery Call</a></div>
+      <div class="margin-medium ix-fade ix-btn" data-ix="load" data-ix-variant="btn" data-ix-delay="2000"><a data-c="hero-a-1" href="#" class="button">Book a Discovery Call</a></div>
     </div>
   </section>`,
   'partners': `<section class="section_partners section-pad">
