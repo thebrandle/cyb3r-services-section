@@ -11,20 +11,16 @@
   var me  = document.currentScript && document.currentScript.src;
   var CSS = me ? me.replace(/landing\.js(\?.*)?$/, 'landing.css') : '';
 
-  var MARKUP = `<div class="page-wrapper is-purple" id="pageWrapper">
-
-  <!-- ═══ HERO ═══ -->
-  <section class="section_hero">
+  var SECTIONS = {
+  'hero': `<section class="section_hero">
     <div class="hero-text_wrapper">
       <div data-c="hero-div-1" class="text-size-large ix-fade" data-ix="load" data-ix-delay="300">The Alignment Agent for the Open Web</div>
       <h1 data-c="hero-h1-1" class="display-text intro-anim">Make every moment matter</h1>
       <div data-c="hero-div-2" class="text-size-large sub-anim ix-fade" data-ix="load" data-ix-delay="300">Agentic AI that makes real-time, placement-level decisions at scale.</div>
       <div class="margin-medium ix-fade ix-btn" data-ix="load" data-ix-delay="2000"><a data-c="hero-a-1" href="#" class="button">Book a Discovery Call</a></div>
     </div>
-  </section>
-
-  <!-- ═══ PARTNERS TICKER ═══ -->
-  <section class="section_partners section-pad">
+  </section>`,
+  'partners': `<section class="section_partners section-pad">
     <div class="carousel-horizontal">
       <div class="ticker-track" id="tickerTrack">
         <div class="ticker-group">
@@ -45,10 +41,8 @@
         </div>
       </div>
     </div>
-  </section>
-
-  <!-- ═══ RELEVANCE-AGENT TITLE ═══ -->
-  <section class="section_relevance-agent section-pad">
+  </section>`,
+  'agent': `<section class="section_relevance-agent section-pad">
     <div class="bring-up">
       <div class="padding-global"><div class="container-large">
         <div class="title_wrapper">
@@ -57,10 +51,8 @@
         </div>
       </div></div>
     </div>
-  </section>
-
-  <!-- ═══ CAV SCENE (exact port) ═══ -->
-  <div id="cav-relevance-agent">
+  </section>`,
+  'scene': `<div id="cav-relevance-agent">
     <section class="cav_ra">
       <div class="cav_sticky"><div class="cav_canvas">
         <div class="cav_bulb cav_green"></div>
@@ -89,10 +81,8 @@
         <div data-c="sec4-div-12" class="cav_final_text">Millions of<br>aligned moments</div>
       </div></div>
     </section>
-  </div>
-
-  <!-- ═══ EXAMPLES SLIDER ═══ -->
-  <section class="section_examples section-pad">
+  </div>`,
+  'examples': `<section class="section_examples section-pad">
     <div class="bokeh" id="bokeh"></div>
     <div class="padding-global"><div class="container-large">
       <div class="slider ix-fade" data-ix="scroll">
@@ -105,10 +95,8 @@
         </button>
       </div>
     </div></div>
-  </section>
-
-  <!-- ═══ PROVEN RESULTS ═══ -->
-  <section class="section_proven-results section-pad">
+  </section>`,
+  'results': `<section class="section_proven-results section-pad">
     <div class="padding-global"><div class="container-large">
       <div>
         <div data-c="proven-results-div-1" class="text-size-large" style="margin-bottom:1rem">Proven Results</div>
@@ -135,10 +123,8 @@
         </div>
       </div>
     </div></div>
-  </section>
-
-  <!-- ═══ BACKED BY ═══ -->
-  <section class="section_backed-by section-pad">
+  </section>`,
+  'transparency': `<section class="section_backed-by section-pad">
     <div class="padding-global" style="padding-top:6rem"><div class="container-large">
       <div class="backed-by_wrapper">
         <div class="backed-by_title">
@@ -162,10 +148,8 @@
       </div>
     </div></div>
     <div class="footer-bottom-gradient"></div>
-  </section>
-
-  <!-- ═══ SEAMLESS INTEGRATION ═══ -->
-  <section class="section_seamless-integration">
+  </section>`,
+  'integration': `<section class="section_seamless-integration">
     <div class="padding-global" style="padding-top:8rem"><div class="container-large">
       <div class="title_wrapper">
         <div data-c="seamless-integration-div-1" class="text-size-large" style="margin-bottom:1rem">Proven Results</div>
@@ -208,13 +192,8 @@
         </div>
       </div>
     </div></div>
-  </section>
-
-  <!-- ═══ TESTIMONIALS ═══ -->
-  
-
-  <!-- ═══ CTA + FOOTER ═══ -->
-  <section class="section_home-cta">
+  </section>`,
+  'cta': `<section class="section_home-cta">
     <div class="cta-inner">
       <div class="padding-global"><div class="container-large">
         <div class="title_wrapper">
@@ -227,20 +206,35 @@
     <div class="footer-bottom-gradient"></div>
     <div class="padding-global"><div class="container-large">
       </div></div>
-  </section>
-
-</div>`;
+  </section>`
+};
 
   function inject(){
-    var mount = document.getElementById('cybLandingMount');
-    if (!mount) return false;
     if (CSS && !document.getElementById('cyb-lp-css')) {
       var l = document.createElement('link');
       l.id='cyb-lp-css'; l.rel='stylesheet'; l.href=CSS;
       document.head.appendChild(l);
     }
+    /* Preferred: one Webflow-native wrapper per section, so section spacing is
+       editable in the Designer. Each embed carries <div id="cybLP-<key>">. */
+    var n = 0;
+    for (var k in SECTIONS){
+      var el = document.getElementById('cybLP-' + k);
+      if (el && el.getAttribute('data-lp') !== 'done'){
+        el.innerHTML = SECTIONS[k];
+        el.setAttribute('data-lp','done');
+        n++;
+      }
+    }
+    if (n) return true;
+    /* Fallback: the original single mount, still supported so the module works
+       whichever order the page restructure and the publish land in. */
+    var mount = document.getElementById('cybLandingMount');
+    if (!mount) return false;
     mount.className = 'cyb-lp';
-    mount.innerHTML = MARKUP;
+    var out = '<div class="page-wrapper is-purple" id="pageWrapper">';
+    for (var j in SECTIONS) out += SECTIONS[j];
+    mount.innerHTML = out + '</div>';
     return true;
   }
 
