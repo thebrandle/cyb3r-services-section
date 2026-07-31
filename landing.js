@@ -16,10 +16,10 @@
   <!-- ═══ HERO ═══ -->
   <section class="section_hero">
     <div class="hero-text_wrapper">
-      <div class="text-size-large ix-fade" data-ix="load" data-ix-delay="300">The Alignment Agent for the Open Web</div>
-      <h1 class="display-text intro-anim">Make every moment matter</h1>
-      <div class="text-size-large sub-anim ix-fade" data-ix="load" data-ix-delay="300">Agentic AI that makes real-time, placement-level decisions at scale.</div>
-      <div class="margin-medium ix-fade ix-btn" data-ix="load" data-ix-delay="2000"><a href="#" class="button">Book a Discovery Call</a></div>
+      <div data-c="hero-div-1" class="text-size-large ix-fade" data-ix="load" data-ix-delay="300">The Alignment Agent for the Open Web</div>
+      <h1 data-c="hero-h1-1" class="display-text intro-anim">Make every moment matter</h1>
+      <div data-c="hero-div-2" class="text-size-large sub-anim ix-fade" data-ix="load" data-ix-delay="300">Agentic AI that makes real-time, placement-level decisions at scale.</div>
+      <div class="margin-medium ix-fade ix-btn" data-ix="load" data-ix-delay="2000"><a data-c="hero-a-1" href="#" class="button">Book a Discovery Call</a></div>
     </div>
   </section>
 
@@ -52,8 +52,8 @@
     <div class="bring-up">
       <div class="padding-global"><div class="container-large">
         <div class="title_wrapper">
-          <h2 class="heading-style-h1 fancy-anim">Alignment Agent</h2>
-          <div class="margin-medium"><div class="text-size-large">Uniting creative and media intelligence</div></div>
+          <h2 data-c="relevance-agent-h2-1" class="heading-style-h1 fancy-anim">Alignment Agent</h2>
+          <div class="margin-medium"><div data-c="relevance-agent-div-1" class="text-size-large">Uniting creative and media intelligence</div></div>
         </div>
       </div></div>
     </div>
@@ -68,25 +68,25 @@
         <div class="cav_bulb cav_merged"></div>
         <div class="cav_particles"></div>
         <div class="cav_sidecopy cav_leftcopy">
-          <div class="cav_kicker">Match the brief</div>
-          <div class="cav_title">Targeting<br>Context</div>
-          <div class="cav_body">Billions of pages analysed</div>
+          <div data-c="sec4-div-1" class="cav_kicker">Match the brief</div>
+          <div data-c="sec4-div-2" class="cav_title">Targeting<br>Context</div>
+          <div data-c="sec4-div-3" class="cav_body">Billions of pages analysed</div>
         </div>
         <div class="cav_sidecopy cav_rightcopy">
-          <div class="cav_kicker">Align one creative, or millions</div>
-          <div class="cav_title">Creative<br>Messaging</div>
-          <div class="cav_body">Millions of unique creatives served</div>
+          <div data-c="sec4-div-4" class="cav_kicker">Align one creative, or millions</div>
+          <div data-c="sec4-div-5" class="cav_title">Creative<br>Messaging</div>
+          <div data-c="sec4-div-6" class="cav_body">Millions of unique creatives served</div>
         </div>
-        <div class="cav_center_text cav_text_1">Measures how closely the message<br>fits the page</div>
-        <div class="cav_center_text cav_text_2">Only serve an ad when the<br>message meets the moment</div>
+        <div data-c="sec4-div-7" class="cav_center_text cav_text_1">Measures how closely the message<br>fits the page</div>
+        <div data-c="sec4-div-8" class="cav_center_text cav_text_2">Only serve an ad when the<br>message meets the moment</div>
         <div class="cav_percent"><span class="cav_percent_num">50</span>%</div>
         <div class="cav_score">
-          <div class="cav_score_label">Alignment Score</div>
+          <div data-c="sec4-div-9" class="cav_score_label">Alignment Score</div>
           <div class="cav_score_value"><span class="cav_score_num">70</span>%</div>
         </div>
-        <div class="cav_scale_text">Delivery at Scale</div>
-        <div class="cav_final_text cav_ads_text">Millions of ad variations</div>
-        <div class="cav_final_text">Millions of<br>aligned moments</div>
+        <div data-c="sec4-div-10" class="cav_scale_text">Delivery at Scale</div>
+        <div data-c="sec4-div-11" class="cav_final_text cav_ads_text">Millions of ad variations</div>
+        <div data-c="sec4-div-12" class="cav_final_text">Millions of<br>aligned moments</div>
       </div></div>
     </section>
   </div>
@@ -111,27 +111,27 @@
   <section class="section_proven-results section-pad">
     <div class="padding-global"><div class="container-large">
       <div>
-        <div class="text-size-large" style="margin-bottom:1rem">Proven Results</div>
-        <h2 class="heading-style-h1 fancy-anim">Relevance = Results</h2>
+        <div data-c="proven-results-div-1" class="text-size-large" style="margin-bottom:1rem">Proven Results</div>
+        <h2 data-c="proven-results-h2-1" class="heading-style-h1 fancy-anim">Relevance = Results</h2>
       </div>
       <div class="stats_wrapper">
         <div class="single-stat">
           <div class="notch"><svg viewBox="0 0 300 230" preserveAspectRatio="none" fill="none">
             <path d="M12 1 H221 L299 79 V218 a11 11 0 0 1 -11 11 H12 A11 11 0 0 1 1 218 V12 A11 11 0 0 1 12 1 Z" stroke="rgba(255,255,255,.55)" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
-          <div class="text-stat">30%</div>
-          <div class="stat-label">Decrease in CPA</div>
+          <div data-c="proven-results-div-2" class="text-stat">30%</div>
+          <div data-c="proven-results-div-3" class="stat-label">Decrease in CPA</div>
         </div>
         <div class="single-stat">
           <div class="notch"><svg viewBox="0 0 300 230" preserveAspectRatio="none" fill="none">
             <path d="M12 1 H221 L299 79 V218 a11 11 0 0 1 -11 11 H12 A11 11 0 0 1 1 218 V12 A11 11 0 0 1 12 1 Z" stroke="rgba(255,255,255,.55)" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
-          <div class="text-stat">3x</div>
-          <div class="stat-label">Longer Attention</div>
+          <div data-c="proven-results-div-4" class="text-stat">3x</div>
+          <div data-c="proven-results-div-5" class="stat-label">Longer Attention</div>
         </div>
         <div class="single-stat">
           <div class="notch"><svg viewBox="0 0 300 230" preserveAspectRatio="none" fill="none">
             <path d="M12 1 H221 L299 79 V218 a11 11 0 0 1 -11 11 H12 A11 11 0 0 1 1 218 V12 A11 11 0 0 1 12 1 Z" stroke="rgba(255,255,255,.55)" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg></div>
-          <div class="text-stat">21%</div>
-          <div class="stat-label">Uplift in Brand Awareness</div>
+          <div data-c="proven-results-div-6" class="text-stat">21%</div>
+          <div data-c="proven-results-div-7" class="stat-label">Uplift in Brand Awareness</div>
         </div>
       </div>
     </div></div>
@@ -142,21 +142,21 @@
     <div class="padding-global" style="padding-top:6rem"><div class="container-large">
       <div class="backed-by_wrapper">
         <div class="backed-by_title">
-          <h2 class="heading-style-h1 fancy-anim">Built on Absolute Transparency</h2>
-          <div class="margin-medium"><div class="text-size-large">We work in the open. We bring a new standard of trust to programmatic display by sharing the exact data other platforms keep hidden.</div></div>
+          <h2 data-c="backed-by-h2-1" class="heading-style-h1 fancy-anim">Built on Absolute Transparency</h2>
+          <div class="margin-medium"><div data-c="backed-by-div-1" class="text-size-large">We work in the open. We bring a new standard of trust to programmatic display by sharing the exact data other platforms keep hidden.</div></div>
         </div>
         <div class="acc_wrapper" id="accWrapper">
           <div class="acc_single open">
-            <div class="acc_label"><div class="text-size-large">Full-Path URLs</div><span class="plus-icon"></span></div>
-            <div class="acc_content"><div class="text-size-small">No settling for a top-level domain. You get the complete page URL for every placement, so you always know exactly where your ad ran.</div></div>
+            <div class="acc_label"><div data-c="backed-by-div-2" class="text-size-large">Full-Path URLs</div><span class="plus-icon"></span></div>
+            <div class="acc_content"><div data-c="backed-by-div-3" class="text-size-small">No settling for a top-level domain. You get the complete page URL for every placement, so you always know exactly where your ad ran.</div></div>
           </div>
           <div class="acc_single">
-            <div class="acc_label"><div class="text-size-large">Impression-Level Data</div><span class="plus-icon"></span></div>
-            <div class="acc_content"><div class="text-size-small">Follow the numbers that matter. Review impressions, clicks, conversions and spend for every single placement, reported without rounding or hiding.</div></div>
+            <div class="acc_label"><div data-c="backed-by-div-4" class="text-size-large">Impression-Level Data</div><span class="plus-icon"></span></div>
+            <div class="acc_content"><div data-c="backed-by-div-5" class="text-size-small">Follow the numbers that matter. Review impressions, clicks, conversions and spend for every single placement, reported without rounding or hiding.</div></div>
           </div>
           <div class="acc_single">
-            <div class="acc_label"><div class="text-size-large">Creative Variants</div><span class="plus-icon"></span></div>
-            <div class="acc_content"><div class="text-size-small">Total clarity on your messaging. See which creative variant the agent chose for each page, and the context signals that drove that choice.</div></div>
+            <div class="acc_label"><div data-c="backed-by-div-6" class="text-size-large">Creative Variants</div><span class="plus-icon"></span></div>
+            <div class="acc_content"><div data-c="backed-by-div-7" class="text-size-small">Total clarity on your messaging. See which creative variant the agent chose for each page, and the context signals that drove that choice.</div></div>
           </div>
         </div>
       </div>
@@ -168,42 +168,42 @@
   <section class="section_seamless-integration">
     <div class="padding-global" style="padding-top:8rem"><div class="container-large">
       <div class="title_wrapper">
-        <div class="text-size-large" style="margin-bottom:1rem">Proven Results</div>
-        <h2 class="heading-style-h1 fancy-anim">Seamless Enterprise Integration</h2>
-        <div class="margin-medium"><div class="text-size-large">One intelligent infrastructure, built for enterprise scale.</div></div>
+        <div data-c="seamless-integration-div-1" class="text-size-large" style="margin-bottom:1rem">Proven Results</div>
+        <h2 data-c="seamless-integration-h2-1" class="heading-style-h1 fancy-anim">Seamless Enterprise Integration</h2>
+        <div class="margin-medium"><div data-c="seamless-integration-div-2" class="text-size-large">One intelligent infrastructure, built for enterprise scale.</div></div>
       </div>
       <div class="big-cards_wrapper">
         <div class="big-card">
           <div class="big-card_01">
-            <div class="subtitle">Activation Model</div>
-            <h3 class="heading-style-h2">Managed Execution</h3>
-            <div class="margin-medium"><div class="text-size-large">We carry the heavy lifting. Our team runs your campaigns end-to-end, steering programmatic delivery toward the outcomes that matter most to you.</div></div>
+            <div data-c="seamless-integration-div-3" class="subtitle">Activation Model</div>
+            <h3 data-c="seamless-integration-h3-1" class="heading-style-h2">Managed Execution</h3>
+            <div class="margin-medium"><div data-c="seamless-integration-div-4" class="text-size-large">We carry the heavy lifting. Our team runs your campaigns end-to-end, steering programmatic delivery toward the outcomes that matter most to you.</div></div>
           </div>
           <div class="big-card_02">
-            <div class="text-stat">01</div>
-            <div class="pills_wrapper"><div class="pill-text">End-to-End Partnership</div><div class="pill-text">Zero Manual Setup</div><div class="pill-text">Maximum Returns</div></div>
+            <div data-c="seamless-integration-div-5" class="text-stat">01</div>
+            <div class="pills_wrapper"><div data-c="seamless-integration-div-6" class="pill-text">End-to-End Partnership</div><div data-c="seamless-integration-div-7" class="pill-text">Zero Manual Setup</div><div data-c="seamless-integration-div-8" class="pill-text">Maximum Returns</div></div>
           </div>
         </div>
         <div class="big-card is-pink">
           <div class="big-card_01">
-            <div class="subtitle">Activation Model</div>
-            <h3 class="heading-style-h2">DSP Overlays</h3>
-            <div class="margin-medium"><div class="text-size-large">Curate your own environments. Activate the agent as a single targeting line inside the buying platforms your teams already use every day, with no migration.</div></div>
+            <div data-c="seamless-integration-div-9" class="subtitle">Activation Model</div>
+            <h3 data-c="seamless-integration-h3-2" class="heading-style-h2">DSP Overlays</h3>
+            <div class="margin-medium"><div data-c="seamless-integration-div-10" class="text-size-large">Curate your own environments. Activate the agent as a single targeting line inside the buying platforms your teams already use every day, with no migration.</div></div>
           </div>
           <div class="big-card_02">
-            <div class="text-stat">02</div>
-            <div class="pills_wrapper"><div class="pill-text">Complete Buying Control</div><div class="pill-text">Direct PMP Access</div><div class="pill-text">Alignment Overlays</div></div>
+            <div data-c="seamless-integration-div-11" class="text-stat">02</div>
+            <div class="pills_wrapper"><div data-c="seamless-integration-div-12" class="pill-text">Complete Buying Control</div><div data-c="seamless-integration-div-13" class="pill-text">Direct PMP Access</div><div data-c="seamless-integration-div-14" class="pill-text">Alignment Overlays</div></div>
           </div>
         </div>
         <div class="big-card is-dark-purple">
           <div class="big-card_01">
-            <div class="subtitle">Activation Model</div>
-            <h3 class="heading-style-h2">Intelligent Creative</h3>
-            <div class="margin-medium"><div class="text-size-large">Let our creative technology respond to live signals and page context in real time. We wrap your existing assets or build bespoke, high-impact variants.</div></div>
+            <div data-c="seamless-integration-div-15" class="subtitle">Activation Model</div>
+            <h3 data-c="seamless-integration-h3-3" class="heading-style-h2">Intelligent Creative</h3>
+            <div class="margin-medium"><div data-c="seamless-integration-div-16" class="text-size-large">Let our creative technology respond to live signals and page context in real time. We wrap your existing assets or build bespoke, high-impact variants.</div></div>
           </div>
           <div class="big-card_02">
-            <div class="text-stat">03</div>
-            <div class="pills_wrapper"><div class="pill-text">Live Data Points</div><div class="pill-text">Existing Asset Wrappers</div><div class="pill-text">Placement-Level Matching</div></div>
+            <div data-c="seamless-integration-div-17" class="text-stat">03</div>
+            <div class="pills_wrapper"><div data-c="seamless-integration-div-18" class="pill-text">Live Data Points</div><div data-c="seamless-integration-div-19" class="pill-text">Existing Asset Wrappers</div><div data-c="seamless-integration-div-20" class="pill-text">Placement-Level Matching</div></div>
           </div>
         </div>
       </div>
@@ -214,14 +214,14 @@
   <section class="section_testimonials section-pad">
 <div class="padding-global"><div class="container-large">
       <div class="title_wrapper">
-        <h2 class="heading-style-h1 fancy-anim">Proven by Enterprise Leaders</h2>
-        <div class="margin-medium"><div class="text-size-large">How global brands use the Alignment Agent to lift outcomes and operate with full visibility.</div></div>
+        <h2 data-c="testimonials-h2-1" class="heading-style-h1 fancy-anim">Proven by Enterprise Leaders</h2>
+        <div class="margin-medium"><div data-c="testimonials-div-1" class="text-size-large">How global brands use the Alignment Agent to lift outcomes and operate with full visibility.</div></div>
       </div>
       <div class="testimonial_wrapper ix-fade" data-ix="scroll">
         <div class="testimonial-card">
           <svg class="quote-ico" viewBox="0 0 44 34" fill="none"><path d="M0 34V20C0 8 6 1 18 0v8c-6 1-9 4-9 10h9v16H0Zm26 0V20C26 8 32 1 44 0v8c-6 1-9 4-9 10h9v16H26Z" fill="#fff"/></svg>
-          <div class="heading-style-h3">What impressed us most was that this went far beyond a clever targeting trick. The agent reshaped how our creative and media teams work together, and the transparency reporting gave every stakeholder — from brand to procurement — total confidence in where our budget was going and why it performed.</div>
-          <div class="text-size-small" style="opacity:.8">Head of Programmatic — Global Retail Group</div>
+          <div data-c="testimonials-div-2" class="heading-style-h3">What impressed us most was that this went far beyond a clever targeting trick. The agent reshaped how our creative and media teams work together, and the transparency reporting gave every stakeholder - from brand to procurement - total confidence in where our budget was going and why it performed.</div>
+          <div data-c="testimonials-div-3" class="text-size-small" style="opacity:.8">Head of Programmatic - Global Retail Group</div>
         </div>
       </div>
     </div></div>
@@ -232,9 +232,9 @@
     <div class="cta-inner">
       <div class="padding-global"><div class="container-large">
         <div class="title_wrapper">
-          <h2 class="heading-style-h1 fancy-anim">Ready to Own<br>Every Moment?</h2>
-          <div class="_50-wrapper"><div class="margin-medium"><div class="text-size-large">Partner with us to capture true human intent on the open web and drive stronger commercial outcomes.</div></div></div>
-          <div class="margin-medium"><a href="#" class="button is-pink">Book a Discovery Call</a></div>
+          <h2 data-c="home-cta-h2-1" class="heading-style-h1 fancy-anim">Ready to Own<br>Every Moment?</h2>
+          <div class="_50-wrapper"><div class="margin-medium"><div data-c="home-cta-div-1" class="text-size-large">Partner with us to capture true human intent on the open web and drive stronger commercial outcomes.</div></div></div>
+          <div class="margin-medium"><a data-c="home-cta-a-1" href="#" class="button is-pink">Book a Discovery Call</a></div>
         </div>
       </div></div>
     </div>
@@ -542,6 +542,38 @@
 
   }
 
+
+  /* ---- editable copy -------------------------------------------------
+   * A hidden Collection List (#cybCopySrc, class .cyb-copy-src) renders one
+   * row per "Landing Page Copy" item: a node carrying the key and a node
+   * carrying the wording. We match each row's key to a [data-c] node in the
+   * injected markup and swap the wording in. Runs BEFORE run() so SplitType
+   * and the GSAP timelines split the final text, not the placeholder.
+   * A blank Text field keeps the wording baked into this module. */
+  function esc(s){
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+  function applyCopy(){
+    var src = document.getElementById('cybCopySrc');
+    var mount = document.getElementById('cybLandingMount');
+    if (!src || !mount) return 0;
+    var n = 0;
+    src.querySelectorAll('[data-ck]').forEach(function(kNode){
+      var row = kNode.parentElement; if (!row) return;
+      var vNode = row.querySelector('[data-cv]'); if (!vNode) return;
+      var key = (kNode.textContent || '').trim();
+      var txt = (vNode.textContent || '').replace(/\r/g, '').trim();
+      if (!key || !txt) return;                       /* blank = keep original */
+      var target = mount.querySelector('[data-c="' + key + '"]');
+      if (!target) return;
+      target.innerHTML = txt.split('\n').map(function(line){
+        return esc(line.trim());
+      }).join('<br>');
+      n++;
+    });
+    return n;
+  }
+
   function boot(t){
     if (!(window.gsap && window.ScrollTrigger)) {
       return t < 150 ? setTimeout(function(){ boot(t+1); }, 50) : void 0;
@@ -549,6 +581,7 @@
     if (!inject()) {
       return t < 150 ? setTimeout(function(){ boot(t+1); }, 50) : void 0;
     }
+    try { applyCopy(); } catch(e){ console.warn('[cyb-lp] copy', e); }
     try { gsap.registerPlugin(ScrollTrigger); } catch(e){}
     try { run(); } catch(e){ console.warn('[cyb-lp]', e); }
     if (window.ScrollTrigger) setTimeout(function(){ ScrollTrigger.refresh(); }, 60);
