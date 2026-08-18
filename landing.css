@@ -177,6 +177,10 @@
   .cyb-lp .big-card.is-pink{ background-color:var(--pink); color:#fff; top:8rem; }
   .cyb-lp .big-card.is-dark-purple{ background-color:var(--purple); color:#fff; top:11rem; }
   .cyb-lp .big-card .text-stat{ margin:0; font-size:6rem; }
+  /* Orphan/widow prevention. The site head already applies text-wrap:pretty to p/li/headings,
+     but every paragraph on this page is written as a DIV, so those selectors never reach it.
+     The animated scene headlines are deliberately excluded - SplitType/GSAP consume their line breaks. */
+  .cyb-lp .text-size-large, .cyb-lp .text-size-small, .cyb-lp .cav_body, .cyb-lp .stat-label{ text-wrap:pretty; }
 
   /* ── TESTIMONIALS ────────────────────────────────────────────── */
   .cyb-lp .section_testimonials{ background-color:var(--purple); color:#fff; flex-direction:column; justify-content:center;
