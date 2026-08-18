@@ -73,6 +73,7 @@
   .cyb-lp #cav-relevance-agent{
     --cav-white:#ffffff; --cav-green:#A682B7; --cav-green-dark:#241E2B;
     --cav-pink:#39F1E0; --cav-pink-dark:#0C2027; --cav-purple:#6E9EB5; --cav-purple-dark:#17222A;
+    --cav-particle-light:#ACC8D5; --cav-particle-mid:#97B9CA; --cav-particle-glow:110,158,181;
     --cav-section-height:760vh; --cav-text-shadow:0 0 32px rgba(255,255,255,0.12);
     overflow-x:clip;
   }
@@ -97,8 +98,8 @@
   .cyb-lp .cav_particles{ position:absolute; inset:0; z-index:1; opacity:0; transform-style:preserve-3d; perspective:900px; pointer-events:none; }
   .cyb-lp .cav_particle{ position:absolute; left:50%; top:50%; width:var(--s); height:var(--s); border-radius:999px;
     transform:translate3d(var(--x),var(--y),var(--z)) scale(var(--sc,1)); opacity:var(--o,.85); filter:blur(var(--b,0px));
-    background:radial-gradient(circle at 50% 47%, #CDB4D8 0%, #C0A0CE 34%, #241E2B 82%);
-    box-shadow:0 0 42px rgba(166,130,183,.32), inset 0 0 48px rgba(0,0,0,.42); will-change:transform,opacity; }
+    background:radial-gradient(circle at 50% 47%, var(--cav-particle-light) 0%, var(--cav-particle-mid) 34%, var(--cav-purple-dark) 82%);
+    box-shadow:0 0 42px rgba(var(--cav-particle-glow),.32), inset 0 0 48px rgba(0,0,0,.42); will-change:transform,opacity; }
   .cyb-lp .cav_core_particle{ z-index:3; }
   .cyb-lp .cav_sidecopy{ position:absolute; z-index:4; top:51%; transform:translateY(-50%); width:min(37vw,730px); will-change:transform,opacity; }
   .cyb-lp .cav_leftcopy{ left:clamp(32px,8vw,120px); }
@@ -132,7 +133,7 @@
   .cyb-lp .arrow-btn.right{ right:2.5rem; }
   /* arrow glyph stroke is set as an SVG attribute in Webflow, so it stays editable */
   /* brand logo above each slide caption; small, left-aligned with the text */
-  .cyb-lp .slide-logo{ display:block; height:44px; width:auto; max-width:190px; object-fit:contain;
+  .cyb-lp .slide-logo{ display:block; height:44px; width:auto; max-width:290px; object-fit:contain;
     object-position:left center; margin:0 0 1.1rem; }
   /* stand-in publisher mock inside device */
   .cyb-lp .pubmock{ display:flex; flex-direction:column; height:100%; font-family:var(--font-sans); }
