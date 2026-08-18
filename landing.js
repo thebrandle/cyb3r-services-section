@@ -534,6 +534,22 @@
   function esc(s){
     return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
+  // text-wrap:pretty is best-effort - Chrome still leaves a lone last word on some
+  // paragraphs. Bind the final two words with a non-breaking space so a one-word
+  // last line is impossible. Runs AFTER applyCopy so it acts on the final CMS wording.
+  var ORPHAN_SEL = '.text-size-large, .text-size-small, .cav_body, .stat-label';
+  function preventOrphans(){
+    document.querySelectorAll('.cyb-lp ' + ORPHAN_SEL).forEach(function(el){
+      if (el.children.length) return;                 // leave markup-bearing nodes alone
+      var s = el.textContent.replace(/\u00A0/g, ' ').trim();
+      var w = s.split(/\s+/);
+      if (w.length < 4) return;                       // too short to orphan meaningfully
+      var tail = w[w.length-2] + ' ' + w[w.length-1];
+      if (tail.length > 22) return;                   // binding long words could overflow
+      el.textContent = w.slice(0, -2).join(' ') + ' ' + w[w.length-2] + '\u00A0' + w[w.length-1];
+    });
+  }
+
   function applyCopy(){
     var src = document.getElementById('cybCopySrc');
     var mount = document.getElementById('cybLandingMount');
@@ -563,6 +579,7 @@
       return t < 150 ? setTimeout(function(){ boot(t+1); }, 50) : void 0;
     }
     try { applyCopy(); } catch(e){ console.warn('[cyb-lp] copy', e); }
+    try { preventOrphans(); } catch(e){ console.warn('[cyb-lp] orphans', e); }
     try { gsap.registerPlugin(ScrollTrigger); } catch(e){}
     try { run(); } catch(e){ console.warn('[cyb-lp]', e); }
     if (window.ScrollTrigger) setTimeout(function(){ ScrollTrigger.refresh(); }, 60);
