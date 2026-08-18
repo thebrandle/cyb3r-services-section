@@ -340,11 +340,11 @@
 
   /* ═══ examples slider (out-in 500ms, infinite, manual) ═══ */
   const SLIDES=[
-    { cat:"TRAVEL", brand:"Sandals", logo:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d461deb044d7d665cdc22_sandals.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1cb1db31fed60b9bfd8ef6_Sandals_TRAVEL_Hotels_StLuci_970x250%20%281%29_mp4.mp4" },
-    { cat:"AUTO", brand:"Volkswagen", logo:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d91a2644ccb0bf6cd2d0c_volkswagen_02.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1cb05a6251df8cb0c1ef69_Volkswagen_AUTOMOTIVE_Q1_2026_Golf_970x250_mp4.mp4" },
-    { cat:"RETAIL", brand:"B&Q", logo:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d4781bb693fbdfbc48558_bq.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c53b187ffdba169e2b8_B%26Q%20_RETAIL_House%20%26%20Garden_Plants_mp4.mp4" },
+    { cat:"TRAVEL", brand:"Sandals", logo:"https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a840b6e50161f92d0da25d8_slide-logo-sandals.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1cb1db31fed60b9bfd8ef6_Sandals_TRAVEL_Hotels_StLuci_970x250%20%281%29_mp4.mp4" },
+    { cat:"AUTO", brand:"Volkswagen", logo:"https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a840b6ec98229c29fdaf22f_slide-logo-volkswagen.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1cb05a6251df8cb0c1ef69_Volkswagen_AUTOMOTIVE_Q1_2026_Golf_970x250_mp4.mp4" },
+    { cat:"RETAIL", brand:"B&Q", logo:"https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a840b6e205c2adf37efb1d8_slide-logo-bq.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c53b187ffdba169e2b8_B%26Q%20_RETAIL_House%20%26%20Garden_Plants_mp4.mp4" },
     { cat:"ELECTRONICS", brand:"Hisense", logo:"", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c6a7682ee1bfc2e980c_Hisense_ELECTRONICS_reacher_970x250_mp4.mp4" },
-    { cat:"ENTERTAINMENT", brand:"VUE Cinemas", logo:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d461dbda46ca16cd10f0f_vue.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c73ce7c60654d87af21_VUE%20Cinemas_%20ENTERTAINMENT_HailMary_970x250_mp4.mp4" }
+    { cat:"ENTERTAINMENT", brand:"VUE Cinemas", logo:"https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a840b6fb1474bf35b4afb0d_slide-logo-vue.png", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c73ce7c60654d87af21_VUE%20Cinemas_%20ENTERTAINMENT_HailMary_970x250_mp4.mp4" }
   ];
   const vp=document.getElementById("sliderViewport");
   SLIDES.forEach((s,i)=>{
