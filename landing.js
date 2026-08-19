@@ -377,7 +377,7 @@
   document.getElementById("nextBtn").addEventListener("click",()=>go(1));
   document.getElementById("prevBtn").addEventListener("click",()=>go(-1));
   /* card hover tilt — traced on the live site (mouse-move rotate, heavy smoothing, decays after leave) */
-  document.querySelectorAll(".slider_video").forEach(sv=>{
+  document.querySelectorAll(".slider_video, .showreel_frame").forEach(sv=>{
     const st={rx:0,ry:0,tx:0,ty:0};
     sv.style.transformStyle="preserve-3d";
     sv.addEventListener("mousemove",e=>{ const r=sv.getBoundingClientRect();
