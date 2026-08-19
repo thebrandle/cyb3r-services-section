@@ -37,7 +37,7 @@
           <img src="https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d91a2dd14b078c9416258_greene-king_02.png" loading="lazy" alt="">
           <img src="https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d461ddb3fd286a25fec53_krispy-kreme.png" loading="lazy" alt="">
           <img src="https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d461f3e500c2560add64d_coors.png" loading="lazy" alt="">
-          <img src="https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d4629b2152996dca0a9c2_nhs.png" loading="lazy" alt="">
+          <img src="https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264/6a1d4629b2152996dca0a9c2_nhs.png" loading="lazy" alt=""><img src="https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a856e1bc06e240ce9b06f5b_ticker-logo-fxpro-v2.svg" loading="lazy" alt="FxPro logo">
         </div>
       </div>
     </div>
