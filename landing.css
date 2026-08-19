@@ -144,17 +144,18 @@
     border-radius:0; display:block;
     /* cinematic side dissolve - the footage melts into the page instead of ending
        on a hard edge. Needs .showreel_frame background transparent (set in Webflow). */
-    -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%);
-            mask-image:linear-gradient(to right, transparent 0%, #000 14%, #000 86%, transparent 100%); }
-  /* depth pool beneath the frame (neutral, not tinted - the footage is already teal) */
-  .cyb-lp .showreel_frame::before{ content:""; position:absolute; inset:2% 1%; z-index:0;
-    pointer-events:none; box-shadow:0 40px 90px rgba(0,0,0,.55); }
-  /* darkened side rails + corner vignette: pulls the eye to the centre of frame */
+    -webkit-mask-image:linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%);
+            mask-image:linear-gradient(to right, transparent 0%, #000 12%, #000 88%, transparent 100%); }
+  /* No drop shadow on purpose: a shadow is exactly what makes a video read as a
+     floating container. The blend does the work instead.
+     The fade colour IS the page background (--purple #1A232D), so the edges do not
+     darken, they simply dissolve into the page. Keep these in sync if the page
+     background ever changes. */
   .cyb-lp .showreel_frame::after{ content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
     background:
-      linear-gradient(to right, rgba(10,14,18,.85) 0%, rgba(10,14,18,0) 22%,
-                      rgba(10,14,18,0) 78%, rgba(10,14,18,.85) 100%),
-      radial-gradient(120% 82% at 50% 50%, rgba(0,0,0,0) 50%, rgba(0,0,0,.5) 100%); }
+      linear-gradient(to right, rgba(26,35,45,1) 0%, rgba(26,35,45,0) 20%,
+                      rgba(26,35,45,0) 80%, rgba(26,35,45,1) 100%),
+      radial-gradient(125% 88% at 50% 50%, rgba(26,35,45,0) 58%, rgba(26,35,45,.42) 100%); }
   .cyb-lp .showreel_ctrls{ position:absolute; right:16px; bottom:16px; z-index:4;
     display:flex; align-items:center; gap:8px; }
   .cyb-lp .showreel_btn{ width:36px; height:36px; flex:none; display:inline-flex;
