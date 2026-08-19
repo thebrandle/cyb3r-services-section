@@ -572,6 +572,59 @@
     });
   }
 
+  /* ═══ showreel video with sound ═══
+     Webflow's Background Video element strips the audio track when it transcodes, so
+     the hero is built here from a plain <video> pointed at an untranscoded asset
+     (the frame's data-showreel-src). Every browser blocks autoplay WITH sound, so it
+     starts muted (which is allowed) and the toggle supplies the user gesture that
+     unlocks audio. To change the video, update data-showreel-src on .showreel_frame. */
+  function initShowreel(){
+    var frame = document.querySelector('.showreel_frame[data-showreel-src]');
+    if (!frame || frame.querySelector('video')) return;
+    var src = frame.getAttribute('data-showreel-src');
+    var poster = frame.getAttribute('data-showreel-poster') || '';
+
+    var v = document.createElement('video');
+    v.className = 'showreel_vid';
+    v.src = src; if (poster) v.poster = poster;
+    v.muted = true; v.setAttribute('muted','');       /* attribute form matters on iOS */
+    v.autoplay = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline','');
+    v.preload = 'metadata';
+    frame.appendChild(v);
+    var p = v.play(); if (p && p.catch) p.catch(function(){});
+
+    var ICON_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m23 9-6 6M17 9l6 6"/></svg>';
+    var ICON_ON  = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg>';
+
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'showreel_sound';
+    function paint(){
+      btn.innerHTML = (v.muted ? ICON_OFF : ICON_ON) + '<span>' + (v.muted ? 'Sound on' : 'Sound off') + '</span>';
+      btn.setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Turn sound off');
+      btn.setAttribute('aria-pressed', String(!v.muted));
+    }
+    btn.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      v.muted = !v.muted;
+      if (!v.muted) { v.volume = 1; var q = v.play(); if (q && q.catch) q.catch(function(){}); }
+      paint();
+    });
+    paint();
+    frame.appendChild(btn);
+
+    /* pause while off-screen so a 55s track never plays to nobody */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting) { var r = v.play(); if (r && r.catch) r.catch(function(){}); }
+          else { v.pause(); if (!v.muted) { v.muted = true; paint(); } }
+        });
+      }, { threshold: 0.25 }).observe(frame);
+    }
+  }
+
   function applyCopy(){
     var src = document.getElementById('cybCopySrc');
     /* 49 of the 61 copy nodes are real Webflow elements now and are edited directly
@@ -607,6 +660,7 @@
     }
     try { applyCopy(); } catch(e){ console.warn('[cyb-lp] copy', e); }
     try { preventOrphans(); } catch(e){ console.warn('[cyb-lp] orphans', e); }
+    try { initShowreel(); } catch(e){ console.warn('[cyb-lp] showreel', e); }
     try { gsap.registerPlugin(ScrollTrigger); } catch(e){}
     try { run(); } catch(e){ console.warn('[cyb-lp]', e); }
     if (window.ScrollTrigger) setTimeout(function(){ ScrollTrigger.refresh(); }, 60);
