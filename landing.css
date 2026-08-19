@@ -146,9 +146,9 @@
     display:flex; align-items:center; gap:8px; }
   .cyb-lp .showreel_btn{ width:36px; height:36px; flex:none; display:inline-flex;
     align-items:center; justify-content:center; padding:0;
-    background:#39F1E0; color:#0F0E0E; border:0; border-radius:0; cursor:pointer;
+    background:#0F0E0E; color:#39F1E0; border:0; border-radius:0; cursor:pointer;
     transition:background-color .25s ease; }
-  .cyb-lp .showreel_btn:hover{ background:#EBEBEB; }
+  .cyb-lp .showreel_btn:hover{ background:#1A232D; }
   .cyb-lp .showreel_btn svg{ width:17px; height:17px; display:block; }
   @media (max-width:767px){
     .cyb-lp .showreel_ctrls{ right:10px; bottom:10px; gap:6px; }
