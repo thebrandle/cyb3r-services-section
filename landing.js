@@ -339,13 +339,35 @@
     if(bl) i.style.filter="blur("+bl+"px)"; bokeh.appendChild(i); });
 
   /* ═══ examples slider (out-in 500ms, infinite, manual) ═══ */
-  const SLIDES=[
+  /* Slides are editable in the Editor via the "Landing Page Slides" collection.
+     A hidden Collection List (#cybSlideSrc) renders one row per slide; read it here.
+     If the list is missing or every row is incomplete we fall back to the built-in
+     list below, so the carousel can never end up empty. */
+  function readSlidesFromCms(){
+    var src = document.getElementById('cybSlideSrc');
+    if (!src) return null;
+    var rows = [];
+    src.querySelectorAll('[data-scat]').forEach(function(catNode){
+      var row = catNode.parentElement; if (!row) return;
+      function g(sel){ var n = row.querySelector(sel); return n ? (n.textContent || '').trim() : ''; }
+      var brand = g('[data-sbrand]'), video = g('[data-svideo]');
+      if (!brand || !/^https?:/i.test(video)) return;      /* incomplete row */
+      var o = parseFloat(g('[data-sorder]'));
+      rows.push({ cat: (catNode.textContent || '').trim(), brand: brand,
+                  desc: g('[data-sdesc]'), video: video, _o: isNaN(o) ? 999 : o });
+    });
+    if (!rows.length) return null;
+    rows.sort(function(a, b){ return a._o - b._o; });
+    return rows;
+  }
+  const SLIDES_FALLBACK=[
     { cat:"TRAVEL", brand:"Sandals", desc:"Caribbean luxury, placed in front of travellers ready to book.", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1cb1db31fed60b9bfd8ef6_Sandals_TRAVEL_Hotels_StLuci_970x250%20%281%29_mp4.mp4" },
     { cat:"AUTO", brand:"Volkswagen", desc:"Taking the new Golf to drivers already researching their next car.", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1cb05a6251df8cb0c1ef69_Volkswagen_AUTOMOTIVE_Q1_2026_Golf_970x250_mp4.mp4" },
     { cat:"RETAIL", brand:"B&Q", desc:"Meeting home and garden shoppers the moment inspiration strikes.", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c53b187ffdba169e2b8_B%26Q%20_RETAIL_House%20%26%20Garden_Plants_mp4.mp4" },
     { cat:"ELECTRONICS", brand:"Hisense", desc:"Putting 100-inch TVs beside the blockbusters they were built for.", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c6a7682ee1bfc2e980c_Hisense_ELECTRONICS_reacher_970x250_mp4.mp4" },
     { cat:"ENTERTAINMENT", brand:"VUE Cinemas", desc:"Filling seats by reaching film fans mid-review.", video:"https://cdn.prod.website-files.com/6a180c5b2a617f73fd65d264%2F6a1d1c73ce7c60654d87af21_VUE%20Cinemas_%20ENTERTAINMENT_HailMary_970x250_mp4.mp4" }
   ];
+  const SLIDES = readSlidesFromCms() || SLIDES_FALLBACK;
   const vp=document.getElementById("sliderViewport");
   SLIDES.forEach((s,i)=>{
     const d=document.createElement("div"); d.className="slide"+(i===0?" active":"");
