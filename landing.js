@@ -552,9 +552,11 @@
 
   function applyCopy(){
     var src = document.getElementById('cybCopySrc');
-    /* Sections are native Webflow elements now, so the old embed mount no longer
-       exists and scoping to it silently disabled the whole CMS copy overlay.
-       Scope to .cyb-lp, which wraps every [data-c] node on the page. */
+    /* 49 of the 61 copy nodes are real Webflow elements now and are edited directly
+       in the Designer, so the overlay MUST NOT touch them - it would silently
+       overwrite every Designer edit on load. Only the 12 sec4-* nodes live inside
+       the particle-scene HtmlEmbed, where the CMS is the only editing route, so the
+       overlay is deliberately restricted to .w-embed descendants. */
     var mount = document.querySelector('.cyb-lp') || document;
     if (!src) return 0;
     var n = 0;
@@ -564,7 +566,7 @@
       var key = (kNode.textContent || '').trim();
       var txt = (vNode.textContent || '').replace(/\r/g, '').trim();
       if (!key || !txt) return;                       /* blank = keep original */
-      var target = mount.querySelector('[data-c="' + key + '"]');
+      var target = mount.querySelector('.w-embed [data-c="' + key + '"]');
       if (!target) return;
       target.innerHTML = txt.split('\n').map(function(line){
         return esc(line.trim());
