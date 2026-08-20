@@ -184,6 +184,15 @@
   .cyb-lp .hero-progress:hover .hero-progress_knob{ opacity:1; }
   .cyb-lp .hero-time{ flex:none; font:500 11px/1 "Inter",system-ui,sans-serif; color:#EDEDEF;
     letter-spacing:.02em; font-variant-numeric:tabular-nums; }
+  /* Phones crop the frame to the monitor (.hero-media aspect-ratio 4/3 +
+     object-position:100%, set in Webflow) because the full 2.254:1 frame leaves the
+     device tiny with dead space beside it. The visible window becomes the right
+     59.1% of the source, so the panel that sat at 47.19%-97.66% now maps to
+     10.6%-96%. Chrome must be re-mapped to that or it lands off the screen. */
+  @media (max-width:767px){
+    .cyb-lp .hero-vid{ object-position:100% center; }
+    .cyb-lp .hero-controls{ left:10.6%; width:85.4%; }
+  }
   @media (max-width:991px){
     .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }
     .cyb-lp .hero-time{ display:none; }
