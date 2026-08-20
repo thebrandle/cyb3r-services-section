@@ -154,15 +154,15 @@
 
   /* ── HERO PLAYER CHROME ───────────────────────────────────────
      Anchored to the monitor's SCREEN panel, measured from the footage's alpha:
-     the display sits at left 45.94% / width 53.12% / top 0 / height 66.55% of
-     .hero-media. Keeping these as percentages means the chrome tracks the display
+     the display sits at left 47.19% / width 50.47% / top 0 / height 65.85% of
+     .hero-media (measured 2026-08-20 from newvideohero.mov). Keeping these as percentages means the chrome tracks the display
      at every width. If the hero video is ever re-exported, re-measure these four
      numbers or the bar will drift off the screen. */
   /* .hero-media is pointer-events:none so it never steals clicks from the copy, which
      also means .hero-media:hover can NEVER match. The hover target is this box instead -
      it is sized to the display panel, so "hover the screen" is what reveals the bar.
      The copy sits at z-index 5 above this, so it keeps its own clicks where they overlap. */
-  .cyb-lp .hero-controls{ position:absolute; left:45.94%; width:53.12%; top:0; height:66.55%;
+  .cyb-lp .hero-controls{ position:absolute; left:47.19%; width:50.47%; top:0; height:65.85%;
     z-index:3; display:flex; align-items:flex-end; justify-content:center;
     padding:0; pointer-events:auto; }
   /* flush to the bottom edge of the display, full panel width */
