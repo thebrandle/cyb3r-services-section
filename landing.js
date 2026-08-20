@@ -487,6 +487,17 @@
     const percentObj={ value:cfg.countStart }, scoreObj={ value:cfg.countEnd };
     const percentNum=q(".cav_percent_num"), scoreNum=q(".cav_score_num");
 
+    /* On phones the side captions are restacked to top:11% / bottom:9% (see the
+       <=767px block in the stylesheet), which puts the RIGHT caption in the same
+       bottom band as .cav_percent. Because .cav_percent is opacity:1 from the
+       start, the "50%" sat on top of "Creative Messaging" in the opening frame.
+       On phones we therefore hold the readout back until the captions have
+       cleared (they fade 0.05 -> 0.60) and start the count then, so it still
+       counts up from countStart instead of appearing mid-way. Desktop keeps the
+       original timing - it has no overlap, the captions are off to the sides. */
+    const cavPhone = window.matchMedia && window.matchMedia("(max-width:767px)").matches;
+    const pctAt    = cavPhone ? 0.62 : 0.42;
+
     const tl=gsap.timeline({ defaults:{ ease:"none" },
       scrollTrigger:{ trigger:root, start:"top top", end:"bottom bottom", scrub:1.1/(cfg.scrollSpeed||1), invalidateOnRefresh:true } });
 
@@ -496,7 +507,7 @@
       .to(".cav_green",{scale:.9,duration:.8},0.15)
       .to(".cav_pink",{scale:.9,duration:.8},0.15)
       .fromTo(".cav_text_1",{opacity:0,y:42},{opacity:1,y:0,duration:.35},0.42)
-      .to(percentObj,{ value:cfg.countMid, duration:.45, onUpdate:()=>{ percentNum.textContent=Math.round(percentObj.value); } },0.42)
+      .to(percentObj,{ value:cfg.countMid, duration:.45, onUpdate:()=>{ percentNum.textContent=Math.round(percentObj.value); } },pctAt)
       .to(".cav_text_1",{opacity:0,y:-38,duration:.35},1.02)
       .to(".cav_green",{scale:.8,duration:.8},1.0)
       .to(".cav_pink",{scale:.8,duration:.8},1.0)
@@ -529,6 +540,14 @@
       .to(".cav_particles",{scale:.72,duration:1.05},5.28)
       .fromTo(finalText,{opacity:0,y:54,scale:.96},{opacity:1,y:0,scale:1,duration:.46},5.7)
       .to(coreParticle,{opacity:.98,duration:.4},5.85);
+
+    /* Phones only: hold the percent readout hidden until the captions have gone.
+       fromTo's immediateRender pins it to opacity 0 at t=0 - that opening frame is
+       exactly where it used to collide - and it fades in as the count begins.
+       Added after the chain on purpose: timeline positions are absolute, so this
+       lands at pctAt regardless of insertion order, and the existing fade-out at
+       1.78 still reads its start value as 1. */
+    if (cavPhone) tl.fromTo(".cav_percent",{opacity:0},{opacity:1,duration:.22},pctAt);
 
     setTimeout(()=>ScrollTrigger.refresh(),300);
     setTimeout(()=>ScrollTrigger.refresh(),1000);
