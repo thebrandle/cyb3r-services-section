@@ -601,15 +601,17 @@
     var poster = (host.getAttribute('data-hero-poster') || '').trim();
     if (poster) v.poster = poster;
 
-    function addSource(url, type){
-      if (!url) return;
-      var s = document.createElement('source');
-      s.src = url; if (type) s.type = type;
-      v.appendChild(s);
-    }
-    addSource(mov,  'video/quicktime');   /* Safari, alpha  - must be first */
-    addSource(webm, 'video/webm');        /* Chrome/Firefox, alpha */
-    addSource(mp4,  'video/mp4');         /* fallback, no alpha */
+    /* Pick ONE file explicitly rather than listing <source>s and trusting the browser.
+       With a source list the mov has to come first for Safari, which means any browser
+       that merely *claims* it can play a quicktime container takes an HEVC file whose
+       alpha lives in an auxiliary layer it may not decode - that renders as garbage
+       rather than failing over. Choosing here makes the outcome deterministic. */
+    var ua = navigator.userAgent;
+    var isSafari = /Safari/.test(ua) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR|Android/.test(ua);
+    var canWebm  = !!v.canPlayType('video/webm; codecs="vp9"');
+    var chosen   = (isSafari && mov) ? mov : (canWebm && webm) ? webm : (mp4 || webm || mov);
+    v.src = chosen;
+    v.setAttribute('data-picked', isSafari ? 'safari-mov' : (canWebm && webm) ? 'vp9-webm' : 'mp4-fallback');
 
     host.appendChild(v);
     function tryPlay(){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
