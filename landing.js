@@ -578,6 +578,53 @@
      (the frame's data-showreel-src). Every browser blocks autoplay WITH sound, so it
      starts muted (which is allowed) and the toggle supplies the user gesture that
      unlocks audio. To change the video, update data-showreel-src on .showreel_frame. */
+  /* ═══ hero video (full-bleed, behind the copy) ═══
+     Transparent video needs two encodings: HEVC-with-alpha in a .mov for Safari and
+     VP9 yuva420p .webm for Chrome/Firefox. Safari picks the mov, everyone else the
+     webm; data-hero-src is a plain mp4 fallback with no alpha. Source order matters -
+     the mov must come first or Safari takes the webm and loses the alpha.
+     Set data-hero-mov / data-hero-webm / data-hero-src on .hero-media. */
+  function initHeroVideo(){
+    var host = document.querySelector('.hero-media');
+    if (!host || host.querySelector('video')) return;
+    var mov  = (host.getAttribute('data-hero-mov')  || '').trim();
+    var webm = (host.getAttribute('data-hero-webm') || '').trim();
+    var mp4  = (host.getAttribute('data-hero-src')  || '').trim();
+    if (!mov && !webm && !mp4) return;                 /* nothing set yet */
+
+    var v = document.createElement('video');
+    v.className = 'hero-vid';
+    v.muted = true; v.setAttribute('muted','');
+    v.autoplay = true; v.loop = true; v.playsInline = true;
+    v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline','');
+    v.preload = 'auto';
+    var poster = (host.getAttribute('data-hero-poster') || '').trim();
+    if (poster) v.poster = poster;
+
+    function addSource(url, type){
+      if (!url) return;
+      var s = document.createElement('source');
+      s.src = url; if (type) s.type = type;
+      v.appendChild(s);
+    }
+    addSource(mov,  'video/quicktime');   /* Safari, alpha  - must be first */
+    addSource(webm, 'video/webm');        /* Chrome/Firefox, alpha */
+    addSource(mp4,  'video/mp4');         /* fallback, no alpha */
+
+    host.appendChild(v);
+    var p = v.play(); if (p && p.catch) p.catch(function(){});
+
+    /* don't decode a full-bleed video while it is scrolled away */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function(en){
+        en.forEach(function(e){
+          if (e.isIntersecting) { var r = v.play(); if (r && r.catch) r.catch(function(){}); }
+          else v.pause();
+        });
+      }, { threshold: 0.01 }).observe(host);
+    }
+  }
+
   function initShowreel(){
     var frame = document.querySelector('.showreel_frame[data-showreel-src]');
     if (!frame || frame.querySelector('video')) return;
@@ -694,6 +741,7 @@
     }
     try { applyCopy(); } catch(e){ console.warn('[cyb-lp] copy', e); }
     try { preventOrphans(); } catch(e){ console.warn('[cyb-lp] orphans', e); }
+    try { initHeroVideo(); } catch(e){ console.warn('[cyb-lp] hero video', e); }
     try { initShowreel(); } catch(e){ console.warn('[cyb-lp] showreel', e); }
     try { gsap.registerPlugin(ScrollTrigger); } catch(e){}
     try { run(); } catch(e){ console.warn('[cyb-lp]', e); }

@@ -136,6 +136,22 @@
   .cyb-lp .arrow-btn.left{ left:2.5rem; }
   .cyb-lp .arrow-btn.right{ right:2.5rem; }
   /* arrow glyph stroke is set as an SVG attribute in Webflow, so it stays editable */
+  /* ── HERO: left copy over a full-bleed video ──────────────────
+     The video defines the hero's height (width:100%, height:auto), so whatever
+     aspect ratio is exported drives the layout with no magic numbers. The copy is
+     absolutely overlaid and capped so it never runs under the device on the right.
+     Below 768 the copy goes static (set in Webflow) and simply stacks above. */
+  .cyb-lp .hero-vid{ display:block; width:100%; height:auto; }
+  .cyb-lp .hero-text_wrapper > *{ max-width:34rem; }
+  @media (min-width:768px){
+    /* keep the copy clear of the right-hand device */
+    .cyb-lp .hero-text_wrapper > *{ max-width:min(34rem, 46%); }
+  }
+  @media (max-width:767px){
+    .cyb-lp .hero-media{ pointer-events:auto; }
+    .cyb-lp .hero-text_wrapper > *{ max-width:100%; }
+  }
+
   /* showreel video + controls. Autoplay is only permitted while muted, so the video
      starts silent with a crossed-speaker icon; the sound button is the user gesture
      that unlocks audio. The play/pause button replaces the one Webflow's Background
