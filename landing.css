@@ -158,14 +158,19 @@
      .hero-media. Keeping these as percentages means the chrome tracks the display
      at every width. If the hero video is ever re-exported, re-measure these four
      numbers or the bar will drift off the screen. */
+  /* .hero-media is pointer-events:none so it never steals clicks from the copy, which
+     also means .hero-media:hover can NEVER match. The hover target is this box instead -
+     it is sized to the display panel, so "hover the screen" is what reveals the bar.
+     The copy sits at z-index 5 above this, so it keeps its own clicks where they overlap. */
   .cyb-lp .hero-controls{ position:absolute; left:45.94%; width:53.12%; top:0; height:66.55%;
     z-index:3; display:flex; align-items:flex-end; justify-content:center;
-    padding:0 2.5% 2.5%; pointer-events:none; }
-  .cyb-lp .hero-ctrlbar{ pointer-events:auto; width:100%; display:flex; align-items:center; gap:.75rem;
+    padding:0; pointer-events:auto; }
+  /* flush to the bottom edge of the display, full panel width */
+  .cyb-lp .hero-ctrlbar{ width:100%; display:flex; align-items:center; gap:.75rem;
     padding:.55rem .75rem; border-radius:0; background:rgba(10,14,18,.72);
     -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
-    opacity:0; transform:translateY(6px); transition:opacity .3s ease, transform .3s ease; }
-  .cyb-lp .hero-media:hover .hero-ctrlbar, .cyb-lp .hero-ctrlbar:focus-within, .cyb-lp .hero-ctrlbar.is-held{ opacity:1; transform:none; }
+    opacity:0; transition:none; }   /* instant on/off, no fade or slide */
+  .cyb-lp .hero-controls:hover .hero-ctrlbar, .cyb-lp .hero-ctrlbar:focus-within, .cyb-lp .hero-ctrlbar.is-held{ opacity:1; }
   .cyb-lp .hero-cbtn{ flex:none; width:30px; height:30px; display:inline-flex; align-items:center;
     justify-content:center; padding:0; border:0; border-radius:0; cursor:pointer;
     background:transparent; color:#39F1E0; transition:color .2s ease; }
