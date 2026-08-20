@@ -152,6 +152,40 @@
   .cyb-lp .hero-text_wrapper > *{ max-width:100%; }
   @media (max-width:767px){ .cyb-lp .hero-media{ pointer-events:auto; } }
 
+  /* ── HERO PLAYER CHROME ───────────────────────────────────────
+     Anchored to the monitor's SCREEN panel, measured from the footage's alpha:
+     the display sits at left 45.94% / width 53.12% / top 0 / height 66.55% of
+     .hero-media. Keeping these as percentages means the chrome tracks the display
+     at every width. If the hero video is ever re-exported, re-measure these four
+     numbers or the bar will drift off the screen. */
+  .cyb-lp .hero-controls{ position:absolute; left:45.94%; width:53.12%; top:0; height:66.55%;
+    z-index:3; display:flex; align-items:flex-end; justify-content:center;
+    padding:0 2.5% 2.5%; pointer-events:none; }
+  .cyb-lp .hero-ctrlbar{ pointer-events:auto; width:100%; display:flex; align-items:center; gap:.75rem;
+    padding:.55rem .75rem; border-radius:0; background:rgba(10,14,18,.72);
+    -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+    opacity:0; transform:translateY(6px); transition:opacity .3s ease, transform .3s ease; }
+  .cyb-lp .hero-media:hover .hero-ctrlbar, .cyb-lp .hero-ctrlbar:focus-within, .cyb-lp .hero-ctrlbar.is-held{ opacity:1; transform:none; }
+  .cyb-lp .hero-cbtn{ flex:none; width:30px; height:30px; display:inline-flex; align-items:center;
+    justify-content:center; padding:0; border:0; border-radius:0; cursor:pointer;
+    background:transparent; color:#39F1E0; transition:color .2s ease; }
+  .cyb-lp .hero-cbtn:hover{ color:#fff; }
+  .cyb-lp .hero-cbtn svg{ width:15px; height:15px; display:block; }
+  .cyb-lp .hero-progress{ flex:1 1 auto; height:4px; background:rgba(255,255,255,.22); cursor:pointer;
+    position:relative; }
+  .cyb-lp .hero-progress_fill{ position:absolute; left:0; top:0; bottom:0; width:0%; background:#39F1E0; }
+  .cyb-lp .hero-progress_knob{ position:absolute; top:50%; width:10px; height:10px; margin-left:-5px;
+    background:#39F1E0; transform:translateY(-50%); opacity:0; transition:opacity .2s ease; }
+  .cyb-lp .hero-progress:hover .hero-progress_knob{ opacity:1; }
+  .cyb-lp .hero-time{ flex:none; font:500 11px/1 "Inter",system-ui,sans-serif; color:#EDEDEF;
+    letter-spacing:.02em; font-variant-numeric:tabular-nums; }
+  @media (max-width:991px){
+    .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }
+    .cyb-lp .hero-time{ display:none; }
+    .cyb-lp .hero-cbtn{ width:26px; height:26px; }
+    .cyb-lp .hero-cbtn svg{ width:13px; height:13px; }
+  }
+
   /* showreel video + controls. Autoplay is only permitted while muted, so the video
      starts silent with a crossed-speaker icon; the sound button is the user gesture
      that unlocks audio. The play/pause button replaces the one Webflow's Background

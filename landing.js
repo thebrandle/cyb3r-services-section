@@ -612,7 +612,86 @@
     addSource(mp4,  'video/mp4');         /* fallback, no alpha */
 
     host.appendChild(v);
-    var p = v.play(); if (p && p.catch) p.catch(function(){});
+    function tryPlay(){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+    tryPlay();
+
+    /* ── player chrome, anchored to the monitor screen (see .hero-controls) ── */
+    var I = {
+      play :'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.53.85l10-6.5a1 1 0 0 0 0-1.7l-10-6.5A1 1 0 0 0 8 5.5z"/></svg>',
+      pause:'<svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg>',
+      off  :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="m23 9-6 6M17 9l6 6"/></svg>',
+      on   :'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a9 9 0 0 1 0 14"/></svg>'
+    };
+    function el(tag, cls){ var n = document.createElement(tag); if (cls) n.className = cls; return n; }
+    function mmss(s){
+      if (!isFinite(s) || s < 0) s = 0;
+      var m = Math.floor(s / 60), r = Math.floor(s % 60);
+      return m + ':' + (r < 10 ? '0' : '') + r;
+    }
+
+    var shell = el('div','hero-controls');
+    var bar   = el('div','hero-ctrlbar');
+    var bPlay = el('button','hero-cbtn is-play');  bPlay.type = 'button';
+    var bMute = el('button','hero-cbtn is-sound'); bMute.type = 'button';
+    var track = el('div','hero-progress');
+    var fill  = el('div','hero-progress_fill');
+    var knob  = el('div','hero-progress_knob');
+    var time  = el('span','hero-time');
+    track.appendChild(fill); track.appendChild(knob);
+
+    function paintPlay(){
+      bPlay.innerHTML = v.paused ? I.play : I.pause;
+      bPlay.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video');
+    }
+    function paintMute(){
+      bMute.innerHTML = v.muted ? I.off : I.on;
+      bMute.setAttribute('aria-label', v.muted ? 'Turn sound on' : 'Turn sound off');
+      bMute.setAttribute('aria-pressed', String(!v.muted));
+    }
+    function paintTime(){
+      var d = v.duration, c = v.currentTime;
+      var pct = (isFinite(d) && d > 0) ? (c / d) * 100 : 0;
+      fill.style.width = pct + '%';
+      knob.style.left  = pct + '%';
+      time.textContent = mmss(c) + ' / ' + mmss(d);
+      track.setAttribute('aria-valuenow', Math.round(pct));
+    }
+
+    bPlay.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      if (v.paused) tryPlay(); else v.pause();
+    });
+    bMute.addEventListener('click', function(e){
+      e.preventDefault(); e.stopPropagation();
+      v.muted = !v.muted;
+      if (!v.muted) { v.volume = 1; tryPlay(); }
+      paintMute();
+    });
+
+    /* click or drag anywhere on the track to seek */
+    track.setAttribute('role','slider');
+    track.setAttribute('aria-label','Seek video');
+    function seekFromEvent(e){
+      var r = track.getBoundingClientRect();
+      var x = (e.touches ? e.touches[0].clientX : e.clientX) - r.left;
+      var p = Math.min(1, Math.max(0, x / r.width));
+      if (isFinite(v.duration)) { v.currentTime = p * v.duration; paintTime(); }
+    }
+    var dragging = false;
+    track.addEventListener('mousedown', function(e){ dragging = true; bar.classList.add('is-held'); seekFromEvent(e); e.preventDefault(); });
+    window.addEventListener('mousemove', function(e){ if (dragging) seekFromEvent(e); });
+    window.addEventListener('mouseup',   function(){ dragging = false; bar.classList.remove('is-held'); });
+    track.addEventListener('touchstart', function(e){ seekFromEvent(e); }, {passive:true});
+
+    v.addEventListener('play',  paintPlay);
+    v.addEventListener('pause', paintPlay);
+    v.addEventListener('timeupdate', paintTime);
+    v.addEventListener('loadedmetadata', paintTime);
+    paintPlay(); paintMute(); paintTime();
+
+    bar.appendChild(bPlay); bar.appendChild(track); bar.appendChild(time); bar.appendChild(bMute);
+    shell.appendChild(bar);
+    host.appendChild(shell);
 
     /* don't decode a full-bleed video while it is scrolled away */
     if ('IntersectionObserver' in window) {
