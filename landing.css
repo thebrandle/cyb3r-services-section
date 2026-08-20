@@ -142,15 +142,11 @@
      absolutely overlaid and capped so it never runs under the device on the right.
      Below 768 the copy goes static (set in Webflow) and simply stacks above. */
   .cyb-lp .hero-vid{ display:block; width:100%; height:auto; }
-  .cyb-lp .hero-text_wrapper > *{ max-width:34rem; }
-  @media (min-width:768px){
-    /* keep the copy clear of the right-hand device */
-    .cyb-lp .hero-text_wrapper > *{ max-width:min(34rem, 46%); }
-  }
-  @media (max-width:767px){
-    .cyb-lp .hero-media{ pointer-events:auto; }
-    .cyb-lp .hero-text_wrapper > *{ max-width:100%; }
-  }
+  /* The wrapper itself now carries the width (min(37vw,34rem)) and sits at the page's
+     left edge, matching .cav_leftcopy. Children just fill it - capping them again
+     would squash the copy to a fraction of an already narrow column. */
+  .cyb-lp .hero-text_wrapper > *{ max-width:100%; }
+  @media (max-width:767px){ .cyb-lp .hero-media{ pointer-events:auto; } }
 
   /* showreel video + controls. Autoplay is only permitted while muted, so the video
      starts silent with a crossed-speaker icon; the sound button is the user gesture
