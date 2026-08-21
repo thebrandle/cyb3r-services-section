@@ -312,6 +312,54 @@
   .cyb-lp .single-stat .notch{ position:absolute; inset:0; }
   .cyb-lp .single-stat .notch svg{ width:100%; height:100%; display:block; }
 
+  /* ── PLATFORM / WHAT THE REPORTING SHOWS ─────────────────────────
+     Deck source for this section is purple/pink; translated to the site's
+     dark + teal palette. Teal fills carry DARK content only - nothing white
+     ever sits on #39F1E0. */
+  .cyb-lp .section_platform{ color:#fff; position:relative; overflow:hidden; padding-bottom:10rem; }
+  .cyb-lp .platform_grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.02fr);
+    gap:4rem; align-items:start; margin-top:2.5rem; }
+  /* no screenshot supplied yet -> collapse to one column so nothing looks broken */
+  .cyb-lp .platform_grid.is-noshot{ grid-template-columns:minmax(0,1fr); }
+  .cyb-lp .platform_grid.is-noshot .platform_shot{ display:none; }
+  .cyb-lp .platform_accent{ color:#39F1E0; }
+  .cyb-lp .platform_lead{ margin:1.5rem 0 2.25rem; max-width:34rem; color:#A7ACB4;
+    font-size:1.25rem; line-height:1.5; text-wrap:pretty; }
+  .cyb-lp .platform_list{ list-style:none; margin:0; padding:0; display:flex; flex-flow:column; gap:.7rem; }
+  .cyb-lp .platform_row{ display:grid; grid-template-columns:minmax(0,14.5rem) minmax(0,1fr); gap:.7rem; }
+  .cyb-lp .platform_key{ display:flex; align-items:center; padding:.9rem 1.1rem; font-family:var(--font-exp);
+    font-size:.95rem; font-weight:700; line-height:1.15; text-transform:uppercase; letter-spacing:.005em;
+    color:#39F1E0; border:1px solid rgba(57,241,224,.5); }
+  .cyb-lp .platform_val{ display:flex; align-items:center; padding:.9rem 1.1rem; font-size:1rem; line-height:1.35;
+    color:#E7EAEE; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.1); text-wrap:pretty; }
+  /* the two rows the deck picks out - solid teal, so the content goes dark */
+  .cyb-lp .platform_row.is-key .platform_key{ background:#39F1E0; color:#0F0E0E; border-color:#39F1E0; }
+  .cyb-lp .platform_row.is-key .platform_val{ background:rgba(57,241,224,.12); border-color:rgba(57,241,224,.4); color:#fff; }
+
+  .cyb-lp .platform_shot{ position:sticky; top:7rem; }
+  .cyb-lp .platform_shot img{ width:100%; height:auto; display:block; }
+
+  .cyb-lp .platform_band{ margin-top:3rem; padding:2.1rem 2.5rem; text-align:center; color:#0F0E0E;
+    background:linear-gradient(90deg,#39F1E0 0%,#8FF8ED 50%,#39F1E0 100%);
+    font-family:var(--font-exp); font-weight:700; line-height:1.3; text-wrap:pretty;
+    font-size:clamp(1.05rem,1.9vw,1.5rem); }
+
+  @media (max-width:991px){
+    .cyb-lp .platform_grid{ grid-template-columns:minmax(0,1fr); gap:3rem; }
+    .cyb-lp .platform_shot{ position:static; }
+    .cyb-lp .platform_row{ grid-template-columns:minmax(0,12rem) minmax(0,1fr); }
+  }
+  @media (max-width:767px){
+    .cyb-lp .section_platform{ padding-bottom:6rem; }
+    .cyb-lp .platform_grid{ gap:2.25rem; }
+    .cyb-lp .platform_lead{ font-size:1rem; margin:1.1rem 0 1.6rem; }
+    /* stacked: the label reads as a heading for the line under it */
+    .cyb-lp .platform_row{ grid-template-columns:minmax(0,1fr); gap:0; }
+    .cyb-lp .platform_key{ padding:.6rem .85rem; font-size:.78rem; }
+    .cyb-lp .platform_val{ padding:.75rem .85rem; font-size:.95rem; border-top:0; }
+    .cyb-lp .platform_band{ margin-top:2rem; padding:1.4rem 1.15rem; }
+  }
+
   /* ── BACKED BY ───────────────────────────────────────────────── */
   .cyb-lp .acc_content .text-size-small{ padding-bottom:.5rem; }
   .cyb-lp .plus-icon::before, .cyb-lp .plus-icon::after{ content:""; position:absolute; background:#0F0E0E; transition:transform .45s cubic-bezier(.6,0,.2,1); }
