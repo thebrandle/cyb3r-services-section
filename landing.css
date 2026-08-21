@@ -312,52 +312,6 @@
   .cyb-lp .single-stat .notch{ position:absolute; inset:0; }
   .cyb-lp .single-stat .notch svg{ width:100%; height:100%; display:block; }
 
-  /* ── PLATFORM / WHAT THE REPORTING SHOWS ─────────────────────────
-     Plain typographic bullets: title over its line, no chips, no fills.
-     Nothing in here uses the brand teal - that colour is reserved for CTAs
-     on this page, so a highlighted row or band would read as clickable. */
-  .cyb-lp .section_platform{ color:#fff; position:relative; overflow:hidden; padding-bottom:10rem; }
-  .cyb-lp .platform_grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    gap:4.5rem; align-items:start; margin-top:2.5rem; }
-  /* no screenshot supplied yet -> one column, so an empty slot never reads as broken */
-  .cyb-lp .platform_grid.is-noshot{ grid-template-columns:minmax(0,1fr); }
-  .cyb-lp .platform_grid.is-noshot .platform_shot{ display:none; }
-
-  .cyb-lp .platform_lead{ margin:1.5rem 0 2.5rem; max-width:34rem; color:#A7ACB4;
-    font-size:1.25rem; line-height:1.5; text-wrap:pretty; }
-
-  .cyb-lp .platform_list{ list-style:none; margin:0; padding:0; }
-  .cyb-lp .platform_item{ position:relative; padding:0 0 1.35rem 1.6rem; margin-bottom:1.35rem;
-    border-bottom:1px solid rgba(255,255,255,.13); }
-  .cyb-lp .platform_item:last-child{ border-bottom:0; padding-bottom:0; margin-bottom:0; }
-  .cyb-lp .platform_item::before{ content:""; position:absolute; left:0; top:.62em;
-    width:6px; height:6px; border-radius:50%; background:#fff; opacity:.5; }
-  .cyb-lp .platform_item-title{ margin:0 0 .35rem; font-family:var(--font-exp); font-size:1.05rem;
-    font-weight:700; line-height:1.2; letter-spacing:.01em; text-transform:uppercase; color:#fff; }
-  .cyb-lp .platform_item-copy{ margin:0; font-size:1.05rem; line-height:1.5; color:#A7ACB4; text-wrap:pretty; }
-
-  /* closing line: a size step up, deliberately NOT a band or a button */
-  .cyb-lp .platform_close{ margin:2.75rem 0 0; max-width:36rem; color:#fff; font-weight:500;
-    font-size:clamp(1.3rem,1.85vw,1.75rem); line-height:1.35; text-wrap:pretty; }
-
-  .cyb-lp .platform_shot{ position:sticky; top:7rem; }
-  .cyb-lp .platform_shot-inner{ width:100%; }
-  .cyb-lp .platform_shot img{ width:100%; height:auto; display:block; }
-
-  @media (max-width:991px){
-    .cyb-lp .platform_grid{ grid-template-columns:minmax(0,1fr); gap:3rem; }
-    .cyb-lp .platform_shot{ position:static; }
-  }
-  @media (max-width:767px){
-    .cyb-lp .section_platform{ padding-bottom:6rem; }
-    .cyb-lp .platform_grid{ gap:2.25rem; margin-top:1.75rem; }
-    .cyb-lp .platform_lead{ font-size:1rem; margin:1.1rem 0 1.75rem; }
-    .cyb-lp .platform_item{ padding:0 0 1.05rem 1.3rem; margin-bottom:1.05rem; }
-    .cyb-lp .platform_item-title{ font-size:.95rem; }
-    .cyb-lp .platform_item-copy{ font-size:1rem; }
-    .cyb-lp .platform_close{ font-size:1.15rem; margin-top:2rem; }
-  }
-
   /* ── BACKED BY ───────────────────────────────────────────────── */
   .cyb-lp .acc_content .text-size-small{ padding-bottom:.5rem; }
   .cyb-lp .plus-icon::before, .cyb-lp .plus-icon::after{ content:""; position:absolute; background:#0F0E0E; transition:transform .45s cubic-bezier(.6,0,.2,1); }

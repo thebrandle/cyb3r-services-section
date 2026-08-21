@@ -124,41 +124,6 @@
       </div>
     </div></div>
   </section>`,
-  'platform': `<section class="section_platform">
-    <div class="padding-global"><div class="container-large">
-      <div class="platform_grid">
-        <div class="platform_copy">
-          <div data-c="platform-div-1" class="text-size-large" style="margin-bottom:1rem">Inside the platform</div>
-          <h2 data-c="platform-h2-1" class="heading-style-h1 fancy-anim">Detailed, actionable insights for creative and media</h2>
-          <p data-c="platform-div-2" class="platform_lead">Our new platform delivers agencies and advertisers the ability to transform their display marketing:</p>
-          <ul class="platform_list">
-            <li class="platform_item">
-              <h3 data-c="platform-div-3" class="platform_item-title">Full URL transparency</h3>
-              <p data-c="platform-div-4" class="platform_item-copy">See the full URL where every ad has been placed</p>
-            </li>
-            <li class="platform_item">
-              <h3 data-c="platform-div-5" class="platform_item-title">Creative elements</h3>
-              <p data-c="platform-div-6" class="platform_item-copy">Messages, products and imagery shown in ads</p>
-            </li>
-            <li class="platform_item">
-              <h3 data-c="platform-div-7" class="platform_item-title">Performance metrics</h3>
-              <p data-c="platform-div-8" class="platform_item-copy">Impressions, clicks and conversions, all shown from your source of truth</p>
-            </li>
-            <li class="platform_item">
-              <h3 data-c="platform-div-9" class="platform_item-title">Content cohorts</h3>
-              <p data-c="platform-div-10" class="platform_item-copy">The type of content your ads have appeared against</p>
-            </li>
-            <li class="platform_item">
-              <h3 data-c="platform-div-11" class="platform_item-title">Contextual distance</h3>
-              <p data-c="platform-div-12" class="platform_item-copy">How relevant your creative is to what is on the page</p>
-            </li>
-          </ul>
-          <p data-c="platform-div-13" class="platform_close">Our AI-DCO reporting unlocks opportunities with every targeting partner and publisher you work with.</p>
-        </div>
-        <div class="platform_shot"><div class="platform_shot-inner" id="cybPlatformShot"></div></div>
-      </div>
-    </div></div>
-  </section>`,
   'transparency': `<section class="section_backed-by section-pad">
     <div class="padding-global" style="padding-top:6rem"><div class="container-large">
       <div class="backed-by_wrapper">
@@ -261,22 +226,6 @@
         n++;
       }
     }
-    /* Everything except partners and scene is native Webflow markup now, so a section
-       added to this module later has no embed waiting for it. Place it next to the
-       section it belongs after, building the same lp-<key> wrapper the Designer uses.
-       If a real <div id="cybLP-platform"> embed is ever added in the Designer the loop
-       above claims it first and this is skipped, so the two can never double up. */
-    var PLACE_AFTER = { platform: '.lp-results' };
-    for (var pk in PLACE_AFTER){
-      if (!SECTIONS[pk] || document.getElementById('cybLP-' + pk)) continue;
-      var prev = document.querySelector(PLACE_AFTER[pk]);
-      if (!prev || !prev.parentNode) continue;
-      var wrap = document.createElement('div');
-      wrap.className = 'lp-' + pk;
-      wrap.innerHTML = '<div id="cybLP-' + pk + '" data-lp="done">' + SECTIONS[pk] + '</div>';
-      prev.parentNode.insertBefore(wrap, prev.nextSibling);
-      n++;
-    }
     if (n) return true;
     /* Fallback: the original single mount, still supported so the module works
        whichever order the page restructure and the publish land in. */
@@ -313,8 +262,6 @@
   const ASSETS = {
     tickerLogos: [],            // override logo image URLs if you move hosting
     slides: [null,null,null,null,null], // override per-slide media: {media:"assets/ad.mp4"}
-    platformShot: "https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a8830340e22bfcad3285dad_platform-reporting-dashboard.png",
-    platformShotAlt: "The reporting dashboard, showing per-publisher impressions, clicks, CTR, conversions and contextual distance for a campaign",
   };
   function applyAssets(){
     if(ASSETS.tickerLogos.length){ document.querySelectorAll(".ticker-group").forEach(g=>{
@@ -323,16 +270,6 @@
       const box=slide.querySelector(".ads-preview"); const isVid=/\.(mp4|webm)($|\?)/.test(sl.media);
       box.innerHTML=isVid?`<video src="${sl.media}" muted loop autoplay playsinline style="width:100%;height:100%;object-fit:cover"></video>`
                          :`<img src="${sl.media}" style="width:100%;height:100%;object-fit:cover" alt="">`; });
-    /* Platform screenshot. Until a URL is set the grid collapses to one column via
-       .is-noshot rather than leaving an empty half - an unfilled slot should never
-       read as a broken layout. */
-    const shot=document.getElementById("cybPlatformShot");
-    if(shot){
-      const grid=shot.closest(".platform_grid");
-      if(ASSETS.platformShot){
-        shot.innerHTML=`<img src="${ASSETS.platformShot}" alt="${ASSETS.platformShotAlt}" loading="lazy" decoding="async">`;
-      } else if(grid){ grid.classList.add("is-noshot"); }
-    }
   }
 
   /* ═══ cursor dot-mask (exact: lerp 0.065) ═══ */
