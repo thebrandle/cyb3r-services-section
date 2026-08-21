@@ -840,7 +840,12 @@
        tracks the panel at every width with no JS measuring. */
     var screenHit = el('div','hero-screen');
     var badge = el('div','hero-screen_badge');
-    badge.innerHTML = I.play;
+    /* Not I.play - that path's bounding box runs x 8..19.53, so its centre sits at 57%
+       of the viewBox and it reads visibly right-of-centre in a circle. This triangle is
+       drawn so its bounding box is centred on both axes: x 6.5..17.5 and y 4.5..19.5,
+       both centred on 12 of 24. */
+    badge.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">'
+                    + '<path d="M6.5 4.5 17.5 12 6.5 19.5z"/></svg>';
     screenHit.appendChild(badge);
     screenHit.addEventListener('click', function(){
       if (v.paused) tryPlay(); else v.pause();

@@ -276,8 +276,9 @@
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     opacity:0; transition:opacity .28s ease, transform .28s ease; }
   .cyb-lp .hero-controls.is-paused .hero-screen_badge{ opacity:1; transform:translate(-50%,-50%) scale(1); }
-  /* the play triangle is optically left-heavy in a circle, so nudge it */
-  .cyb-lp .hero-screen_badge svg{ width:36%; height:36%; display:block; margin-left:7%; }
+  /* the glyph's own bounding box is centred (see the path in landing.js), so no nudge -
+     flex centring alone puts it dead centre on both axes */
+  .cyb-lp .hero-screen_badge svg{ width:36%; height:36%; display:block; }
   .cyb-lp .hero-ctrlbar{ position:relative; z-index:2; }
 
   /* flush to the bottom edge of the display, full panel width */
