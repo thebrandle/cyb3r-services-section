@@ -203,16 +203,16 @@
      aspect ratio is exported drives the layout with no magic numbers. The copy is
      absolutely overlaid and capped so it never runs under the device on the right.
      Below 768 the copy goes static (set in Webflow) and simply stacks above. */
-  /* The poster Image is a real Webflow element and defines the layer's height, so the
-     hero renders correctly on the Designer canvas (where this script never runs) and
-     there is no layout shift while the video loads. The video covers it once playing. */
+  /* No poster: the footage is alpha, so anything behind the video composites through it
+     instead of being covered. .hero-media carries an explicit aspect-ratio, so the layer
+     keeps its height without one. */
   .cyb-lp .hero-vid{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
     display:block; z-index:1; }
   /* The monitor only starts 37.4% down the 1920x1080 source, so an uncropped 16:9 frame
      opens with a third of a screen of empty space above it. .hero-media is set to 64/27
      in Webflow, which with object-position bottom shows the bottom 75% of the source
      (y 270..1080) - the dead band goes, the desk surface and monitor are untouched. */
-  .cyb-lp .hero-vid, .cyb-lp .hero-poster{ object-position:center bottom; }
+  .cyb-lp .hero-vid{ object-position:center bottom; }
   /* The wrapper itself now carries the width (min(37vw,34rem)) and sits at the page's
      left edge, matching .cav_leftcopy. Children just fill it - capping them again
      would squash the copy to a fraction of an already narrow column. */
@@ -267,7 +267,7 @@
        maps to left (45.78-42.01)/42.19 = 8.95% and width 34.64/42.19 = 82.11%.
        Vertical is not cropped - the box is narrower than the source - so the 74.26%
        height carries over unchanged. */
-    .cyb-lp .hero-vid, .cyb-lp .hero-poster{ object-position:72.66% center; }
+    .cyb-lp .hero-vid{ object-position:72.66% center; }
     /* the phone box is narrower than the source, so cover crops horizontally only and
        the panel bottom stays at its full-frame 74.26% */
     .cyb-lp .hero-controls{ left:8.95%; width:82.11%; height:74.26%; }
