@@ -129,34 +129,34 @@
       <div class="platform_grid">
         <div class="platform_copy">
           <div data-c="platform-div-1" class="text-size-large" style="margin-bottom:1rem">Inside the platform</div>
-          <h2 data-c="platform-h2-1" class="heading-style-h1 fancy-anim">Detailed, actionable insights for creative <span class="platform_accent">and</span> media</h2>
+          <h2 data-c="platform-h2-1" class="heading-style-h1 fancy-anim">Detailed, actionable insights for creative and media</h2>
           <p data-c="platform-div-2" class="platform_lead">Our new platform delivers agencies and advertisers the ability to transform their display marketing:</p>
           <ul class="platform_list">
-            <li class="platform_row">
-              <span data-c="platform-div-3" class="platform_key">Full URL transparency</span>
-              <span data-c="platform-div-4" class="platform_val">See the full URL where every ad has been placed</span>
+            <li class="platform_item">
+              <h3 data-c="platform-div-3" class="platform_item-title">Full URL transparency</h3>
+              <p data-c="platform-div-4" class="platform_item-copy">See the full URL where every ad has been placed</p>
             </li>
-            <li class="platform_row">
-              <span data-c="platform-div-5" class="platform_key">Creative elements</span>
-              <span data-c="platform-div-6" class="platform_val">Messages, products and imagery shown in ads</span>
+            <li class="platform_item">
+              <h3 data-c="platform-div-5" class="platform_item-title">Creative elements</h3>
+              <p data-c="platform-div-6" class="platform_item-copy">Messages, products and imagery shown in ads</p>
             </li>
-            <li class="platform_row is-key">
-              <span data-c="platform-div-7" class="platform_key">Performance metrics</span>
-              <span data-c="platform-div-8" class="platform_val">Impressions, clicks and conversions, all shown from your source of truth</span>
+            <li class="platform_item">
+              <h3 data-c="platform-div-7" class="platform_item-title">Performance metrics</h3>
+              <p data-c="platform-div-8" class="platform_item-copy">Impressions, clicks and conversions, all shown from your source of truth</p>
             </li>
-            <li class="platform_row">
-              <span data-c="platform-div-9" class="platform_key">Content cohorts</span>
-              <span data-c="platform-div-10" class="platform_val">The type of content your ads have appeared against</span>
+            <li class="platform_item">
+              <h3 data-c="platform-div-9" class="platform_item-title">Content cohorts</h3>
+              <p data-c="platform-div-10" class="platform_item-copy">The type of content your ads have appeared against</p>
             </li>
-            <li class="platform_row is-key">
-              <span data-c="platform-div-11" class="platform_key">Contextual distance</span>
-              <span data-c="platform-div-12" class="platform_val">How relevant your creative is to what is on the page</span>
+            <li class="platform_item">
+              <h3 data-c="platform-div-11" class="platform_item-title">Contextual distance</h3>
+              <p data-c="platform-div-12" class="platform_item-copy">How relevant your creative is to what is on the page</p>
             </li>
           </ul>
+          <p data-c="platform-div-13" class="platform_close">Our AI-DCO reporting unlocks opportunities with every targeting partner and publisher you work with.</p>
         </div>
         <div class="platform_shot"><div class="platform_shot-inner" id="cybPlatformShot"></div></div>
       </div>
-      <div data-c="platform-div-13" class="platform_band">Our AI-DCO reporting unlocks opportunities with every targeting partner and publisher you work with.</div>
     </div></div>
   </section>`,
   'transparency': `<section class="section_backed-by section-pad">
