@@ -224,7 +224,11 @@
      also means .hero-media:hover can NEVER match. The hover target is this box instead -
      it is sized to the display panel, so "hover the screen" is what reveals the bar.
      The copy sits at z-index 5 above this, so it keeps its own clicks where they overlap. */
-  .cyb-lp .hero-controls{ position:absolute; left:47.19%; width:50.47%; top:0; height:65.85%;
+  /* Re-derived for the v4 hero (1920x1080). The monitor's screen panel sits at
+     x 879..1544, y 404..802 in that frame -> left 45.78%, width 34.64%, and the box
+     bottom (where the bar sits) at 74.26% of the height. These are pinned to the
+     artwork, so re-measure them if the hero video is ever re-cut. */
+  .cyb-lp .hero-controls{ position:absolute; left:45.78%; width:34.64%; top:0; height:74.26%;
     z-index:3; display:flex; align-items:flex-end; justify-content:center;
     padding:0; pointer-events:auto; }
   /* flush to the bottom edge of the display, full panel width */
@@ -246,14 +250,18 @@
   .cyb-lp .hero-progress:hover .hero-progress_knob{ opacity:1; }
   .cyb-lp .hero-time{ flex:none; font:500 11px/1 "Inter",system-ui,sans-serif; color:#EDEDEF;
     letter-spacing:.02em; font-variant-numeric:tabular-nums; }
-  /* Phones crop the frame to the monitor (.hero-media aspect-ratio 4/3 +
-     object-position:100%, set in Webflow) because the full 2.254:1 frame leaves the
-     device tiny with dead space beside it. The visible window becomes the right
-     59.1% of the source, so the panel that sat at 47.19%-97.66% now maps to
-     10.6%-96%. Chrome must be re-mapped to that or it lands off the screen. */
+  /* Phones crop the frame to the monitor (.hero-media aspect-ratio 3/4, set in
+     Webflow) because the monitor is only 34.64% of this 16:9 frame - uncropped it
+     would render about 116px wide on a 375px phone. */
   @media (max-width:767px){
-    .cyb-lp .hero-vid{ object-position:100% center; }
-    .cyb-lp .hero-controls{ left:10.6%; width:85.4%; }
+    /* Phone shows a 3/4 window of the 16/9 source = the middle 42.19% of its width.
+       Centred on the monitor (its centre is at 63.10% of the frame) that window runs
+       42.01%..84.20%, which is object-position 72.66%. Inside that window the panel
+       maps to left (45.78-42.01)/42.19 = 8.95% and width 34.64/42.19 = 82.11%.
+       Vertical is not cropped - the box is narrower than the source - so the 74.26%
+       height carries over unchanged. */
+    .cyb-lp .hero-vid, .cyb-lp .hero-poster{ object-position:72.66% center; }
+    .cyb-lp .hero-controls{ left:8.95%; width:82.11%; }
   }
   @media (max-width:991px){
     .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }
