@@ -756,6 +756,13 @@
        autoplay-less video renders as an empty box until something plays it - the hero
        looked blank on load. auto paints the first frame straight away. */
     v.preload = 'auto';
+    /* The poster ATTRIBUTE, which is not the same thing as the .hero-poster element that
+       used to sit behind the video. That element composited through the alpha and doubled
+       the monitor up; this is painted BY the video element and is replaced the instant
+       playback starts, so it cannot composite with anything. It is needed because iOS
+       Safari decodes no frames for a video that is not playing - with autoplay off the
+       display was simply blank until someone pressed play. Same alpha PNG framing as the
+       footage, so it lands exactly where the first frame does. */
     var poster = (host.getAttribute('data-hero-poster') || '').trim();
     if (poster) v.poster = poster;
 
@@ -772,6 +779,13 @@
     v.setAttribute('data-picked', isSafari ? 'safari-mov' : (canWebm && webm) ? 'vp9-webm' : 'mp4-fallback');
 
     host.appendChild(v);
+    /* Browsers that will decode a frame for a paused video need a seek to commit to it.
+       Harmless where the poster already covers it, and it means the real first frame
+       replaces the poster before any interaction. */
+    v.addEventListener('loadeddata', function(){
+      if (v.currentTime === 0) { try { v.currentTime = 0.001; } catch (err) {} }
+    }, { once:true });
+
     /* Defined but deliberately NOT called here. autoplay=false only clears the
        attribute - an explicit play() still starts the video, which is what was
        autoplaying on load. It waits for the CTA, the glass, or the bar. */
