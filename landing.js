@@ -313,7 +313,7 @@
   const ASSETS = {
     tickerLogos: [],            // override logo image URLs if you move hosting
     slides: [null,null,null,null,null], // override per-slide media: {media:"assets/ad.mp4"}
-    platformShot: "",           // platform section screenshot (right column). Empty -> copy goes full width.
+    platformShot: "https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a8830340e22bfcad3285dad_platform-reporting-dashboard.png",
     platformShotAlt: "The reporting dashboard, showing per-publisher impressions, clicks, CTR, conversions and contextual distance for a campaign",
   };
   function applyAssets(){
