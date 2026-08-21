@@ -385,17 +385,73 @@
     vp.appendChild(d);
   });
   const slides=[...vp.children]; let cur=0, animating=false;
-  function go(dir){
-    if(animating) return; animating=true;
-    const next=(cur+dir+slides.length)%slides.length;
+
+  /* goTo drives every transition; go() is the relative wrapper. Split out so the
+     dots can jump straight to an index - dir is passed explicitly by go() so the
+     wrap from the last slide back to the first still animates forwards. */
+  function goTo(next, dir){
+    if(animating || next===cur || !slides[next]) return; animating=true;
+    if(!dir) dir = next > cur ? 1 : -1;
     const out=slides[cur], inn=slides[next];
     // out-in, 500ms total, ease (matches data-animation="outin" data-duration="500")
     out.animate([{opacity:1, transform:"translateX(0)"},{opacity:0, transform:"translateX("+(dir>0?-40:40)+"px)"}],{duration:250, easing:"ease", fill:"forwards"}).onfinish=()=>{
       out.classList.remove("active"); out.style.opacity=""; out.style.transform="";
       inn.classList.add("active");
-      inn.animate([{opacity:0, transform:"translateX("+(dir>0?40:-40)+"px)"},{opacity:1, transform:"translateX(0)"}],{duration:250, easing:"ease", fill:"forwards"}).onfinish=()=>{ cur=next; animating=false; };
+      inn.animate([{opacity:0, transform:"translateX("+(dir>0?40:-40)+"px)"},{opacity:1, transform:"translateX(0)"}],{duration:250, easing:"ease", fill:"forwards"}).onfinish=()=>{ cur=next; animating=false; paintDots(); };
     };
   }
+  function go(dir){ goTo((cur+dir+slides.length)%slides.length, dir); }
+
+  /* Phone control row. Webflow hides the .arrow-btn overlays below 767px, so on a
+     phone there was previously no way at all to reach slides 2-5. Built here rather
+     than in the section markup because the slide count comes from the CMS. */
+  const NAV_SVG = {
+    prev:'<svg width="20" height="13" viewBox="0 0 22 14" fill="none" aria-hidden="true"><path d="M8 1 2 7l6 6M2 7h20" stroke="currentColor" stroke-width="1.5"/></svg>',
+    next:'<svg width="20" height="13" viewBox="0 0 22 14" fill="none" aria-hidden="true"><path d="M14 1l6 6-6 6M20 7H0" stroke="currentColor" stroke-width="1.5"/></svg>'
+  };
+  function navBtn(dir,label){
+    const b=document.createElement("button"); b.type="button";
+    b.className="slider-nav_btn"; b.setAttribute("aria-label",label);
+    b.innerHTML = dir>0 ? NAV_SVG.next : NAV_SVG.prev;
+    b.addEventListener("click",()=>go(dir));
+    return b;
+  }
+  const nav=document.createElement("div"); nav.className="slider-nav";
+  const dotsWrap=document.createElement("div"); dotsWrap.className="slider-dots";
+  const dots=SLIDES.map((s,i)=>{
+    const d=document.createElement("button"); d.type="button";
+    d.className="slider-dot"+(i===0?" is-on":"");
+    d.setAttribute("aria-label","Show "+(s.brand||("slide "+(i+1))));
+    d.addEventListener("click",()=>goTo(i));
+    dotsWrap.appendChild(d); return d;
+  });
+  function paintDots(){ dots.forEach((d,i)=>{
+    d.classList.toggle("is-on", i===cur);
+    d.setAttribute("aria-current", i===cur ? "true" : "false");
+  }); }
+  paintDots();
+  nav.appendChild(navBtn(-1,"Previous example"));
+  nav.appendChild(dotsWrap);
+  nav.appendChild(navBtn(1,"Next example"));
+  vp.parentElement.appendChild(nav);
+
+  /* Swipe. pan-y keeps vertical page scrolling with the browser and gives us the
+     horizontal axis; the axis test then ignores mostly-vertical drags so a scroll
+     that wanders sideways does not flip the slide. Mouse is excluded - the cards
+     have a mousemove tilt effect and a drag would fight it. */
+  vp.style.touchAction="pan-y";
+  let sx=0, sy=0, swiping=false;
+  vp.addEventListener("pointerdown",e=>{
+    if(e.pointerType==="mouse") return;
+    sx=e.clientX; sy=e.clientY; swiping=true;
+  },{passive:true});
+  vp.addEventListener("pointerup",e=>{
+    if(!swiping) return; swiping=false;
+    const dx=e.clientX-sx, dy=e.clientY-sy;
+    if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)) go(dx<0?1:-1);
+  },{passive:true});
+  vp.addEventListener("pointercancel",()=>{ swiping=false; },{passive:true});
+
   document.getElementById("nextBtn").addEventListener("click",()=>go(1));
   document.getElementById("prevBtn").addEventListener("click",()=>go(-1));
   /* card hover tilt — traced on the live site (mouse-move rotate, heavy smoothing, decays after leave) */

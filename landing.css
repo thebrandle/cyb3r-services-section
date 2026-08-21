@@ -136,6 +136,41 @@
   .cyb-lp .arrow-btn.left{ left:2.5rem; }
   .cyb-lp .arrow-btn.right{ right:2.5rem; }
   /* arrow glyph stroke is set as an SVG attribute in Webflow, so it stays editable */
+
+  /* ── slider: phone controls ───────────────────────────────────
+     Webflow hides the .arrow-btn overlays below 767px (at phone widths they
+     sit right on top of the creative), which left the carousel with no way
+     to advance at all - no arrows, and the slider has never had swipe. This
+     row sits UNDER the slide instead, so it reaches nothing it shouldn't:
+     same circle treatment as the desktop arrows, with dots for position
+     since there are five slides and no other affordance.
+
+     Deliberately new class names. .arrow-btn, .slider and .slider-viewport
+     are all in WEBFLOW_OWNED, so single-class rules for them are stripped
+     from the module stylesheet by build.py - styling the phone controls
+     through those names would either vanish at build time or, via a
+     descendant selector, silently outrank the Designer. */
+  .cyb-lp .slider-nav{ display:none; align-items:center; justify-content:center; gap:1rem; margin-top:1.75rem; }
+  .cyb-lp .slider-nav_btn{ width:46px; height:46px; border-radius:50%; flex:none; cursor:pointer;
+    border:1px solid rgba(255,255,255,.4); background:transparent; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .3s, border-color .3s; -webkit-tap-highlight-color:transparent; }
+  .cyb-lp .slider-nav_btn:active{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.7); }
+  .cyb-lp .slider-dots{ display:flex; align-items:center; gap:.5rem; }
+  .cyb-lp .slider-dot{ width:8px; height:8px; flex:none; padding:0; border:0; border-radius:999px;
+    background:rgba(255,255,255,.28); cursor:pointer;
+    transition:width .3s, background .3s; -webkit-tap-highlight-color:transparent; }
+  .cyb-lp .slider-dot.is-on{ width:22px; background:#39F1E0; }
+  @media (max-width:767px){
+    .cyb-lp .slider-nav{ display:flex; }
+    /* .slider-viewport carries a fixed min-height:700px, but the phone slide stacks
+       (video over text) and runs taller than that. Slides are position:absolute, so
+       they contribute no height and simply spilled out of the viewport box - which
+       put the control row, laid out after the viewport, on top of the slide text.
+       Letting the active slide sit in flow makes the viewport grow to fit it. Only
+       one slide is ever .active, and min-height stays a floor, so nothing else moves. */
+    .cyb-lp .slide{ position:relative; inset:auto; }
+  }
   /* ── HERO: left copy over a full-bleed video ──────────────────
      The video defines the hero's height (width:100%, height:auto), so whatever
      aspect ratio is exported drives the layout with no magic numbers. The copy is
