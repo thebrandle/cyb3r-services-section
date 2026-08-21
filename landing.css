@@ -308,10 +308,26 @@
      Webflow) because the monitor is only 34.64% of this 16:9 frame - uncropped it
      would render about 116px wide on a 375px phone. */
   @media (max-width:767px){
-    /* Phones use the SAME full-bleed 64/27 treatment as desktop: the surface has to
-       run edge to edge, so the frame cannot be a cropped window onto the monitor. The
-       chrome and glass percentages are inherited from the desktop rules for the same
-       reason - the crop is identical, so they already fit. */
+    /* Phones zoom in on the monitor WITHOUT losing the desk surface. The surface is a
+       horizontal band running the full width of the source (checked: it reaches x=5 and
+       x=1915), so cropping horizontally still leaves it edge to edge - what lost it
+       before was cropping vertically ABOVE it. So the window keeps the bottom at 1080
+       and only trims the dead top, then zooms horizontally, centred on the monitor:
+
+         window  x 657..1766 (1109 wide, centred on the monitor's 1212)
+                 y 350..1080 (730 tall - keeps stand and surface)
+
+         .hero-vid  width 1920/1109 = 173.13%   left -657/1109 = -59.24%
+                    height 1080/730 = 147.95%   top  -350/730  = -47.95%
+
+       At 375px that is a 375x247 frame with a 225px monitor, against 130px full-bleed.
+       Everything below is the same region re-measured. */
+    .cyb-lp .hero-vid{ position:absolute; inset:auto; object-fit:fill;
+      width:173.13%; height:147.95%; left:-59.24%; top:-47.95%; }
+    /* panel x 879..1544 -> (879-657)/1109 and 665/1109 ; bottom (802-350)/730 */
+    .cyb-lp .hero-controls{ left:20.02%; width:59.96%; height:61.92%; }
+    /* panel top (404-350)/730 = 7.40% of the frame -> 7.40/61.92 down the shell */
+    .cyb-lp .hero-screen{ top:11.95%; }
   }
   @media (max-width:991px){
     .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }
