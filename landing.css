@@ -171,7 +171,11 @@
     transition:width .3s, background .3s; -webkit-tap-highlight-color:transparent; }
   .cyb-lp .slider-dot.is-on{ width:22px; background:#39F1E0; }
   @media (max-width:767px){
-    .cyb-lp .slider-nav{ display:flex; }
+    .cyb-lp .slider-nav{ display:flex; margin-top:0; margin-bottom:1.1rem; }
+    /* stacked on phones, so the kicker/brand/body read as a centred caption under the
+       artwork rather than a left-aligned column */
+    .cyb-lp .slider_text{ align-items:center; text-align:center; }
+    .cyb-lp .slide-desc{ margin-left:auto; margin-right:auto; }
     /* .slider_video is a fixed 648px tall from the desktop rule, which parked the
        454px creative in the middle of a box 194px taller than itself. Letting it wrap
        the artwork both tightens the section and makes top:50% land on the creative. */
@@ -304,32 +308,10 @@
      Webflow) because the monitor is only 34.64% of this 16:9 frame - uncropped it
      would render about 116px wide on a 375px phone. */
   @media (max-width:767px){
-    /* Phone shows a 3/4 window of the 16/9 source = the middle 42.19% of its width.
-       Centred on the monitor (its centre is at 63.10% of the frame) that window runs
-       42.01%..84.20%, which is object-position 72.66%. Inside that window the panel
-       maps to left (45.78-42.01)/42.19 = 8.95% and width 34.64/42.19 = 82.11%.
-       Vertical is not cropped - the box is narrower than the source - so the 74.26%
-       height carries over unchanged. */
-    /* object-fit cannot crop BOTH axes here: the box is narrower than the 16:9 source,
-       so cover is height-driven and shows the full frame height - 167px of empty band
-       above the monitor and 115px below on a 375px phone. So the frame becomes a real
-       window instead: overflow:hidden, with the video sized and offset to show just
-       source x 840..1585, y 360..890 (745x530). The bottom edge is the monitor's own
-       bottom (its chin ends at ~882), so the frame closes on the device rather than
-       slicing through it - the stand and desk surface are what get dropped.
-
-         video width  1920/745 = 257.72% of the box width
-         left offset  -840/745 = -112.75%
-         video height 1080/530 = 203.77% of the box height
-         top offset   -360/530 = -67.92%
-
-       Everything below is that region re-measured, so it stays exact at any width. */
-    .cyb-lp .hero-vid{ position:absolute; inset:auto; object-fit:fill;
-      width:257.72%; height:203.77%; left:-112.75%; top:-67.92%; }
-    /* panel x 879..1544 -> (879-840)/745 and 665/745 ; bottom (802-360)/530 */
-    .cyb-lp .hero-controls{ left:5.24%; width:89.26%; height:83.40%; }
-    /* panel top (404-360)/530 = 8.30% of the frame -> 8.30/83.40 down the shell */
-    .cyb-lp .hero-screen{ top:9.95%; }
+    /* Phones use the SAME full-bleed 64/27 treatment as desktop: the surface has to
+       run edge to edge, so the frame cannot be a cropped window onto the monitor. The
+       chrome and glass percentages are inherited from the desktop rules for the same
+       reason - the crop is identical, so they already fit. */
   }
   @media (max-width:991px){
     .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }

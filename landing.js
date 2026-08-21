@@ -450,7 +450,7 @@
     out.animate([{opacity:1, transform:"translateX(0)"},{opacity:0, transform:"translateX("+(dir>0?-40:40)+"px)"}],{duration:250, easing:"ease", fill:"forwards"}).onfinish=()=>{
       out.classList.remove("active"); out.style.opacity=""; out.style.transform="";
       inn.classList.add("active");
-      inn.animate([{opacity:0, transform:"translateX("+(dir>0?40:-40)+"px)"},{opacity:1, transform:"translateX(0)"}],{duration:250, easing:"ease", fill:"forwards"}).onfinish=()=>{ cur=next; animating=false; paintDots(); };
+      inn.animate([{opacity:0, transform:"translateX("+(dir>0?40:-40)+"px)"},{opacity:1, transform:"translateX(0)"}],{duration:250, easing:"ease", fill:"forwards"}).onfinish=()=>{ cur=next; animating=false; paintDots(); placeNav(); };
     };
   }
   function go(dir){ goTo((cur+dir+slides.length)%slides.length, dir); }
@@ -471,9 +471,26 @@
     d.classList.toggle("is-on", i===cur);
     d.setAttribute("aria-current", i===cur ? "true" : "false");
   }); }
+
+  /* On phones the slide stacks artwork-over-copy and the dots belong between the two,
+     reading as the artwork's own pager. They live outside the slides (one row, five
+     slides), so they get moved into whichever slide is active; on desktop they go back
+     under the whole slider. Called on every change, so it survives slide switches. */
+  const navPhone = () => window.matchMedia("(max-width:767px)").matches;
+  function placeNav(){
+    const content = slides[cur] && slides[cur].querySelector(".slider_content");
+    const video   = content && content.querySelector(".slider_video");
+    if (navPhone() && video){
+      if (nav.previousElementSibling !== video) video.after(nav);
+    } else if (nav.parentElement !== vp.parentElement){
+      vp.parentElement.appendChild(nav);
+    }
+  }
+  window.addEventListener("resize", placeNav);
   paintDots();
   nav.appendChild(dotsWrap);
   vp.parentElement.appendChild(nav);
+  placeNav();
 
   /* One pair of arrows per slide, so wire them all. stopPropagation keeps a tap on an
      arrow from also reaching the swipe handler on the viewport. */
@@ -735,7 +752,10 @@
     v.muted = true; v.setAttribute('muted','');
     v.autoplay = false; v.loop = false; v.playsInline = true;
     v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline','');
-    v.preload = 'metadata';
+    /* 'auto', not 'metadata': with metadata the browser decodes no frames, so an
+       autoplay-less video renders as an empty box until something plays it - the hero
+       looked blank on load. auto paints the first frame straight away. */
+    v.preload = 'auto';
     var poster = (host.getAttribute('data-hero-poster') || '').trim();
     if (poster) v.poster = poster;
 
