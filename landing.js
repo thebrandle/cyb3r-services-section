@@ -841,28 +841,22 @@
       }, { threshold: 0.01 }).observe(host);
     }
 
-    /* ── play triggers ──────────────────────────────────────────────────────
-       withSound() is only ever reached from a real click, so unmuting is allowed
-       by autoplay policy. tryPlay() is shared with the bar's play button. */
-    function playWithSound(){
-      v.muted = false; v.removeAttribute('muted'); v.volume = 1;
-      paintMute();
-      tryPlay();
-    }
+    /* ── the only play trigger: the "Watch the video" CTA ───────────────────
+       The frame deliberately has NO click handler. It is full-bleed, so "the video"
+       and "the empty space either side of the monitor" are the same hit area - a
+       click far from the display toggling playback reads as a bug. Play/pause/mute
+       stay on the bar, which is sized to the display itself.
 
-    /* the frame itself: click anywhere on it to play or pause. Clicks that land on
-       the control bar are ignored so its own buttons keep working. */
-    host.addEventListener('click', function(e){
-      if (e.target.closest && e.target.closest('.hero-ctrlbar')) return;
-      if (v.paused) playWithSound(); else v.pause();
-    });
-
-    /* the "Watch the video" CTA. Matched by class or by data-hero-play so the button
-       can be renamed in the Designer without breaking the hook. */
+       Reached only from a real click, so unmuting is allowed by autoplay policy.
+       Matched by class or [data-hero-play] so the button can be renamed in the
+       Designer without breaking the hook. */
     document.querySelectorAll('.ghostbutton, [data-hero-play]').forEach(function(btn){
       btn.addEventListener('click', function(e){
         e.preventDefault();
-        playWithSound();
+        try { v.currentTime = 0; } catch (err) {}   /* always from the top */
+        v.muted = false; v.removeAttribute('muted'); v.volume = 1;
+        paintMute();
+        tryPlay();
         host.scrollIntoView({ behavior:'smooth', block:'center' });
       });
     });
