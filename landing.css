@@ -99,7 +99,11 @@
   .cyb-lp .cav_particle{ position:absolute; left:50%; top:50%; width:var(--s); height:var(--s); border-radius:999px;
     transform:translate3d(var(--x),var(--y),var(--z)) scale(var(--sc,1)); opacity:var(--o,.85); filter:blur(var(--b,0px));
     background:radial-gradient(circle at 50% 47%, var(--cav-particle-light) 0%, var(--cav-particle-mid) 34%, var(--cav-purple-dark) 82%);
-    box-shadow:0 0 42px rgba(var(--cav-particle-glow),.32), inset 0 0 48px rgba(0,0,0,.42); will-change:transform,opacity; }
+    box-shadow:0 0 42px rgba(var(--cav-particle-glow),.32), inset 0 0 48px rgba(0,0,0,.42); }
+  /* will-change is gated on .is-live, which the scene's ScrollTrigger toggles. Left on
+     the base rule it kept ~240 permanently composited layers alive for the entire
+     14,000px page rather than just while this section is in view. */
+  .cyb-lp .cav_particles.is-live .cav_particle{ will-change:transform,opacity; }
   .cyb-lp .cav_core_particle{ z-index:3; }
   .cyb-lp .cav_sidecopy{ position:absolute; z-index:4; top:51%; transform:translateY(-50%); width:min(37vw,730px); will-change:transform,opacity; }
   .cyb-lp .cav_leftcopy{ left:clamp(32px,8vw,120px); }
@@ -126,10 +130,15 @@
   .cyb-lp .slider_content{ gap:10rem; perspective:150px; perspective-origin:0%; justify-content:center; align-items:center;
     padding-left:6.5rem; padding-right:6.5rem; display:flex; overflow:visible; }
   .cyb-lp .slider_video{ width:381px; height:648px; display:flex; justify-content:center; align-items:center; will-change:transform; }
+  @media (hover:none){ .cyb-lp .slider_video{ will-change:auto; } }   /* tilt is mousemove-only */
   .cyb-lp .ads-preview{ position:relative; flex:none; border-radius:0; width:457.2px; height:648px; background:#141C24; overflow:hidden; }
   .cyb-lp .slider_text{ flex-flow:column; justify-content:flex-start; align-items:flex-start; display:flex;
     align-self:stretch; }
   /* short "what we did" line, vertically centred in the space under the caption */
+  /* Replaces an inline font-size:3.75rem on the h3. That inline value won over every
+     stylesheet but left Webflow's fixed line-height:30px alone, so 60px glyphs sat in a
+     30px box - overflowing it and landing on the paragraph (measured gap: 0px). */
+  .cyb-lp .slider_text .slide-brand{ font-size:3.75rem; line-height:1.06; margin:0 0 .85rem; letter-spacing:-.02em; }
   .cyb-lp .slide-desc{ margin:auto 0; max-width:24rem; font-size:1.25rem; line-height:1.55;
     color:#A7ACB4; text-wrap:pretty; }
   /* hover is owned by Webflow so the colour stays editable in the Designer */
@@ -141,21 +150,16 @@
      Webflow hides the .arrow-btn overlays below 767px (at phone widths they
      sit right on top of the creative), which left the carousel with no way
      to advance at all - no arrows, and the slider has never had swipe. This
-     row sits UNDER the slide instead, so it reaches nothing it shouldn't:
-     same circle treatment as the desktop arrows, with dots for position
-     since there are five slides and no other affordance.
+     arrows sit ON the creative (one pair per slide, inside .slider_video) and
+     only the dots go underneath, tight to the copy.
 
      Deliberately new class names. .arrow-btn, .slider and .slider-viewport
      are all in WEBFLOW_OWNED, so single-class rules for them are stripped
      from the module stylesheet by build.py - styling the phone controls
      through those names would either vanish at build time or, via a
      descendant selector, silently outrank the Designer. */
-  .cyb-lp .slider-nav{ display:none; align-items:center; justify-content:center; gap:1rem; margin-top:1.75rem; }
-  .cyb-lp .slider-nav_btn{ width:46px; height:46px; border-radius:50%; flex:none; cursor:pointer;
-    border:1px solid rgba(255,255,255,.4); background:transparent; color:#fff;
-    display:flex; align-items:center; justify-content:center;
-    transition:background .3s, border-color .3s; -webkit-tap-highlight-color:transparent; }
-  .cyb-lp .slider-nav_btn:active{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.7); }
+  .cyb-lp .slider-nav{ display:none; align-items:center; justify-content:center; gap:1rem; margin-top:.9rem; }
+  .cyb-lp .slider-side{ display:none; }
   .cyb-lp .slider-dots{ display:flex; align-items:center; gap:.5rem; }
   .cyb-lp .slider-dot{ width:8px; height:8px; flex:none; padding:0; border:0; border-radius:999px;
     background:rgba(255,255,255,.28); cursor:pointer;
@@ -163,6 +167,24 @@
   .cyb-lp .slider-dot.is-on{ width:22px; background:#39F1E0; }
   @media (max-width:767px){
     .cyb-lp .slider-nav{ display:flex; }
+    /* .slider_video is a fixed 648px tall from the desktop rule, which parked the
+       454px creative in the middle of a box 194px taller than itself. Letting it wrap
+       the artwork both tightens the section and makes top:50% land on the creative. */
+    .cyb-lp .slider_video{ position:relative; width:auto; height:auto; }
+    .cyb-lp .slider-side{ position:absolute; top:50%; transform:translateY(-50%); z-index:6;
+      display:flex; align-items:center; justify-content:center; cursor:pointer;
+      width:44px; height:44px; border-radius:50%; flex:none; color:#fff;
+      /* the ad creatives are mostly light, so the desktop transparent-with-white-border
+         treatment would disappear on them - same dark scrim as the hero player chrome */
+      background:rgba(10,14,18,.55); border:1px solid rgba(255,255,255,.45);
+      -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+      -webkit-tap-highlight-color:transparent; }
+    .cyb-lp .slider-side:active{ background:rgba(10,14,18,.78); }
+    .cyb-lp .slider-side.is-prev{ left:6px; }
+    .cyb-lp .slider-side.is-next{ right:6px; }
+    /* the desktop 3.75rem brand name is far too heavy at 375px */
+    .cyb-lp .slider_text .slide-brand{ font-size:clamp(2rem,8.6vw,2.5rem); margin-bottom:.55rem; }
+    .cyb-lp .slide-desc{ font-size:1rem; line-height:1.5; }
     /* .slider-viewport carries a fixed min-height:700px, but the phone slide stacks
        (video over text) and runs taller than that. Slides are position:absolute, so
        they contribute no height and simply spilled out of the viewport box - which

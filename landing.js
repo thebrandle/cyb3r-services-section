@@ -369,16 +369,30 @@
   ];
   const SLIDES = readSlidesFromCms() || SLIDES_FALLBACK;
   const vp=document.getElementById("sliderViewport");
+  const NAV_SVG = {
+    prev:'<svg width="20" height="13" viewBox="0 0 22 14" fill="none" aria-hidden="true"><path d="M8 1 2 7l6 6M2 7h20" stroke="currentColor" stroke-width="1.5"/></svg>',
+    next:'<svg width="20" height="13" viewBox="0 0 22 14" fill="none" aria-hidden="true"><path d="M14 1l6 6-6 6M20 7H0" stroke="currentColor" stroke-width="1.5"/></svg>'
+  };
   SLIDES.forEach((s,i)=>{
     const d=document.createElement("div"); d.className="slide"+(i===0?" active":"");
+    /* The phone arrows live INSIDE .slider_video, one pair per slide, so they centre
+       on the creative with a plain top:50% and stay put if the artwork is ever resized.
+       Only the active slide is in the DOM flow, so only its pair is ever visible.
+       .slide-brand replaces an inline font-size:3.75rem: that inline value beat every
+       stylesheet but left Webflow's fixed line-height:30px in place, so the 60px brand
+       name overflowed its own 30px line box and sat right on top of the paragraph. */
     d.innerHTML=`
       <div class="slider_content">
-        <div class="slider_video"><div class="ads-preview">
-          <video src="${s.video}" muted loop autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
-        </div></div>
+        <div class="slider_video">
+          <div class="ads-preview">
+            <video src="${s.video}" muted loop autoplay playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover"></video>
+          </div>
+          <button type="button" class="slider-side is-prev" aria-label="Previous example">${NAV_SVG.prev}</button>
+          <button type="button" class="slider-side is-next" aria-label="Next example">${NAV_SVG.next}</button>
+        </div>
         <div class="slider_text">
           <div class="subtitle">${s.cat}</div>
-          <h3 class="heading-style-h2" style="font-size:3.75rem">${s.brand}</h3>
+          <h3 class="heading-style-h2 slide-brand">${s.brand}</h3>
           <p class="slide-desc">${s.desc}</p>
         </div>
       </div>`;
@@ -402,20 +416,9 @@
   }
   function go(dir){ goTo((cur+dir+slides.length)%slides.length, dir); }
 
-  /* Phone control row. Webflow hides the .arrow-btn overlays below 767px, so on a
-     phone there was previously no way at all to reach slides 2-5. Built here rather
-     than in the section markup because the slide count comes from the CMS. */
-  const NAV_SVG = {
-    prev:'<svg width="20" height="13" viewBox="0 0 22 14" fill="none" aria-hidden="true"><path d="M8 1 2 7l6 6M2 7h20" stroke="currentColor" stroke-width="1.5"/></svg>',
-    next:'<svg width="20" height="13" viewBox="0 0 22 14" fill="none" aria-hidden="true"><path d="M14 1l6 6-6 6M20 7H0" stroke="currentColor" stroke-width="1.5"/></svg>'
-  };
-  function navBtn(dir,label){
-    const b=document.createElement("button"); b.type="button";
-    b.className="slider-nav_btn"; b.setAttribute("aria-label",label);
-    b.innerHTML = dir>0 ? NAV_SVG.next : NAV_SVG.prev;
-    b.addEventListener("click",()=>go(dir));
-    return b;
-  }
+  /* Dots only under the slide - the arrows sit on the creative itself (built into
+     each slide above). Built here rather than in the section markup because the
+     slide count comes from the CMS. */
   const nav=document.createElement("div"); nav.className="slider-nav";
   const dotsWrap=document.createElement("div"); dotsWrap.className="slider-dots";
   const dots=SLIDES.map((s,i)=>{
@@ -430,10 +433,15 @@
     d.setAttribute("aria-current", i===cur ? "true" : "false");
   }); }
   paintDots();
-  nav.appendChild(navBtn(-1,"Previous example"));
   nav.appendChild(dotsWrap);
-  nav.appendChild(navBtn(1,"Next example"));
   vp.parentElement.appendChild(nav);
+
+  /* One pair of arrows per slide, so wire them all. stopPropagation keeps a tap on an
+     arrow from also reaching the swipe handler on the viewport. */
+  vp.querySelectorAll(".slider-side").forEach(b=>{
+    b.addEventListener("click",e=>{ e.preventDefault(); e.stopPropagation();
+      go(b.classList.contains("is-next") ? 1 : -1); });
+  });
 
   /* Swipe. pan-y keeps vertical page scrolling with the browser and gives us the
      horizontal axis; the axis test then ignores mostly-vertical drags so a scroll
@@ -506,7 +514,13 @@
     const particlesWrap=q(".cav_particles");
     const rand=seededRandom(cfg.randomSeed||1);
     particlesWrap.innerHTML="";
-    for(let i=0;i<cfg.particleCount;i++){
+    /* 240 particles is a desktop budget. On a phone each one is a separately
+       composited, permanently will-change'd node that exists for the whole 14,000px
+       page, not just while this scene is on screen - together they were the single
+       largest source of scroll jank. The reveal stages below slice 28/70/135, so the
+       build-up still reads as progressive at this count. */
+    const particleCount = isMobile ? 96 : cfg.particleCount;
+    for(let i=0;i<particleCount;i++){
       const el=document.createElement("span");
       el.className="cav_particle"+(i===0?" cav_core_particle":"");
       const isCore=i===0; let x,y,z,size,opacity,blur,scale;
@@ -555,7 +569,10 @@
     const pctAt    = cavPhone ? 0.62 : 0.42;
 
     const tl=gsap.timeline({ defaults:{ ease:"none" },
-      scrollTrigger:{ trigger:root, start:"top top", end:"bottom bottom", scrub:1.1/(cfg.scrollSpeed||1), invalidateOnRefresh:true } });
+      scrollTrigger:{ trigger:root, start:"top top", end:"bottom bottom", scrub:1.1/(cfg.scrollSpeed||1), invalidateOnRefresh:true,
+        /* will-change on the particles is gated on this class (see the stylesheet), so
+           the compositor only holds those layers while the scene is in view. */
+        onToggle:self=>particlesWrap.classList.toggle("is-live", self.isActive) } });
 
     tl
       .fromTo(".cav_leftcopy",{opacity:1,x:0},{opacity:0,x:-80,duration:.55},0.05)
