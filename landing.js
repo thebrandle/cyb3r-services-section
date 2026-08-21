@@ -518,7 +518,10 @@
   const gsapLib=window.gsap, ST=window.ScrollTrigger, SplitType=window.SplitType;
   gsapLib.registerPlugin(ST);
 
-  document.querySelectorAll(".fancy-anim").forEach(el=>{
+  /* .platform_heading is included by hand: that section is native Webflow now and the
+     Designer API refuses to attach the shared .fancy-anim class to it (it reports the
+     style as not found, same as heading-style-h1), so the selector carries it instead. */
+  document.querySelectorAll(".fancy-anim, .platform_heading").forEach(el=>{
     const text=new SplitType(el,{types:"words"});
     gsapLib.from(text.words,{ scrollTrigger:{ trigger:el, start:"top 60%", end:"top 30%", scrub:true }, opacity:0.2, stagger:0.1 });
   });

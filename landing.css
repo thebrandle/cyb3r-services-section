@@ -132,14 +132,19 @@
   .cyb-lp .slider_video{ width:381px; height:648px; display:flex; justify-content:center; align-items:center; will-change:transform; }
   @media (hover:none){ .cyb-lp .slider_video{ will-change:auto; } }   /* tilt is mousemove-only */
   .cyb-lp .ads-preview{ position:relative; flex:none; border-radius:0; width:457.2px; height:648px; background:#141C24; overflow:hidden; }
-  .cyb-lp .slider_text{ flex-flow:column; justify-content:flex-start; align-items:flex-start; display:flex;
+  /* justify-content:center (was flex-start) so the kicker, brand and body sit as one
+     block centred against the artwork and the arrow buttons, instead of the brand
+     riding at the very top of a 648px column. */
+  .cyb-lp .slider_text{ flex-flow:column; justify-content:center; align-items:flex-start; display:flex;
     align-self:stretch; }
   /* short "what we did" line, vertically centred in the space under the caption */
   /* Replaces an inline font-size:3.75rem on the h3. That inline value won over every
      stylesheet but left Webflow's fixed line-height:30px alone, so 60px glyphs sat in a
      30px box - overflowing it and landing on the paragraph (measured gap: 0px). */
   .cyb-lp .slider_text .slide-brand{ font-size:3.75rem; line-height:1.06; margin:0 0 .85rem; letter-spacing:-.02em; }
-  .cyb-lp .slide-desc{ margin:auto 0; max-width:24rem; font-size:1.25rem; line-height:1.55;
+  /* margin was `auto 0`, which in this flex column resolved to 240px top AND bottom -
+     that was the entire gap between the brand name and its body copy. */
+  .cyb-lp .slide-desc{ margin:.9rem 0 0; max-width:24rem; font-size:1.25rem; line-height:1.55;
     color:#A7ACB4; text-wrap:pretty; }
   /* hover is owned by Webflow so the colour stays editable in the Designer */
   .cyb-lp .arrow-btn.left{ left:2.5rem; }
