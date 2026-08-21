@@ -219,6 +219,19 @@
   .cyb-lp .hero-text_wrapper > *{ max-width:100%; }
   @media (max-width:767px){ .cyb-lp .hero-media{ pointer-events:auto; } }
 
+  /* ── "Watch the video" ghost CTA ───────────────────────────────
+     The arrow is a masked SVG, not a glyph: background-color drives its colour, so it
+     picks up the brand teal and stays crisp at any size. It lives here rather than in
+     Webflow because the Designer cannot author pseudo-element content - the button's
+     own layout (inline-flex + column-gap) IS set in Webflow, so the two do not fight.
+     The grey that used to appear on hover is .button:hover's --orange-hover (#EBEBEB);
+     that is overridden on the combo in Webflow, at higher specificity than this file. */
+  .cyb-lp .ghostbutton::after{
+    content:""; flex:none; width:1.05em; height:1.05em; background-color:#39F1E0;
+    -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center/contain no-repeat;
+    transition:transform .25s ease; }
+  .cyb-lp .ghostbutton:hover::after{ transform:translateX(3px); }
+
   /* ── HERO PLAYER CHROME ───────────────────────────────────────
      Anchored to the monitor's SCREEN panel, measured from the footage's alpha:
      the display sits at left 47.19% / width 50.47% / top 0 / height 65.85% of

@@ -728,10 +728,14 @@
 
     var v = document.createElement('video');
     v.className = 'hero-vid';
+    /* Starts PAUSED and muted - no autoplay. It is a 55s narrated piece now, not an
+       ambient loop, so it waits for a deliberate play: the "Watch the video" CTA, a
+       click anywhere on the frame, or the play button in the bar. Loop is off for the
+       same reason - restarting a narrated video mid-sentence is worse than stopping. */
     v.muted = true; v.setAttribute('muted','');
-    v.autoplay = true; v.loop = true; v.playsInline = true;
+    v.autoplay = false; v.loop = false; v.playsInline = true;
     v.setAttribute('playsinline',''); v.setAttribute('webkit-playsinline','');
-    v.preload = 'auto';
+    v.preload = 'metadata';
     var poster = (host.getAttribute('data-hero-poster') || '').trim();
     if (poster) v.poster = poster;
 
@@ -829,15 +833,39 @@
     shell.appendChild(bar);
     host.appendChild(shell);
 
-    /* don't decode a full-bleed video while it is scrolled away */
+    /* Scrolling away pauses, but scrolling back does NOT resume - with sound on, a
+       video that restarts itself when it re-enters the viewport is hostile. */
     if ('IntersectionObserver' in window) {
       new IntersectionObserver(function(en){
-        en.forEach(function(e){
-          if (e.isIntersecting) { var r = v.play(); if (r && r.catch) r.catch(function(){}); }
-          else v.pause();
-        });
+        en.forEach(function(e){ if (!e.isIntersecting) v.pause(); });
       }, { threshold: 0.01 }).observe(host);
     }
+
+    /* ── play triggers ──────────────────────────────────────────────────────
+       withSound() is only ever reached from a real click, so unmuting is allowed
+       by autoplay policy. tryPlay() is shared with the bar's play button. */
+    function playWithSound(){
+      v.muted = false; v.removeAttribute('muted'); v.volume = 1;
+      paintMute();
+      tryPlay();
+    }
+
+    /* the frame itself: click anywhere on it to play or pause. Clicks that land on
+       the control bar are ignored so its own buttons keep working. */
+    host.addEventListener('click', function(e){
+      if (e.target.closest && e.target.closest('.hero-ctrlbar')) return;
+      if (v.paused) playWithSound(); else v.pause();
+    });
+
+    /* the "Watch the video" CTA. Matched by class or by data-hero-play so the button
+       can be renamed in the Designer without breaking the hook. */
+    document.querySelectorAll('.ghostbutton, [data-hero-play]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        playWithSound();
+        host.scrollIntoView({ behavior:'smooth', block:'center' });
+      });
+    });
   }
 
   function initShowreel(){
