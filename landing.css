@@ -310,13 +310,24 @@
        maps to left (45.78-42.01)/42.19 = 8.95% and width 34.64/42.19 = 82.11%.
        Vertical is not cropped - the box is narrower than the source - so the 74.26%
        height carries over unchanged. */
-    .cyb-lp .hero-vid{ object-position:72.66% center; }
-    /* the phone box is narrower than the source, so cover crops horizontally only and
-       the panel bottom stays at its full-frame 74.26% */
-    .cyb-lp .hero-controls{ left:8.95%; width:82.11%; height:74.26%; }
-    /* full source height is visible here, so the panel top is 404/1080 = 37.41% of the
-       frame, i.e. 37.41/74.26 = 50.38% down the shell */
-    .cyb-lp .hero-screen{ top:50.38%; }
+    /* object-fit cannot crop BOTH axes here: the box is narrower than the 16:9 source,
+       so cover is height-driven and shows the full frame height - 167px of empty band
+       above the monitor and 115px below on a 375px phone. So the frame becomes a real
+       window instead: overflow:hidden, with the video sized and offset to show just
+       source x 840..1585, y 360..850 (745x490, the monitor plus a margin).
+
+         video width  1920/745 = 257.72% of the box width
+         left offset  -840/745 = -112.75%
+         video height 1080/490 = 220.41% of the box height
+         top offset   -360/490 = -73.47%
+
+       Everything below is that region re-measured, so it stays exact at any width. */
+    .cyb-lp .hero-vid{ position:absolute; inset:auto; object-fit:fill;
+      width:257.72%; height:220.41%; left:-112.75%; top:-73.47%; }
+    /* panel x 879..1544 -> (879-840)/745 and 665/745 ; bottom (802-360)/490 */
+    .cyb-lp .hero-controls{ left:5.24%; width:89.26%; height:90.20%; }
+    /* panel top (404-360)/490 = 8.98% of the frame -> 8.98/90.20 down the shell */
+    .cyb-lp .hero-screen{ top:9.96%; }
   }
   @media (max-width:991px){
     .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }

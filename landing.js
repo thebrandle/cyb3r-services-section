@@ -752,8 +752,10 @@
     v.setAttribute('data-picked', isSafari ? 'safari-mov' : (canWebm && webm) ? 'vp9-webm' : 'mp4-fallback');
 
     host.appendChild(v);
+    /* Defined but deliberately NOT called here. autoplay=false only clears the
+       attribute - an explicit play() still starts the video, which is what was
+       autoplaying on load. It waits for the CTA, the glass, or the bar. */
     function tryPlay(){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
-    tryPlay();
 
     /* ── player chrome, anchored to the monitor screen (see .hero-controls) ── */
     var I = {
