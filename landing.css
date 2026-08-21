@@ -251,6 +251,35 @@
   .cyb-lp .hero-controls{ position:absolute; left:45.78%; width:34.64%; top:0; height:65.68%;
     z-index:3; display:flex; align-items:flex-end; justify-content:center;
     padding:0; pointer-events:auto; }
+  /* ── the display itself (glass only) ─────────────────────────────
+     .hero-controls is pinned to the panel horizontally but starts at the frame's top
+     edge, so the bar can sit flush on the panel's bottom. This inset starts partway
+     down it so the hit area covers the glass and nothing else:
+
+       panel in the 1920x1080 source        y 404..802
+       desktop crop shows source y 270..1080 (810 tall)
+         -> panel top    (404-270)/810 = 16.54% of the frame
+            panel bottom (802-270)/810 = 65.68% of the frame  (= the shell's height)
+         -> as a fraction of the shell:  16.54/65.68 = 25.19%
+
+     All percentages, so it tracks the panel at every width with nothing measured in JS.
+     Sits under the bar (z-index) so the bar's own buttons still take their clicks. */
+  .cyb-lp .hero-screen{ position:absolute; left:0; right:0; top:25.19%; bottom:0; z-index:1;
+    cursor:pointer; }
+  .cyb-lp .hero-screen::before{ content:""; position:absolute; inset:0; pointer-events:none;
+    background:rgba(8,12,16,.32); opacity:0; transition:opacity .28s ease; }
+  .cyb-lp .hero-controls.is-paused .hero-screen::before{ opacity:1; }
+  .cyb-lp .hero-screen_badge{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.92);
+    width:clamp(44px,4.4vw,68px); height:clamp(44px,4.4vw,68px); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; pointer-events:none;
+    background:rgba(10,14,18,.66); border:1px solid rgba(255,255,255,.4); color:#39F1E0;
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    opacity:0; transition:opacity .28s ease, transform .28s ease; }
+  .cyb-lp .hero-controls.is-paused .hero-screen_badge{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  /* the play triangle is optically left-heavy in a circle, so nudge it */
+  .cyb-lp .hero-screen_badge svg{ width:36%; height:36%; display:block; margin-left:7%; }
+  .cyb-lp .hero-ctrlbar{ position:relative; z-index:2; }
+
   /* flush to the bottom edge of the display, full panel width */
   .cyb-lp .hero-ctrlbar{ width:100%; display:flex; align-items:center; gap:.75rem;
     padding:.55rem .75rem; border-radius:0; background:rgba(10,14,18,.72);
@@ -284,6 +313,9 @@
     /* the phone box is narrower than the source, so cover crops horizontally only and
        the panel bottom stays at its full-frame 74.26% */
     .cyb-lp .hero-controls{ left:8.95%; width:82.11%; height:74.26%; }
+    /* full source height is visible here, so the panel top is 404/1080 = 37.41% of the
+       frame, i.e. 37.41/74.26 = 50.38% down the shell */
+    .cyb-lp .hero-screen{ top:50.38%; }
   }
   @media (max-width:991px){
     .cyb-lp .hero-ctrlbar{ opacity:1; transform:none; gap:.5rem; padding:.45rem .6rem; }

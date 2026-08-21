@@ -782,6 +782,8 @@
     function paintPlay(){
       bPlay.innerHTML = v.paused ? I.play : I.pause;
       bPlay.setAttribute('aria-label', v.paused ? 'Play video' : 'Pause video');
+      /* drives the dim + play badge over the glass */
+      shell.classList.toggle('is-paused', v.paused);
     }
     function paintMute(){
       bMute.innerHTML = v.muted ? I.off : I.on;
@@ -830,6 +832,21 @@
     paintPlay(); paintMute(); paintTime();
 
     bar.appendChild(bPlay); bar.appendChild(track); bar.appendChild(time); bar.appendChild(bMute);
+
+    /* Click target for the DISPLAY ONLY. .hero-controls is already pinned to the panel
+       horizontally, but it runs from the frame's top edge down to the panel's bottom so
+       the bar can sit flush - so this inset starts partway down it (see .hero-screen in
+       the stylesheet) to cover the glass and nothing else. Percentages throughout, so it
+       tracks the panel at every width with no JS measuring. */
+    var screenHit = el('div','hero-screen');
+    var badge = el('div','hero-screen_badge');
+    badge.innerHTML = I.play;
+    screenHit.appendChild(badge);
+    screenHit.addEventListener('click', function(){
+      if (v.paused) tryPlay(); else v.pause();
+    });
+    shell.appendChild(screenHit);
+
     shell.appendChild(bar);
     host.appendChild(shell);
 
