@@ -314,18 +314,22 @@
        before was cropping vertically ABOVE it. So the window keeps the bottom at 1080
        and only trims the dead top, then zooms horizontally, centred on the monitor:
 
-         window  x 657..1766 (1109 wide, centred on the monitor's 1212)
+       The zoom is set so the GLASS matches the button column above it: the panel is 665
+       source px and the column is 375-2*20 = 335px, so the scale is 335/665 and the
+       full-bleed frame spans 375/scale = 744 source px, centred on the panel's 1212.
+
+         window  x 839..1584 (744 wide)
                  y 350..1080 (730 tall - keeps stand and surface)
 
-         .hero-vid  width 1920/1109 = 173.13%   left -657/1109 = -59.24%
-                    height 1080/730 = 147.95%   top  -350/730  = -47.95%
+         .hero-vid  width 1920/744 = 257.92%   left -839/744 = -112.75%
+                    height 1080/730 = 147.95%  top  -350/730 = -47.95%
 
-       At 375px that is a 375x247 frame with a 225px monitor, against 130px full-bleed.
-       Everything below is the same region re-measured. */
+       At 375px: frame 375x368, glass left 20.0px / width 335.0px / right 20.0px, i.e.
+       flush with the buttons. Everything below is that region re-measured. */
     .cyb-lp .hero-vid{ position:absolute; inset:auto; object-fit:fill;
-      width:173.13%; height:147.95%; left:-59.24%; top:-47.95%; }
-    /* panel x 879..1544 -> (879-657)/1109 and 665/1109 ; bottom (802-350)/730 */
-    .cyb-lp .hero-controls{ left:20.02%; width:59.96%; height:61.92%; }
+      width:257.92%; height:147.95%; left:-112.75%; top:-47.95%; }
+    /* panel x 879..1544 -> (879-839)/744 and 665/744 ; bottom (802-350)/730 */
+    .cyb-lp .hero-controls{ left:5.33%; width:89.33%; height:61.92%; }
     /* panel top (404-350)/730 = 7.40% of the frame -> 7.40/61.92 down the shell */
     .cyb-lp .hero-screen{ top:11.95%; }
   }
