@@ -12,14 +12,19 @@
  * small variant (~8-16KB instead of ~100-200KB). Logos without srcset are unaffected - those
  * old full-size PNG uploads can only be slimmed by re-uploading smaller assets in the CMS.
  */
+/* v1.5.0 (2026-09-21): STOPPED forcing loading="eager" on the ticker logos.
+ * Measured: Webflow's IX2 engine initialises on window LOAD, and until it does, the
+ * rule html.w-mod-js:not(.w-mod-ix3) holds .hero-content at visibility:hidden. Forcing
+ * 37 below-the-fold logos eager kept `load` (and therefore the visible hero) ~2.4s late.
+ * The original reason for eager was 200-640KB PNG logos trickling in; they are now
+ * 10-30KB WebP, so native lazy loading fills the marquee fast without blocking load.
+ * The sizes="140px" correction below is KEPT - that is what stops the browser picking
+ * an 800px+ srcset variant for a ~115px slot.
+ */
 (function () {
   function eager() {
     var imgs = document.querySelectorAll('.logo-ticker-track img');
     for (var i = 0; i < imgs.length; i++) {
-      if (imgs[i].getAttribute('loading') !== 'eager') {
-        imgs[i].setAttribute('loading', 'eager');
-        imgs[i].loading = 'eager';
-      }
       if (imgs[i].getAttribute('srcset') && imgs[i].getAttribute('sizes') !== '140px') {
         imgs[i].setAttribute('sizes', '140px');
       }
