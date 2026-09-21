@@ -1,4 +1,4 @@
-/* CYB3R logo-ticker image deferral. v1.0.0  (site-wide, HEAD)
+/* CYB3R logo-ticker image deferral. v1.1.0  (site-wide, HEAD)
  *
  * WHY THIS EXISTS AND WHY IT IS IN THE HEAD:
  * The logo marquee sits ~14,400px down an ~18,600px page and every logo already
@@ -59,6 +59,13 @@
       if (ss) { im.setAttribute('srcset', ss); im.removeAttribute('data-cyb-srcset'); }
       /* sizes=140px keeps the browser off an 800px+ srcset variant for a ~115px slot */
       if (im.getAttribute('srcset') && im.getAttribute('sizes') !== '140px') im.setAttribute('sizes', '140px');
+      /* EAGER on release is REQUIRED, not an optimisation: the marquee track is several
+       * viewports WIDE, so most logos sit horizontally off-screen and loading="lazy"
+       * simply refuses them - measured 28/74 filled after 12s on screen, 33/74 after 25s.
+       * Forcing eager here is the original cyb3rTickerEager behaviour, just moved from
+       * page-load time to near-view time, which is the whole point of this script. */
+      im.setAttribute('loading', 'eager');
+      im.loading = 'eager';
       im.setAttribute('src', im.getAttribute('data-cyb-src'));
       im.removeAttribute('data-cyb-src');
     }
