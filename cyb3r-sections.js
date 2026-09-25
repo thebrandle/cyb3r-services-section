@@ -25,19 +25,19 @@
       kick:"Strategy · Branding · Design", hero:"Health, reimagined.", work:"Early Health City",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-early-health.webp",
       vscale:1.08,
-      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/earlyhealthcity_w_1280.mp4" },
+      video:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/wk/earlyhealthcity_w_1280.mp4" },
     { name:"Gattaca Genomics", desc:"Web design and development for a next-generation genomics platform.",
       kick:"Web Design · Development", hero:"Decoding tomorrow.", work:"Gattaca Genomics",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-gattaca.webp",
-      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/gattaca_w_1280.mp4" },
+      video:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/wk/gattaca_w_1280.mp4" },
     { name:"Cyb3r Group", desc:"Social, content and AI-driven advertising engineered for growth.",
       kick:"Social · Content · AI Advertising", hero:"Growth, engineered.", work:"CYB3R",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-cyb3r-group.webp",
-      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/cyb3r_w_1280.mp4" },
+      video:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/wk/cyb3r_w_1280.mp4" },
     { name:"Innovation City (RAKDAO)", desc:"SEO, Google Ads and paid media built to scale on-chain growth.",
       kick:"SEO · Google Ads · Paid Media", hero:"Built on-chain.", work:"Innovation City",
       img:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@7056b7fffe28ac8d8888f7720fe747b1159866e0/sw-innovation-city.webp",
-      video:"https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/wk/rakdao_w_1280.mp4" }
+      video:"https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/wk/rakdao_w_1280.mp4" }
   ];
   /* Card placeholder images above mirror the 'Selected Works' CMS collection (collection
    * 6a479f199798230430066283) - when the user swaps an image there, copy the new asset URL
@@ -217,12 +217,12 @@
 
   // ---- CYB3R service cards: 6 videos + titles (Cloudinary, pre-cropped to the card aspect 812:568, CORS ok) ----
   const CARDS=[
-    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/brand_w_800.mp4","Brand & Identity"],
-    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/webui_w_800.mp4","Web Design & Development"],
-    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/seoupsacled_w_800.mp4","SEO & Google Ads"],
-    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/socialmedia_w_800.mp4","Social Media & Content"],
-    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/commercialprint_w_800.mp4","Commercial Print & Production"],
-    ["https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/aidriven_w_800.mp4","AI-Driven Advertising"]
+    ["https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/brand_w_800.mp4","Brand & Identity"],
+    ["https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/webui_w_800.mp4","Web Design & Development"],
+    ["https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/seoupsacled_w_800.mp4","SEO & Google Ads"],
+    ["https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/socialmedia_w_800.mp4","Social Media & Content"],
+    ["https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/commercialprint_w_800.mp4","Commercial Print & Production"],
+    ["https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/aidriven_w_800.mp4","AI-Driven Advertising"]
   ];
   const PAL=[0,1,2,3,4,5,0,1,2];           // 9 ribbon cards = indices into CARDS (6 unique, cycled)
   const GRID_IDX=[0,1,2,3,4,5];            // 6 grid cards, one per service

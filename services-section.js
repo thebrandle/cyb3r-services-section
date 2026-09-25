@@ -17,7 +17,7 @@
    * The renditions are pre-encoded, not transformed on the fly, so the w_#### token lives
    * in the FILENAME - that keeps the existing .replace("w_1440","w_720") swap below working.
    * Available per clip: w_1440 (desktop), w_800, w_720 (mobile), w_640, w_480. */
-  var V = "https://rmvgighiqekznberfkiz.supabase.co/storage/v1/object/public/media/svc/";
+  var V = "https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@c57a9d65c62bfd26b6ebe01d6e61830106c631f7/svc/";
   var PLUS = "https://cdn.prod.website-files.com/6a293cec4280dd8c699d4d08/6a44c6196a38f1b057c124e8_svglogoplus.png"; /* CYB3R teal plus icon */
   var services = [
     { title: "Brand & Identity", caption: "Identity systems built to travel across every touchpoint.",
