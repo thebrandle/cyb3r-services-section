@@ -10,7 +10,7 @@
 (function () {
   if (!document.querySelector('.wk,.dm')) return;
   var d = document, h = d.head, started = 0,
-      B = 'https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@de1b5cce689f82463ed8217d03ceee1b39d5af68/';
+      B = 'https://cdn.jsdelivr.net/gh/thebrandle/cyb3r-services-section@dba1f1d55ade0ad792b1bf079f2941e3311427fc/';
   var l = d.createElement('link'); l.rel = 'stylesheet'; l.href = B + 'cyb3r-sections.css'; h.appendChild(l);
   function j(u, c) { var s = d.createElement('script'); s.src = u; if (c) s.onload = c; h.appendChild(s); }
   function start() {
